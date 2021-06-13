@@ -1,0 +1,14 @@
+{
+  "name": "gameboycpu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll --verbose",
+    "dev": "asc assembly/index.ts --target debug",
+    "build": "asc assembly/index.ts --target release",
+    "watch": "watch 'npm run dev' assembly --interval=1"
+  },
+  "author": "zeeeratul",
+  "license": "ISC"
+}

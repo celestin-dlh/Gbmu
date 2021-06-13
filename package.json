@@ -1,0 +1,40 @@
+{
+  "name": "raw-preact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:ui": "webpack serve",
+    "dev:core": "cd core && npm run dev",
+    "watch:core": "cd core && npm run watch",
+    "build:ui": "webpack",
+    "build:core": "cd core && npm run build",
+    "build": "npm run build:core && npm run build:ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-transform-runtime": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
+    "@babel/preset-react": "^7.13.13",
+    "assemblyscript": "^0.19.2",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.2.6",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.1",
+    "lodash": "^4.17.21",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2",
+    "jest": "^27.0.4",
+    "@types/jest": "^26.0.23"
+  },
+  "dependencies": {
+    "@assemblyscript/loader": "^0.19.2",
+    "@babel/runtime": "^7.14.0",
+    "preact": "^10.5.13"
+  }
+}
