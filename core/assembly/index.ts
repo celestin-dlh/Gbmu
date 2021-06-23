@@ -1,11 +1,32 @@
 import { Cpu } from './cpuState';
 import { executeOpcode } from './opcode';
+import { readByteAtPc } from './readWriteOperations';
 
-const MAXCYCLES = 69905;
-export function fetchOpcode(): u8 {
-  const opcode = Cpu.memory[Cpu.pc];
-  Cpu.pc += 1;
+const cycleForOneFrame = 69905;
+
+function fetchOpcode(): i32 {
+  const opcode = readByteAtPc();
   return opcode;
 }
 
-export { executeOpcode } from './opcode';
+export function runFrame(): void {
+  while (Cpu.cycle < cycleForOneFrame) {
+    const opcode = fetchOpcode();
+    executeOpcode(opcode); 
+  }
+}
+
+export function loadRom(buffer: Uint8Array): void {
+  if (buffer.length > 0x8000) {
+    trace("Rom has a limited size of 0x8000 bytes");
+    return;
+  }
+  for (let index = 0; index < buffer.length; index++) {
+    Cpu.rom[index] = buffer[index];
+  }
+  trace("Rom loaded")
+}
+
+export const Uint8Array_ID = idof<Uint8Array>();
+
+export { getDisassembler, getMemoryRow, getMemory } from './debug/index';

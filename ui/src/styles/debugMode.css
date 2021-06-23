@@ -1,0 +1,74 @@
+main.debug {
+    display: grid;
+    grid-template-areas: 
+        "screen controls . . ."
+        "screen disassembler registers . ."
+        "memory memory memory . .";
+    grid-template-columns: 340px auto 120px 120px 120px;
+    grid-template-rows: 80px 300px auto;
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+/* controls */
+.controls {
+    grid-area: controls;
+    display: flex;
+    align-items: center;
+}
+
+.controls__button {
+    background-color: white;
+}
+
+/* disassembler */
+.disassembler {
+    grid-area: disassembler;
+    border: 1px solid white; 
+    border-collapse: collapse;
+}
+
+.disassembler th {
+    border: 1px solid white;
+}
+
+.disassembler td {
+    padding: 5px;
+}
+
+/* registers */
+.registers {
+    grid-area: registers;
+    border: 1px solid white; 
+    border-collapse: collapse;
+}
+
+.registers th {
+    border: 1px solid white;
+}
+
+.registers td {
+    padding: 5px;
+}
+
+/* memory */
+.memory {
+    grid-area: memory;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.memory__header {
+    display: flex;
+    align-items: center;
+}
+
+.memory__input {
+    margin-left: 14px;
+    height: 16px;
+}
+
+.memory__table {
+    width: 100%;
+}

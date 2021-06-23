@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --verbose",
-    "dev": "asc assembly/index.ts --target debug",
-    "build": "asc assembly/index.ts --target release",
+    "dev": "asc assembly/index.ts --target debug --transform as-bind",
+    "build": "asc assembly/index.ts --target release --transform as-bind",
     "watch": "watch 'npm run dev' assembly --interval=1"
   },
   "author": "zeeeratul",

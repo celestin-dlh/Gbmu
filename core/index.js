@@ -1,5 +1,12 @@
-const fs = require("fs");
-const { instantiateSync } = require("@assemblyscript/loader");
+import wasmBuild from './build/optimized.wasm';
+import * as AsBind from 'as-bind';
+
+const wasm = fetch(wasmBuild);
 const imports = { /* imports go here */ };
-const wasmModule = instantiateSync(fs.readFileSync(__dirname + "/build/optimized.wasm"), imports);
-module.exports = wasmModule.exports;
+
+const loadWasmModule = async () => {
+    const asBindInstance = await AsBind.instantiate(wasm);
+    return asBindInstance;
+};
+
+export default loadWasmModule;

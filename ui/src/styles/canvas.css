@@ -1,0 +1,12 @@
+.canvas_container {
+    grid-area: screen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    border: 1px solid white;
+    width: 320px;
+    height: 288px;
+}

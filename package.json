@@ -7,6 +7,7 @@
     "dev:ui": "webpack serve",
     "dev:core": "cd core && npm run dev",
     "watch:core": "cd core && npm run watch",
+    "test:core": "cd core && npm run test",
     "build:ui": "webpack",
     "build:core": "cd core && npm run build",
     "build": "npm run build:core && npm run build:ui"
@@ -35,6 +36,10 @@
   "dependencies": {
     "@assemblyscript/loader": "^0.19.2",
     "@babel/runtime": "^7.14.0",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "as-bind": "^0.7.1",
+    "comlink": "^4.3.1",
     "preact": "^10.5.13"
   }
 }
