@@ -1,24 +1,26 @@
 import { h } from 'preact';
 
 const regexp = /[0-9A-Fa-f]{1,4}/g;
+const numberToHex = (number) => number.toString(16).padStart(4, '0').toUpperCase();
 
 function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
+    // Not really clean code but working ...
     const handleSubmit = (ev) => {
         ev.preventDefault();
         const { value } = ev.target[0];
         const result = [...value.matchAll(regexp)];
         if (result.length > 0) {
-            const hexString = result[0][0].padStart(4, '0').toUpperCase();
+            const hexString = result[0][0].padStart(4, '0');
             if (parseInt(hexString, 16) >= 0xFF70)
-                setMemoryAddress({ value: 'FF70' });
+                setMemoryAddress(0xFF70);
             else if (parseInt(hexString, 16) <= 0)
-                setMemoryAddress({ value: '0000' });
+                setMemoryAddress(0);
             else {
-                setMemoryAddress({ value: hexString.slice(0, 3) + '0' });
+                const roundedNum = hexString.slice(0, 3) + '0';
+                setMemoryAddress(parseInt(roundedNum, 16));
             }
         }
-        else
-            setMemoryAddress({ value: 0 });
+        else setMemoryAddress(0);
     }
 
     return (
@@ -29,7 +31,7 @@ function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
                     <input 
                         class="memory__input" 
                         type='text'
-                        value={memoryAddress.value} 
+                        value={numberToHex(memoryAddress)} 
                         maxLength={4}
                     />
                 </form>
@@ -56,7 +58,7 @@ function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
                 </tr>
                 {memory.map((row, index) => (
                     <tr key={`memory_table_row${index}`}>
-                        <th>{(parseInt(memoryAddress.value, 16) + index * 16).toString(16).padStart(4, '0').toUpperCase()}:</th>
+                        <th>{(memoryAddress + index * 16).toString(16).padStart(4, '0').toUpperCase()}:</th>
                         {row.map((byte) => (
                             <td>{byte.toString(16).padStart(2, '0')}</td>
                         ))}
