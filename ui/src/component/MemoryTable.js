@@ -1,26 +1,8 @@
 import { h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
-import * as Comlink from 'comlink';
-
-const memoryTablePlaceholder = [
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-    new Array(16).fill(0),
-]
 
 const regexp = /[0-9A-Fa-f]{1,4}/g;
 
-function MemoryTable({ workerApi}) {
-    const [memoryAddress, setMemoryAddress] = useState({ value: '0000' });
-    const [memoryTable, setMemoryTable] = useState(memoryTablePlaceholder)
-
+function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
     const handleSubmit = (ev) => {
         ev.preventDefault();
         const { value } = ev.target[0];
@@ -39,13 +21,6 @@ function MemoryTable({ workerApi}) {
             setMemoryAddress({ value: 0 });
     }
 
-    useEffect(() => {
-        const fetchMemory = async (addr) => {
-            await workerApi.fetchMemory(addr, Comlink.proxy(setMemoryTable));
-        }   
-        fetchMemory(parseInt(memoryAddress.value, 16));
-    }, [memoryAddress])
-
     return (
         <div class="memory">
             <div class="memory__header">
@@ -59,7 +34,6 @@ function MemoryTable({ workerApi}) {
                     />
                 </form>
             </div>
-
             <table class="memory__table">
                 <tr class="memory__table__header">
                     <th>Addr</th>
@@ -80,8 +54,8 @@ function MemoryTable({ workerApi}) {
                     <th>xE</th> 
                     <th>xF</th> 
                 </tr>
-                {memoryTable.map((row, index) => (
-                    <tr>
+                {memory.map((row, index) => (
+                    <tr key={`memory_table_row${index}`}>
                         <th>{(parseInt(memoryAddress.value, 16) + index * 16).toString(16).padStart(4, '0').toUpperCase()}:</th>
                         {row.map((byte) => (
                             <td>{byte.toString(16).padStart(2, '0')}</td>

@@ -1,6 +1,6 @@
 import { Cpu } from '../cpuState';
 import { memoryMap } from '../readWriteOperations';
- 
+
 export function getRegisters(): Uint8Array {
     const registersArray = new Uint8Array(8).fill(0);
     registersArray[0] = Cpu.A;
@@ -14,12 +14,7 @@ export function getRegisters(): Uint8Array {
     return registersArray;
 }
 
-
-// get length for the instruction
-// increment pc by the length of the instruction
-// get the `length` byte and put it in array
-
-
+// Disassembler functions
 function getInstructionLength(opcode: i32): u16 {
     return 1;
     
@@ -49,11 +44,11 @@ export function getDisassembler(): u16[][]  {
     return instructionArray;
 }
 
+// Memory table functions
 function getMemoryRow(address: u16): u8[] {
     const row = new Array<u8>(0);
     for (let index = 0; index < 16; index++) {
         const addr = address + <u16>index;
-        // row.push(Cpu.rom[addr]);
         row.push(memoryMap(addr));
     }
     return row;

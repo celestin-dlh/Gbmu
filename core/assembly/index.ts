@@ -1,20 +1,20 @@
 import { Cpu } from './cpuState';
-import { executeOpcode } from './opcode';
-import { readByteAtPc } from './readWriteOperations';
+// import { executeOpcode } from './opcode';
+// import { readByteAtPc } from './readWriteOperations';
 
-const cycleForOneFrame = 69905;
+// const cycleForOneFrame = 69905;
 
-function fetchOpcode(): i32 {
-  const opcode = readByteAtPc();
-  return opcode;
-}
+// function fetchOpcode(): i32 {
+//   const opcode = readByteAtPc();
+//   return opcode;
+// }
 
-export function runFrame(): void {
-  while (Cpu.cycle < cycleForOneFrame) {
-    const opcode = fetchOpcode();
-    executeOpcode(opcode); 
-  }
-}
+// export function runFrame(): void {
+//   while (Cpu.cycle < cycleForOneFrame) {
+//     const opcode = fetchOpcode();
+//     executeOpcode(opcode); 
+//   }
+// }
 
 export function loadRom(buffer: Uint8Array): void {
   if (buffer.length > 0x8000) {
@@ -27,6 +27,4 @@ export function loadRom(buffer: Uint8Array): void {
   trace("Rom loaded")
 }
 
-export const Uint8Array_ID = idof<Uint8Array>();
-
-export { getDisassembler, getMemory } from './debug/index';
+export { getRegisters, getDisassembler, getMemory } from './debug/index';
