@@ -1,5 +1,6 @@
 import { Cpu } from '../cpuState';
-
+import { memoryMap } from '../readWriteOperations';
+ 
 export function getRegisters(): Uint8Array {
     const registersArray = new Uint8Array(8).fill(0);
     registersArray[0] = Cpu.A;
@@ -48,19 +49,19 @@ export function getDisassembler(): u16[][]  {
     return instructionArray;
 }
 
-// get from 0x0 to 0xF in memory
-export function getMemoryRow(address: u16): u8[] {
+function getMemoryRow(address: u16): u8[] {
     const row = new Array<u8>(0);
     for (let index = 0; index < 16; index++) {
-        const addr = address + index;
-        row.push(Cpu.rom[addr]);
+        const addr = address + <u16>index;
+        // row.push(Cpu.rom[addr]);
+        row.push(memoryMap(addr));
     }
     return row;
 }
 
 export function getMemory(startAddress: u16): u8[][] {
     const memory = new Array<u8[]>(0);
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 9; index++) {
         const row = getMemoryRow(startAddress + (<u16>index * 16))
         memory.push(row);
     }

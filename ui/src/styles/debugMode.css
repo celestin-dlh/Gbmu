@@ -71,4 +71,16 @@ main.debug {
 
 .memory__table {
     width: 100%;
+    text-align: center;
+    border: 2px solid white;
+    border-collapse: collapse;
+}
+
+.memory__table__header th {
+    padding: 5px;
+    font-size: 16px;
+}
+
+.memory__table th {
+    border: 1px solid white;
 }

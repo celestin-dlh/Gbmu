@@ -15,32 +15,53 @@ const memoryTablePlaceholder = [
     new Array(16).fill(0),
 ]
 
+const regexp = /[0-9A-Fa-f]{1,4}/g;
+
 function MemoryTable({ workerApi}) {
-    const [memoryAddress, setMemoryAddress] = useState(0x100);
+    const [memoryAddress, setMemoryAddress] = useState({ value: '0000' });
     const [memoryTable, setMemoryTable] = useState(memoryTablePlaceholder)
 
-    const fetchMemory = async () => {
-        await workerApi.fetchMemory(memoryAddress, Comlink.proxy(setMemoryTable))
-    }   
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
+        const { value } = ev.target[0];
+        const result = [...value.matchAll(regexp)];
+        if (result.length > 0) {
+            const hexString = result[0][0].padStart(4, '0').toUpperCase();
+            if (parseInt(hexString, 16) >= 0xFF70)
+                setMemoryAddress({ value: 'FF70' });
+            else if (parseInt(hexString, 16) <= 0)
+                setMemoryAddress({ value: '0000' });
+            else {
+                setMemoryAddress({ value: hexString.slice(0, 3) + '0' });
+            }
+        }
+        else
+            setMemoryAddress({ value: 0 });
+    }
+
+    useEffect(() => {
+        const fetchMemory = async (addr) => {
+            await workerApi.fetchMemory(addr, Comlink.proxy(setMemoryTable));
+        }   
+        fetchMemory(parseInt(memoryAddress.value, 16));
+    }, [memoryAddress])
 
     return (
         <div class="memory">
             <div class="memory__header">
                 <h3>Memory</h3>
-                <input 
-                    class="memory__input" 
-                    type='text'
-                    value={memoryAddress} 
-                />
-                <button 
-                    onClick={fetchMemory}
-                >
-                    Go fetch memory (temp)
-                </button>
+                <form onSubmit={handleSubmit}>
+                    <input 
+                        class="memory__input" 
+                        type='text'
+                        value={memoryAddress.value} 
+                        maxLength={4}
+                    />
+                </form>
             </div>
 
-            <table className="memory__table">
-                <tr>
+            <table class="memory__table">
+                <tr class="memory__table__header">
                     <th>Addr</th>
                     <th>x0</th> 
                     <th>x1</th> 
@@ -61,9 +82,9 @@ function MemoryTable({ workerApi}) {
                 </tr>
                 {memoryTable.map((row, index) => (
                     <tr>
-                        <th>{(memoryAddress + index * 16).toString(16)}</th>
+                        <th>{(parseInt(memoryAddress.value, 16) + index * 16).toString(16).padStart(4, '0').toUpperCase()}:</th>
                         {row.map((byte) => (
-                            <td>{byte.toString(16)}</td>
+                            <td>{byte.toString(16).padStart(2, '0')}</td>
                         ))}
                     </tr>
                 ))}

@@ -29,4 +29,4 @@ export function loadRom(buffer: Uint8Array): void {
 
 export const Uint8Array_ID = idof<Uint8Array>();
 
-export { getDisassembler, getMemoryRow, getMemory } from './debug/index';
+export { getDisassembler, getMemory } from './debug/index';

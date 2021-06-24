@@ -16,6 +16,7 @@ const gameboyWorker = {
 
     async loadRom(romBuffer, cb) {
         this.romBuffer = romBuffer;
+        this.exports.loadRom(romBuffer);
         await cb("Rom loaded succesfully");
     },
 
