@@ -22,7 +22,10 @@ export class Cpu {
   static F: u8 = 0;
 
   static pc: u16 = 0;
+
   static cycle: i32 = 0;
+
+  // memory of the gameboy split in multiples array
   static rom: Uint8Array = new Uint8Array(ROM_SIZE).fill(0);
   static videoRam: Uint8Array = new Uint8Array(VIDEO_RAM_SIZE).fill(1);
   static externalRam: Uint8Array = new Uint8Array(EXTERNAL_RAM_SIZE).fill(2);

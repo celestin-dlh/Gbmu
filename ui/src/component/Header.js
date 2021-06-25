@@ -40,6 +40,10 @@ function Header({ workerApi, uiState, setUiState }) {
                     const result = ev.target.result;
                     const buffer = new Uint8Array(result);
                     loadRom(buffer);
+
+                    // to force rerender of the app when reload a new rom
+                    const state = {...uiState}
+                    setUiState({ ...state, romLoaded: true })
                 }
             };
         }

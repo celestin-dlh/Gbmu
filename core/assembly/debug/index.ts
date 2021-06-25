@@ -1,16 +1,18 @@
 import { Cpu } from '../cpuState';
 import { memoryMap } from '../readWriteOperations';
 
-export function getRegisters(): Uint8Array {
-    const registersArray = new Uint8Array(8).fill(0);
-    registersArray[0] = Cpu.A;
-    registersArray[1] = Cpu.B;
-    registersArray[2] = Cpu.C;
-    registersArray[3] = Cpu.D;
-    registersArray[4] = Cpu.E;
-    registersArray[5] = Cpu.H;
-    registersArray[6] = Cpu.L;
-    registersArray[7] = Cpu.F;
+export function getRegisters(): u16[] {
+    const registersArray = new Array<u16>(5).fill(0);
+    const af = (<u16>Cpu.A << 8) | Cpu.F;
+    const bc = (<u16>Cpu.B << 8) | Cpu.C;
+    const de = (<u16>Cpu.D << 8) | Cpu.E;
+    const hl = (<u16>Cpu.H << 8) | Cpu.L;
+
+    registersArray[0] = Cpu.pc;
+    registersArray[1] = af;
+    registersArray[2] = bc;
+    registersArray[3] = de;
+    registersArray[4] = hl;
     return registersArray;
 }
 

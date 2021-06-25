@@ -34,7 +34,7 @@ function App() {
     <div class="app">
       <Header workerApi={workerApi} uiState={uiState} setUiState={setUiState} />
       {uiState.debugMode ? 
-        <DebugMode workerApi={workerApi} /> :
+        <DebugMode workerApi={workerApi} uiState={uiState} /> :
         <ClassicMode />
       }
     </div>

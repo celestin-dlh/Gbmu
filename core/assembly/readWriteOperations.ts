@@ -1,5 +1,4 @@
 import { Cpu } from './cpuState';
-import { syncCycle } from './cycle';
 import {
     ROM_START,
     ROM_END,
@@ -27,7 +26,7 @@ import {
 export function readByteAtPc(): u8 {
     const byte = Cpu.rom[Cpu.pc];
     Cpu.pc += 1;
-    syncCycle(4);
+    // syncCycle(4);
     return byte;
 } 
   

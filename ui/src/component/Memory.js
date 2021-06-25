@@ -3,7 +3,7 @@ import { h } from 'preact';
 const regexp = /[0-9A-Fa-f]{1,4}/g;
 const numberToHex = (number) => number.toString(16).padStart(4, '0').toUpperCase();
 
-function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
+function Memory({ data, setMemoryAddress, memoryAddress }) {
     // Not really clean code but working ...
     const handleSubmit = (ev) => {
         ev.preventDefault();
@@ -56,7 +56,7 @@ function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
                     <th>xE</th> 
                     <th>xF</th> 
                 </tr>
-                {memory.map((row, index) => (
+                {data.map((row, index) => (
                     <tr key={`memory_table_row${index}`}>
                         <th>{(memoryAddress + index * 16).toString(16).padStart(4, '0').toUpperCase()}:</th>
                         {row.map((byte) => (
@@ -69,4 +69,4 @@ function MemoryTable({ memory, setMemoryAddress, memoryAddress }) {
     )
 };
 
-export default MemoryTable;
+export default Memory;

@@ -2,18 +2,20 @@ import { h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 import * as Comlink from 'comlink';
 import Disassembler from './component/Disassembler';
-import MemoryTable from './component/MemoryTable';
+import Memory from './component/Memory';
+import Registers from './component/Registers';
 
-function DebugMode({ workerApi }) {
+function DebugMode({ workerApi, uiState }) {
     const [debugState, setDebugState] = useState({
         memory: [],
-        disassembler: []
+        disassembler: [],
+        registers: []
     })
     const [memoryAddress, setMemoryAddress] = useState(0);
 
     useEffect(() => {
         workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));
-    }, [memoryAddress])
+    }, [memoryAddress, uiState])
 
     const handleStep = () => {
         workerApi.step();
@@ -29,46 +31,15 @@ function DebugMode({ workerApi }) {
                 <button class="controls__button">Run one second</button>
             </div>
 
-            <Disassembler 
-                nextInstructions={debugState.disassembler}
-            />
+            <Disassembler data={debugState.disassembler} />
 
-            <MemoryTable 
-                memory={[...debugState.memory]} 
+            <Memory 
+                data={[...debugState.memory]} 
                 setMemoryAddress={setMemoryAddress} 
                 memoryAddress={memoryAddress} 
             />
-            <table class="registers">
-                <tr>
-                    <th></th>
-                    <th>Value</th> 
-                </tr>
-                <tr>
-                    <th>PC</th>
-                    <td>342</td>
-                </tr>
-                <tr>
-                    <th>AF</th>
-                    <td>342</td>
-                </tr>
-                <tr>
-                    <th>BC</th>
-                    <td>342</td>
-                </tr>
-                <tr>
-                    <th>DE</th>
-                    <td>342</td>
-                </tr>
-                <tr>
-                    <th>HL</th>
-                    <td>342</td>
-                </tr>
-                <tr>
-                    <th>SP</th>
-                    <td>342</td>
-                </tr>
-            
-            </table>
+
+            <Registers data={debugState.registers} />
         </main>
     )
 };

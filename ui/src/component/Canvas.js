@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import '../styles/canvas.css';
 
 export default function Canvas() {
     return (

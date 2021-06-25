@@ -24,30 +24,53 @@ main.debug {
 /* disassembler */
 .disassembler {
     grid-area: disassembler;
+    display: flex;
+    flex-direction: column;
+}
+
+.disassembler__header {
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.disassembler__table {
     border: 1px solid white; 
     border-collapse: collapse;
+    flex-grow: 1;
 }
 
-.disassembler th {
+.disassembler__table th {
     border: 1px solid white;
+    padding: 3px;
 }
 
-.disassembler td {
+.disassembler__table td {
     padding: 5px;
 }
 
 /* registers */
 .registers {
     grid-area: registers;
+    display: flex;
+    flex-direction: column;
+}
+
+.registers__header {
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+.registers__table {
+    flex-grow: 1;
     border: 1px solid white; 
     border-collapse: collapse;
 }
 
-.registers th {
+.registers__table th {
     border: 1px solid white;
 }
 
-.registers td {
+.registers__table td {
     padding: 5px;
 }
 
