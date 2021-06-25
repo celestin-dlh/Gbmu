@@ -42,6 +42,7 @@ const gameboyWorker = {
     async step() {
         // run wasm step (not implemented yet)
         console.log('running step in wasm module');
+        this.exports.step();
     },
 
     async getDebug(memoryAddress, cb) {

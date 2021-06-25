@@ -1,4 +1,12 @@
 import { Cpu } from './cpuState';
+import { readByteAtPc } from './readWriteOperations';
+import { getInstructionLength } from './debug';
+
+export function step(): void {
+  const opcode = readByteAtPc();
+  const instructionLength = getInstructionLength(opcode);
+  Cpu.pc += instructionLength - 1;
+}
 
 export function loadRom(buffer: Uint8Array): void {
   for (let index = 0; index < buffer.length; index++) {

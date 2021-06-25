@@ -17,7 +17,7 @@ export function getRegisters(): u16[] {
 }
 
 // Disassembler functions
-function getInstructionLength(opcode: i32): u16 {
+export function getInstructionLength(opcode: i32): u16 {
     switch (opcode) {
         case 0x0: return 1;
         case 0x1: return 3;
