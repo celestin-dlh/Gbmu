@@ -1,12 +1,12 @@
-import { Cpu } from '../cpuState';
-import { memoryMap } from '../readWriteOperations';
+import { Cpu, getBC, getDE, getHL } from '../cpuState';
+import { readMemoryMap } from '../readWriteOperations';
 
 export function getRegisters(): u16[] {
     const registersArray = new Array<u16>(5).fill(0);
     const af = (<u16>Cpu.A << 8) | Cpu.F;
-    const bc = (<u16>Cpu.B << 8) | Cpu.C;
-    const de = (<u16>Cpu.D << 8) | Cpu.E;
-    const hl = (<u16>Cpu.H << 8) | Cpu.L;
+    const bc = getBC();
+    const de = getDE();
+    const hl = getHL();
 
     registersArray[0] = Cpu.pc;
     registersArray[1] = af;
@@ -318,7 +318,7 @@ function getMemoryRow(address: u16): u8[] {
     const row = new Array<u8>(0);
     for (let index = 0; index < 16; index++) {
         const addr = address + <u16>index;
-        row.push(memoryMap(addr));
+        row.push(readMemoryMap(addr));
     }
     return row;
 }

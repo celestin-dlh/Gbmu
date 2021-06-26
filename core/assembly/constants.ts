@@ -37,3 +37,5 @@ export const HIGH_RAM_END: u16 = 0xFFFE;
 export const IE_SIZE: u16 = 0x1; // 1
 export const IE_START: u16 = 0xFFFF;
 export const IE_END: u16 = 0xFFFF;
+
+export const CYCLE_PER_FRAME = 69905;

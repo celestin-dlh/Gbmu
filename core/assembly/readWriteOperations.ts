@@ -22,22 +22,69 @@ import {
     IE_END
 } from './constants';
 
+export function writeByte(address: u16, byte: u8): void {
+    // syncCycle(4);
+    writeMemoryMap(address, byte);
+    
+}
+
+function writeMemoryMap(address: u16, byte: u8): void {
+    if (address >= ROM_START && address <= ROM_END) {
+        trace("ROM IS READ ONLY");
+    } 
+    else if (address >= VIDEO_RAM_START && address <= VIDEO_RAM_END) {
+        Cpu.videoRam[address - VIDEO_RAM_START] = byte;
+    } 
+    else if (address >= EXTERNAL_RAM_START && address <= EXTERNAL_RAM_END) {
+        Cpu.externalRam[address - EXTERNAL_RAM_START] = byte;
+    } 
+    else if (address >= WORK_RAM_START && address <= WORK_RAM_END) {
+        Cpu.workRam[address - WORK_RAM_START] = byte;
+    } 
+    else if (address >= ECHO_RAM_START && address <= ECHO_RAM_END) {
+        trace("Nintendo says use of this area is prohibited.");
+    } 
+    else if (address >= OAM_START && address <= OAM_END) {
+        Cpu.oam[address - OAM_START] = byte;
+    } 
+    else if (address >= UNUSED_MEMORY_START && address <= UNUSED_MEMORY_END) {
+        trace("Nintendo says use of this area is prohibited.");
+    } 
+    else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
+        Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
+    } 
+    else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
+        Cpu.highRam[address - HIGH_RAM_START] = byte;
+    } 
+    else if (address >= IE_START && address <= IE_END) {
+        Cpu.IE[address - IE_START] = byte;
+    } 
+
+    trace("Error: This should be unreachable");
+}
+
 // take 4 cycles
 export function readByteAtPc(): u8 {
-    const byte = Cpu.rom[Cpu.pc];
+    const byte = readMemoryMap(Cpu.pc);
     Cpu.pc += 1;
     // syncCycle(4);
     return byte;
 } 
+
+export function readByte(address: u16): u8 {
+    const byte = readMemoryMap(address);
+    // syncCycle(4);
+    return byte;
+}
   
 // take 8 cycles (4 + 4)
 export function readWordAtPc(): u16 {
     const leastSignificantByte = readByteAtPc();
     const mostSignificantByte = readByteAtPc();
-    return (mostSignificantByte << 8) | leastSignificantByte;
+    return (<u16>mostSignificantByte << 8) | <u16>leastSignificantByte;
 }
 
-export function memoryMap(address: u16): u8 {
+export function readMemoryMap(address: u16): u8 {
     if (address >= ROM_START && address <= ROM_END) {
         return Cpu.rom[address];
     } 
