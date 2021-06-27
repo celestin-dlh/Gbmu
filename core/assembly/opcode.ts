@@ -48,7 +48,7 @@ function handle0xOpcode(opcode: u8): void {
             trace("LD B, n");
             Cpu.B = readByteAtPc();
         }
-        case 0x7: {
+        case 0x8: {
             trace("RLCA");
             const leftMostBit = Cpu.A & 0x80;
             Cpu.A = (Cpu.A << 1) & 0xFE;
@@ -874,6 +874,400 @@ function handle7xOpcode(opcode: u8): void {
     }
 }
 
+function handle8xOpcode(opcode: u8): void {
+    switch (opcode) {
+        case 0x0: {
+            trace("ADD A, B");
+            const result = Cpu.A + Cpu.B;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.B)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x1: {
+            trace("ADD A, C");
+            const result = Cpu.A + Cpu.C;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.C)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x2: {
+            trace("ADD A, D");
+            const result = Cpu.A + Cpu.D;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.D)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x3: {
+            trace("ADD A, E");
+            const result = Cpu.A + Cpu.E;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.E)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x4: {
+            trace("ADD A, H");
+            const result = Cpu.A + Cpu.H;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.H)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x5: {
+            trace("ADD A, L");
+            const result = Cpu.A + Cpu.L;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.L)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x6: {
+            trace("ADD A, (HL)");
+            const hl = getHL();
+            const hlValue = readByte(hl);
+            const result = Cpu.A + hlValue;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(hlValue)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x7: {
+            trace("ADD A, A");
+            const result = Cpu.A + Cpu.A;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.A)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x8: {
+            trace("ADC A, B");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.B + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.B) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x9: {
+            trace("ADC A, C");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.C + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.C) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xA: {
+            trace("ADC A, D");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.D + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.D) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xB: {
+            trace("ADC A, E");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.E + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.E) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xC: {
+            trace("ADC A, H");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.H + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.H) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xD: {
+            trace("ADC A, L");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.L + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.L) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xE: {
+            trace("ADC A, (HL)");
+            const carry = <u8>getCarryFlag();
+            const hl = getHL();
+            const value = readByte(hl);
+            const result = Cpu.A + value + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(value) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xF: {
+            trace("ADC A, A");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A + Cpu.A + carry;
+            const halfCarry = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.A) + carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        default: {
+            new Error("Unreachable code");
+            break;
+        }
+    }
+}
+
+function handle9xOpcode(opcode: u8): void {
+    switch (opcode) {
+        case 0x0: {
+            trace("SUB A, B");
+            const result = Cpu.A - Cpu.B;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.B)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x1: {
+            trace("SUB A, C");
+            const result = Cpu.A - Cpu.C;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.C)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x2: {
+            trace("SUB A, D");
+            const result = Cpu.A - Cpu.D;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.D)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x3: {
+            trace("SUB A, E");
+            const result = Cpu.A - Cpu.E;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.E)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x4: {
+            trace("SUB A, H");
+            const result = Cpu.A - Cpu.H;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.H)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x5: {
+            trace("SUB A, L");
+            const result = Cpu.A - Cpu.L;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.L)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x6: {
+            trace("SUB A, (HL)");
+            const hl = getHL();
+            const hlValue = readByte(hl);
+            const result = Cpu.A - hlValue;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(hlValue)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x7: {
+            trace("SUB A, A");
+            const result = Cpu.A - Cpu.A;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.A)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x8: {
+            trace("SBC A, B");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.B - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.B) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x9: {
+            trace("SBC A, C");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.C - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.C) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xA: {
+            trace("SBC A, D");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.D - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.D) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xB: {
+            trace("SBC A, E");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.E - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.E) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xC: {
+            trace("SBC A, H");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.H - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.H) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xD: {
+            trace("SBC A, L");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.L - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.L) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xE: {
+            trace("SBC A, (HL)");
+            const carry = <u8>getCarryFlag();
+            const hl = getHL();
+            const value = readByte(hl);
+            const result = Cpu.A - value - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(value) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xF: {
+            trace("SBC A, A");
+            const carry = <u8>getCarryFlag();
+            const result = Cpu.A - Cpu.A - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.A) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        default: {
+            new Error("Unreachable code");
+            break;
+        }
+    }
+}
+
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
@@ -912,6 +1306,14 @@ function executeOpcode(opcode: u8): void {
         }
         case 0x7: {
             handle7xOpcode(secondNibble);
+            break;
+        }
+        case 0x8: {
+            handle8xOpcode(secondNibble);
+            break;
+        }
+        case 0x9: {
+            handle9xOpcode(secondNibble);
             break;
         }
  
