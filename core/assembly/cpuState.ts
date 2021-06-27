@@ -42,9 +42,9 @@ export class Cpu {
 
 
 
-export function setZeroFlag(value: i32): void {
+export function setZeroFlag(value: bool): void {
   Cpu.F = Cpu.F & 0b1111_0000;
-  if (value == 1) {
+  if (value) {
     Cpu.F = Cpu.F | 0b1000_0000;
   } else {
     Cpu.F = Cpu.F & 0b0111_0000;
@@ -55,9 +55,9 @@ export function getZeroFlag(): bool {
   return ((Cpu.F & 0x80) > 0) ? 1 : 0; 
 }
 
-export function setNegativeFlag(value: i32): void {
+export function setNegativeFlag(value: bool): void {
   Cpu.F = Cpu.F & 0b1111_0000;
-  if (value == 1) {
+  if (value) {
     Cpu.F = Cpu.F | 0b0100_0000;
   } else {
     Cpu.F = Cpu.F & 0b1011_0000;
@@ -68,9 +68,9 @@ export function getNegativeFlag(): bool {
   return ((Cpu.F & 0x40) > 0) ? 1 : 0; 
 }
 
-export function setHalfCarryFlag(value: i32): void {
+export function setHalfCarryFlag(value: bool): void {
   Cpu.F = Cpu.F & 0b1111_0000;
-  if (value == 1) {
+  if (value) {
     Cpu.F = Cpu.F | 0b0010_0000;
   } else {
     Cpu.F = Cpu.F & 0b1101_0000;
@@ -81,9 +81,9 @@ export function getHalfCarryFlag(): bool {
   return ((Cpu.F & 0x20) > 0) ? 1 : 0; 
 }
 
-export function setCarryFlag(value: i32): void {
+export function setCarryFlag(value: bool): void {
   Cpu.F = Cpu.F & 0b1111_0000;
-  if (value == 1) {
+  if (value) {
     Cpu.F = Cpu.F | 0b0001_0000;
   } else {
     Cpu.F = Cpu.F & 0b1110_0000;
