@@ -33,6 +33,10 @@ export default function Registers({ data }) {
                     <th>HL</th>
                     <td>{formatHexNumber(data[4])}</td>
                 </tr>
+                <tr>
+                    <th>SP</th>
+                    <td>{formatHexNumber(data[5])}</td>
+                </tr>
             </table>
         </div>
     )

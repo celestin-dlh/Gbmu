@@ -10,8 +10,9 @@ import {
   HIGH_RAM_SIZE,
   IE_SIZE
 } from './constants';
+import { combineBytes, getHighByte, getLowByte } from './helpers';
 
-class Cpu {
+export class Cpu {
   static A: u8 = 0;
   static B: u8 = 0;
   static C: u8 = 0;
@@ -21,7 +22,8 @@ class Cpu {
   static L: u8 = 0;
   static F: u8 = 0;
 
-  static pc: u16 = 0;
+  static pc: u16 = 0x100;
+  static sp: u16 = 0;
 
   static cycle: i32 = 0;
 
@@ -38,40 +40,82 @@ class Cpu {
   static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
 }
 
-function getBC(): u16 {
-  return (<u16>Cpu.B << 8) | Cpu.C
+export function setZeroFlag(value: i32): void {
+  if (value == 1) {
+    Cpu.F = Cpu.F | 0b1000_0000;
+  } else {
+    Cpu.F = Cpu.F & 0b0111_0000;
+  }
 }
 
-function getDE(): u16 {
-  return (<u16>Cpu.D << 8) | Cpu.E
+export function getZeroFlag(): bool {
+  return ((Cpu.F & 0x80) > 0) ? 1 : 0; 
 }
 
-function getHL(): u16 {
-  return (<u16>Cpu.H << 8) | Cpu.L
+export function setNegativeFlag(value: i32): void {
+  if (value == 1) {
+    Cpu.F = Cpu.F | 0b0100_0000;
+  } else {
+    Cpu.F = Cpu.F & 0b1011_0000;
+  }
 }
 
-function setBC(word: u16): void {
-  const mostSignificantByte = <u8>(word >> 8); 
-  const leastSignificantByte = <u8>word;
+export function getNegativeFlag(): bool {
+  return ((Cpu.F & 0x40) > 0) ? 1 : 0; 
+}
+
+export function setHalfCarryFlag(value: i32): void {
+  if (value == 1) {
+    Cpu.F = Cpu.F | 0b0010_0000;
+  } else {
+    Cpu.F = Cpu.F & 0b1101_0000;
+  }
+}
+
+export function getHalfCarryFlag(): bool {
+  return ((Cpu.F & 0x20) > 0) ? 1 : 0; 
+}
+
+export function setCarryFlag(value: i32): void {
+  if (value == 1) {
+    Cpu.F = Cpu.F | 0b0001_0000;
+  } else {
+    Cpu.F = Cpu.F & 0b1110_0000;
+  }
+}
+
+export function getCarryFlag(): bool {
+  return ((Cpu.F & 0x10) > 0) ? 1 : 0; 
+}
+
+
+// export function checkHalfCarryFlag(): bool {
   
-  Cpu.B = mostSignificantByte;
-  Cpu.C = leastSignificantByte;
+// }
+
+export function getBC(): u16 {
+  return combineBytes(Cpu.B, Cpu.C);
 }
 
-function setDE(word: u16): void {
-  const mostSignificantByte = <u8>(word >> 8); 
-  const leastSignificantByte = <u8>word;
-  
-  Cpu.D = mostSignificantByte;
-  Cpu.E = leastSignificantByte;
+export function getDE(): u16 {
+  return combineBytes(Cpu.D, Cpu.E);
 }
 
-function setHL(word: u16): void {
-  const mostSignificantByte = <u8>(word >> 8); 
-  const leastSignificantByte = <u8>word;
-  
-  Cpu.H = mostSignificantByte;
-  Cpu.L = leastSignificantByte;
+export function getHL(): u16 {
+  return combineBytes(Cpu.H, Cpu.L);
 }
 
-export { Cpu, getBC, getDE, getHL, setBC, setDE, setHL }
+export function setBC(word: u16): void {
+  Cpu.C = getLowByte(word);
+  Cpu.B = getHighByte(word);
+}
+
+export function setDE(word: u16): void {
+  Cpu.E = getLowByte(word);
+  Cpu.D = getHighByte(word);
+}
+
+export function setHL(word: u16): void {
+  Cpu.L = getLowByte(word);
+  Cpu.H = getHighByte(word);
+}
