@@ -20,6 +20,10 @@ export function combineBytes(highByte: u8, lowByte: u8): u16 {
    return (<u16>highByte << 8) | <u16>lowByte;
 }
 
+export function combineNibbles(highNibble: u8, lowNibble: u8): u8 {
+   return (highNibble << 4) | lowNibble;
+}
+
 export function getBitValue(byte: u8, bitIndex: u8): bool {
     const bitMask = <u8>Math.pow(2, bitIndex);
     return ((byte & bitMask) > 0 ? true : false);
