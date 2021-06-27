@@ -703,6 +703,174 @@ function handleCBOpcode(opcode: u8): void {
             Cpu.A = setBitValue(Cpu.A, 3, 0);
             break;
         }
+        case 0xA0: {
+            trace("RES 4, B");
+            Cpu.B = setBitValue(Cpu.B, 4, 0);
+            break;
+        }
+        case 0xA1: {
+            trace("RES 4, C");
+            Cpu.C = setBitValue(Cpu.C, 4, 0);
+            break;
+        }
+        case 0xA2: {
+            trace("RES 4, D");
+            Cpu.D = setBitValue(Cpu.D, 4, 0);
+            break;
+        }
+        case 0xA3: {
+            trace("RES 4, E");
+            Cpu.E = setBitValue(Cpu.E, 4, 0);
+            break;
+        }
+        case 0xA4: {
+            trace("RES 4, H");
+            Cpu.H = setBitValue(Cpu.H, 4, 0);
+            break;
+        }
+        case 0xA5: {
+            trace("RES 4, L");
+            Cpu.L = setBitValue(Cpu.L, 4, 0);
+            break;
+        }
+        case 0xA6: {
+            trace("RES 4, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 4, 0));
+            break;
+        }
+        case 0xA7: {
+            trace("RES 4, A");
+            Cpu.A = setBitValue(Cpu.A, 4, 0);
+            break;
+        }
+        case 0xA8: {
+            trace("RES 5, B");
+            Cpu.B = setBitValue(Cpu.B, 5, 0);
+            break;
+        }
+        case 0xA9: {
+            trace("RES 5, C");
+            Cpu.C = setBitValue(Cpu.C, 5, 0);
+            break;
+        }
+        case 0xAA: {
+            trace("RES 5, D");
+            Cpu.D = setBitValue(Cpu.D, 5, 0);
+            break;
+        }
+        case 0xAB: {
+            trace("RES 5, E");
+            Cpu.E = setBitValue(Cpu.E, 5, 0);
+            break;
+        }
+        case 0xAC: {
+            trace("RES 5, H");
+            Cpu.H = setBitValue(Cpu.H, 5, 0);
+            break;
+        }
+        case 0xAD: {
+            trace("RES 5, L");
+            Cpu.L = setBitValue(Cpu.L, 5, 0);
+            break;
+        }
+        case 0xAE: {
+            trace("RES 5, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 5, 0));
+            break;
+        }
+        case 0xAF: {
+            trace("RES 5, A");
+            Cpu.A = setBitValue(Cpu.A, 5, 0);
+            break;
+        }
+        case 0xB0: {
+            trace("RES 6, B");
+            Cpu.B = setBitValue(Cpu.B, 6, 0);
+            break;
+        }
+        case 0xB1: {
+            trace("RES 6, C");
+            Cpu.C = setBitValue(Cpu.C, 6, 0);
+            break;
+        }
+        case 0xB2: {
+            trace("RES 6, D");
+            Cpu.D = setBitValue(Cpu.D, 6, 0);
+            break;
+        }
+        case 0xB3: {
+            trace("RES 6, E");
+            Cpu.E = setBitValue(Cpu.E, 6, 0);
+            break;
+        }
+        case 0xB4: {
+            trace("RES 6, H");
+            Cpu.H = setBitValue(Cpu.H, 6, 0);
+            break;
+        }
+        case 0xB5: {
+            trace("RES 6, L");
+            Cpu.L = setBitValue(Cpu.L, 6, 0);
+            break;
+        }
+        case 0xB6: {
+            trace("RES 6, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 6, 0));
+            break;
+        }
+        case 0xB7: {
+            trace("RES 6, A");
+            Cpu.A = setBitValue(Cpu.A, 6, 0);
+            break;
+        }
+        case 0xB8: {
+            trace("RES 7, B");
+            Cpu.B = setBitValue(Cpu.B, 7, 0);
+            break;
+        }
+        case 0xB9: {
+            trace("RES 7, C");
+            Cpu.C = setBitValue(Cpu.C, 7, 0);
+            break;
+        }
+        case 0xBA: {
+            trace("RES 7, D");
+            Cpu.D = setBitValue(Cpu.D, 7, 0);
+            break;
+        }
+        case 0xBB: {
+            trace("RES 7, E");
+            Cpu.E = setBitValue(Cpu.E, 7, 0);
+            break;
+        }
+        case 0xBC: {
+            trace("RES 7, H");
+            Cpu.H = setBitValue(Cpu.H, 7, 0);
+            break;
+        }
+        case 0xBD: {
+            trace("RES 7, L");
+            Cpu.L = setBitValue(Cpu.L, 7, 0);
+            break;
+        }
+        case 0xBE: {
+            trace("RES 7, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 7, 0));
+            break;
+        }
+        case 0xBF: {
+            trace("RES 7, A");
+            Cpu.A = setBitValue(Cpu.A, 7, 0);
+            break;
+        }
         default: {
             new Error("Unreachable code");
             break;

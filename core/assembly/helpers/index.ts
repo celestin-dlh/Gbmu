@@ -21,17 +21,17 @@ export function combineBytes(highByte: u8, lowByte: u8): u16 {
 }
 
 export function getBitValue(byte: u8, bitIndex: u8): bool {
-    const bitMask = <i32>Math.pow(2, bitIndex);
+    const bitMask = <u8>Math.pow(2, bitIndex);
     return ((byte & bitMask) > 0 ? true : false);
 }
 
 export function setBitValue(byte: u8, bitIndex: u8, bitValue: bool): u8 {
-    const bitOnMask = Math.pow(2, bitIndex);
-    const bitOffMask = 255 - Math.pow(2, bitIndex);
+    const bitOnMask = <u8>Math.pow(2, bitIndex);
+    const bitOffMask = <u8>(255 - <u8>Math.pow(2, bitIndex));
     if (bitValue == 1) {
-        return (byte | bitOnMask);
+        return byte | bitOnMask;
     } else {
-        return (byte & bitOffMask);
+        return byte & bitOffMask;
     }
 }
 
