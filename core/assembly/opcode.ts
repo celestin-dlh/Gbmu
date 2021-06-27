@@ -871,6 +871,342 @@ function handleCBOpcode(opcode: u8): void {
             Cpu.A = setBitValue(Cpu.A, 7, 0);
             break;
         }
+        case 0xC0: {
+            trace("SET 0, B");
+            Cpu.B = setBitValue(Cpu.B, 0, 1);
+            break;
+        }
+        case 0xC1: {
+            trace("SET 0, C");
+            Cpu.C = setBitValue(Cpu.C, 0, 1);
+            break;
+        }
+        case 0xC2: {
+            trace("SET 0, D");
+            Cpu.D = setBitValue(Cpu.D, 0, 1);
+            break;
+        }
+        case 0xC3: {
+            trace("SET 0, E");
+            Cpu.E = setBitValue(Cpu.E, 0, 1);
+            break;
+        }
+        case 0xC4: {
+            trace("SET 0, H");
+            Cpu.H = setBitValue(Cpu.H, 0, 1);
+            break;
+        }
+        case 0xC5: {
+            trace("SET 0, L");
+            Cpu.L = setBitValue(Cpu.L, 0, 1);
+            break;
+        }
+        case 0xC6: {
+            trace("SET 0, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 0, 1));
+            break;
+        }
+        case 0xC7: {
+            trace("SET 0, A");
+            Cpu.A = setBitValue(Cpu.A, 0, 1);
+            break;
+        }
+        case 0xC8: {
+            trace("SET 1, B");
+            Cpu.B = setBitValue(Cpu.B, 1, 1);
+            break;
+        }
+        case 0xC9: {
+            trace("SET 1, C");
+            Cpu.C = setBitValue(Cpu.C, 1, 1);
+            break;
+        }
+        case 0xCA: {
+            trace("SET 1, D");
+            Cpu.D = setBitValue(Cpu.D, 1, 1);
+            break;
+        }
+        case 0xCB: {
+            trace("SET 1, E");
+            Cpu.E = setBitValue(Cpu.E, 1, 1);
+            break;
+        }
+        case 0xCC: {
+            trace("SET 1, H");
+            Cpu.H = setBitValue(Cpu.H, 1, 1);
+            break;
+        }
+        case 0xCD: {
+            trace("SET 1, L");
+            Cpu.L = setBitValue(Cpu.L, 1, 1);
+            break;
+        }
+        case 0xCE: {
+            trace("SET 1, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 1, 1));
+            break;
+        }
+        case 0xCF: {
+            trace("SET 1, A");
+            Cpu.A = setBitValue(Cpu.A, 1, 1);
+            break;
+        }
+        case 0xD0: {
+            trace("SET 2, B");
+            Cpu.B = setBitValue(Cpu.B, 2, 1);
+            break;
+        }
+        case 0xD1: {
+            trace("SET 2, C");
+            Cpu.C = setBitValue(Cpu.C, 2, 1);
+            break;
+        }
+        case 0xD2: {
+            trace("SET 2, D");
+            Cpu.D = setBitValue(Cpu.D, 2, 1);
+            break;
+        }
+        case 0xD3: {
+            trace("SET 2, E");
+            Cpu.E = setBitValue(Cpu.E, 2, 1);
+            break;
+        }
+        case 0xD4: {
+            trace("SET 2, H");
+            Cpu.H = setBitValue(Cpu.H, 2, 1);
+            break;
+        }
+        case 0xD5: {
+            trace("SET 2, L");
+            Cpu.L = setBitValue(Cpu.L, 2, 1);
+            break;
+        }
+        case 0xD6: {
+            trace("SET 2, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 2, 1));
+            break;
+        }
+        case 0xD7: {
+            trace("SET 2, A");
+            Cpu.A = setBitValue(Cpu.A, 2, 1);
+            break;
+        }
+        case 0xD8: {
+            trace("SET 3, B");
+            Cpu.B = setBitValue(Cpu.B, 3, 1);
+            break;
+        }
+        case 0xD9: {
+            trace("SET 3, C");
+            Cpu.C = setBitValue(Cpu.C, 3, 1);
+            break;
+        }
+        case 0xDA: {
+            trace("SET 3, D");
+            Cpu.D = setBitValue(Cpu.D, 3, 1);
+            break;
+        }
+        case 0xDB: {
+            trace("SET 3, E");
+            Cpu.E = setBitValue(Cpu.E, 3, 1);
+            break;
+        }
+        case 0xDC: {
+            trace("SET 3, H");
+            Cpu.H = setBitValue(Cpu.H, 3, 1);
+            break;
+        }
+        case 0xDD: {
+            trace("SET 3, L");
+            Cpu.L = setBitValue(Cpu.L, 3, 1);
+            break;
+        }
+        case 0xDE: {
+            trace("SET 3, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 3, 1));
+            break;
+        }
+        case 0xDF: {
+            trace("SET 3, A");
+            Cpu.A = setBitValue(Cpu.A, 3, 1);
+            break;
+        }
+        case 0xE0: {
+            trace("SET 4, B");
+            Cpu.B = setBitValue(Cpu.B, 4, 1);
+            break;
+        }
+        case 0xE1: {
+            trace("SET 4, C");
+            Cpu.C = setBitValue(Cpu.C, 4, 1);
+            break;
+        }
+        case 0xE2: {
+            trace("SET 4, D");
+            Cpu.D = setBitValue(Cpu.D, 4, 1);
+            break;
+        }
+        case 0xE3: {
+            trace("SET 4, E");
+            Cpu.E = setBitValue(Cpu.E, 4, 1);
+            break;
+        }
+        case 0xE4: {
+            trace("SET 4, H");
+            Cpu.H = setBitValue(Cpu.H, 4, 1);
+            break;
+        }
+        case 0xE5: {
+            trace("SET 4, L");
+            Cpu.L = setBitValue(Cpu.L, 4, 1);
+            break;
+        }
+        case 0xE6: {
+            trace("SET 4, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 4, 1));
+            break;
+        }
+        case 0xE7: {
+            trace("SET 4, A");
+            Cpu.A = setBitValue(Cpu.A, 4, 1);
+            break;
+        }
+        case 0xE8: {
+            trace("SET 5, B");
+            Cpu.B = setBitValue(Cpu.B, 5, 1);
+            break;
+        }
+        case 0xE9: {
+            trace("SET 5, C");
+            Cpu.C = setBitValue(Cpu.C, 5, 1);
+            break;
+        }
+        case 0xEA: {
+            trace("SET 5, D");
+            Cpu.D = setBitValue(Cpu.D, 5, 1);
+            break;
+        }
+        case 0xEB: {
+            trace("SET 5, E");
+            Cpu.E = setBitValue(Cpu.E, 5, 1);
+            break;
+        }
+        case 0xEC: {
+            trace("SET 5, H");
+            Cpu.H = setBitValue(Cpu.H, 5, 1);
+            break;
+        }
+        case 0xED: {
+            trace("SET 5, L");
+            Cpu.L = setBitValue(Cpu.L, 5, 1);
+            break;
+        }
+        case 0xEE: {
+            trace("SET 5, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 5, 1));
+            break;
+        }
+        case 0xEF: {
+            trace("SET 5, A");
+            Cpu.A = setBitValue(Cpu.A, 5, 1);
+            break;
+        }
+        case 0xF0: {
+            trace("SET 6, B");
+            Cpu.B = setBitValue(Cpu.B, 6, 1);
+            break;
+        }
+        case 0xF1: {
+            trace("SET 6, C");
+            Cpu.C = setBitValue(Cpu.C, 6, 1);
+            break;
+        }
+        case 0xF2: {
+            trace("SET 6, D");
+            Cpu.D = setBitValue(Cpu.D, 6, 1);
+            break;
+        }
+        case 0xF3: {
+            trace("SET 6, E");
+            Cpu.E = setBitValue(Cpu.E, 6, 1);
+            break;
+        }
+        case 0xF4: {
+            trace("SET 6, H");
+            Cpu.H = setBitValue(Cpu.H, 6, 1);
+            break;
+        }
+        case 0xF5: {
+            trace("SET 6, L");
+            Cpu.L = setBitValue(Cpu.L, 6, 1);
+            break;
+        }
+        case 0xF6: {
+            trace("SET 6, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 6, 1));
+            break;
+        }
+        case 0xF7: {
+            trace("SET 6, A");
+            Cpu.A = setBitValue(Cpu.A, 6, 1);
+            break;
+        }
+        case 0xF8: {
+            trace("SET 7, B");
+            Cpu.B = setBitValue(Cpu.B, 7, 1);
+            break;
+        }
+        case 0xF9: {
+            trace("SET 7, C");
+            Cpu.C = setBitValue(Cpu.C, 7, 1);
+            break;
+        }
+        case 0xFA: {
+            trace("SET 7, D");
+            Cpu.D = setBitValue(Cpu.D, 7, 1);
+            break;
+        }
+        case 0xFB: {
+            trace("SET 7, E");
+            Cpu.E = setBitValue(Cpu.E, 7, 1);
+            break;
+        }
+        case 0xFC: {
+            trace("SET 7, H");
+            Cpu.H = setBitValue(Cpu.H, 7, 1);
+            break;
+        }
+        case 0xFD: {
+            trace("SET 7, L");
+            Cpu.L = setBitValue(Cpu.L, 7, 1);
+            break;
+        }
+        case 0xFE: {
+            trace("SET 7, (HL)");
+            const hl = getHL();
+            const value = readByte(hl);
+            writeByte(hl, setBitValue(value, 7, 1));
+            break;
+        }
+        case 0xFF: {
+            trace("SET 7, A");
+            Cpu.A = setBitValue(Cpu.A, 7, 1);
+            break;
+        }
         default: {
             new Error("Unreachable code");
             break;
