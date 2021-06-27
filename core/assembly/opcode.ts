@@ -3,17 +3,6 @@ import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setZeroFlag, setHalfCarr
 import { loadToRegister, loadToPairRegister, loadToMemoryAddress } from './instructions';
 import { getLowNibble, getHighByte, getLowByte } from './helpers';
 
-function fetchOpcode(): u8 {
-    return readByteAtPc();
-}
-
-/*
-    opcode done: (not tested at all)
-    from 0x40 to 0x7F | except 0x76 (HALT OPCODE)
-
-*/
-
-
 function handle0xOpcode(opcode: u8): void {
     switch (opcode) {
         case 0x0: {
@@ -61,7 +50,12 @@ function handle0xOpcode(opcode: u8): void {
         }
         case 0x7: {
             trace("RLCA");
-            // OPCODE_TBD
+            const leftMostBit = Cpu.A & 0x80;
+            Cpu.A = (Cpu.A << 1) & 0xFE;
+            setCarryFlag(leftMostBit > 0 ? 1 : 0);
+            setZeroFlag(0);
+            setHalfCarryFlag(0);
+            setNegativeFlag(0);
         }
         case 0x8: {
             trace("LD (nn), SP");
@@ -79,6 +73,7 @@ function handle0xOpcode(opcode: u8): void {
             setCarryFlag(result > 0xFFFF ? 1 : 0);
             setNegativeFlag(0);
             setHalfCarryFlag(halfCarry);
+            setHL(result & 0xFFFF);
             // syncCycle(4)
         }
         case 0xA: {
@@ -127,6 +122,9 @@ function handle0xOpcode(opcode: u8): void {
                 value = value | 0x80;
                 setCarryFlag(0);
             }
+            setZeroFlag(0);
+            setHalfCarryFlag(0);
+            setNegativeFlag(0);
         }
         default: {
             new Error("Unreachable code");
@@ -156,8 +154,7 @@ function handle1xOpcode(opcode: u8): void {
         }
         case 0x3: {
             trace("INC DE");
-            let value = getDE();
-            value = ((value + 1) & 0xFFFF); 
+            const value = ((getDE() + 1) & 0xFFFF); 
             setDE(value);
             // syncCycle(4)
         }
@@ -190,14 +187,20 @@ function handle1xOpcode(opcode: u8): void {
         case 0x8: {
             trace("JR e");
             const relativeOffset: i8 = <i8>readByteAtPc();
-            const newPc = Cpu.pc + relativeOffset;
             // syncCycle(4)
-            Cpu.pc = newPc;
+            Cpu.pc += relativeOffset;
         }
         case 0x9: {
             trace("ADD HL, DE");
-            // OPCODE_TBD
-            // setNegativeFlag(0);
+            const hl = getHL();
+            const de = getDE();
+            const result = hl + de;
+            const halfCarry = ((getLowNibble(Cpu.L) + getLowByte(Cpu.E)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setHL(result & 0xFFFF);
+            // syncCycle(4)
         }
         case 0xA: {
             trace("LD A, (DE)");
@@ -206,8 +209,7 @@ function handle1xOpcode(opcode: u8): void {
         }
         case 0xB: {
             trace("DEC DE");
-            let value = getDE();
-            value = ((value - 1) & 0xFFFF); 
+            const value = ((getDE() - 1) & 0xFFFF); 
             setDE(value);
             // syncCycle(4)
         }
@@ -250,7 +252,7 @@ function handle2xOpcode(opcode: u8): void {
             trace("JR NZ, e");
             const relativeOffset: i8 = <i8>readByteAtPc();
             const zeroFlag = getZeroFlag();
-            if (!zeroFlag) {
+            if (zeroFlag == 0) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
             }
@@ -264,16 +266,15 @@ function handle2xOpcode(opcode: u8): void {
         }
         case 0x2: {
             trace("LD (HL+), A");
-            const hlAddress = getHL();
-            writeByte(hlAddress, Cpu.A);
-            const hlAddressInc = ((hlAddress + 1) & 0xFFFF);
-            setBC(hlAddressInc);
+            const hl = getHL();
+            writeByte(hl, Cpu.A);
+            const hlInc = ((hl + 1) & 0xFFFF);
+            setBC(hlInc);
         }
         case 0x3: {
             trace("INC HL");
-            const hl = getHL();
-            const hlInc = ((hl + 1) & 0xFFFF); 
-            setHL(hlInc);
+            const value = ((getHL() + 1) & 0xFFFF); 
+            setHL(value);
             // syncCycle(4)
         }
         case 0x4: {
@@ -306,27 +307,32 @@ function handle2xOpcode(opcode: u8): void {
             trace("JR Z, e");
             const relativeOffset: i8 = <i8>readByteAtPc();
             const zeroFlag = getZeroFlag();
-            if (zeroFlag) {
+            if (zeroFlag == 1) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
             }
         }
         case 0x9: {
             trace("ADD HL, HL");
-            // OPCODE_TBD
-            // setNegativeFlag(0);
+            const hl = getHL();
+            const result = hl + hl;
+            const halfCarry = ((getLowNibble(Cpu.L) + getLowByte(Cpu.L)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setHL(result & 0xFFFF);
+            // syncCycle(4)
         }
         case 0xA: {
             trace("LD A, (HL+)");
-            const hlAddress = getHL();
-            Cpu.A = readByte(hlAddress);
-            const hlAddressInc = ((hlAddress + 1) & 0xFFFF);
-            setHL(hlAddressInc);
+            const hl = getHL();
+            Cpu.A = readByte(hl);
+            const hlInc = ((hl + 1) & 0xFFFF);
+            setHL(hlInc);
         }
         case 0xB: {
             trace("DEC HL");
-            let value = getHL();
-            value = ((value - 1) & 0xFFFF); 
+            const value = ((getHL() - 1) & 0xFFFF); 
             setHL(value);
             // syncCycle(4)
         }
@@ -354,7 +360,9 @@ function handle2xOpcode(opcode: u8): void {
         }
         case 0xF: {
             trace("CPL");
-            // OPCODE_TBD
+            Cpu.A = Cpu.A ^ 0xFF;
+            setHalfCarryFlag(1);
+            setNegativeFlag(1);
         }
         default: {
             new Error("Unreachable code");
@@ -369,7 +377,7 @@ function handle3xOpcode(opcode: u8): void {
             trace("JR NC, e");
             const relativeOffset: i8 = <i8>readByteAtPc();
             const carryFlag = getCarryFlag();
-            if (!carryFlag) {
+            if (carryFlag == 0) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
             }
@@ -382,38 +390,38 @@ function handle3xOpcode(opcode: u8): void {
         }
         case 0x2: {
             trace("LD (HL-), A");
-            const hlAddress = getHL();
-            writeByte(hlAddress, Cpu.A);
-            const hlAddressDec = ((hlAddress - 1) & 0xFFFF);
-            setHL(hlAddressDec);
+            const hl = getHL();
+            writeByte(hl, Cpu.A);
+            const hlDec = ((hl - 1) & 0xFFFF);
+            setHL(hlDec);
         }
         case 0x3: {
             trace("INC SP");
-            const spInc = ((Cpu.sp + 1) & 0xFF);
+            const spInc = ((Cpu.sp + 1) & 0xFFFF);
             Cpu.sp = spInc;
             // syncCycle(4)
         }
         case 0x4: {
             trace("INC (HL)");
-            const hlAddress = getHL();
-            const valueAtAddress = readByte(hlAddress);
-            const valueAtAddressInc = ((valueAtAddress + 1) & 0xFF);
-            const halfCarry = ((getLowNibble(valueAtAddress) + 1) & 0x10) > 0 ? 1 : 0;
+            const hl = getHL();
+            const value = readByte(hl);
+            const valueInc = ((value + 1) & 0xFF);
+            const halfCarry = ((getLowNibble(value) + 1) & 0x10) > 0 ? 1 : 0;
             setNegativeFlag(0);
-            setZeroFlag(valueAtAddressInc > 0 ? 0 : 1);
+            setZeroFlag(valueInc > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);
-            writeByte(hlAddress, valueAtAddressInc);
+            writeByte(hl, valueInc);
         }
         case 0x5: {
             trace("DEC (HL)");
-            const hlAddress = getHL();
-            const valueAtAddress = readByte(hlAddress);
-            const valueAtAddressDec = ((valueAtAddress - 1) & 0xFF);
-            const halfCarry = ((getLowNibble(valueAtAddress) - 1) & 0x10) > 0 ? 1 : 0;
+            const hl = getHL();
+            const value = readByte(hl);
+            const valueDec = ((value - 1) & 0xFF);
+            const halfCarry = ((getLowNibble(value) - 1) & 0x10) > 0 ? 1 : 0;
             setNegativeFlag(1);
-            setZeroFlag(valueAtAddressDec > 0 ? 0 : 1);
+            setZeroFlag(valueDec > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);
-            writeByte(hlAddress, valueAtAddressDec);
+            writeByte(hl, valueDec);
         }
         case 0x6: {
             trace("LD (HL), n");
@@ -423,7 +431,9 @@ function handle3xOpcode(opcode: u8): void {
         }
         case 0x7: {
             trace("SCF");
-            // OPCODE_TBD
+            setNegativeFlag(0);
+            setHalfCarryFlag(0);
+            setCarryFlag(1);
         }
         case 0x8: {
             trace("JR C, e");
@@ -436,19 +446,26 @@ function handle3xOpcode(opcode: u8): void {
         }
         case 0x9: {
             trace("ADD HL, SP");
-            // OPCODE_TBD
-            // setNegativeFlag(0);
+            const hl = getHL();
+            const result = hl + Cpu.sp;
+            const halfCarry = ((getLowNibble(Cpu.L) + getLowByte(Cpu.sp)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            setNegativeFlag(0);
+            setHalfCarryFlag(halfCarry);
+            setHL(result & 0xFFFF);
+            // syncCycle(4)
         }
         case 0xA: {
             trace("LD A, (HL-)");
-            const hlAddress = getHL();
-            Cpu.A = readByte(hlAddress);
-            const hlAddressDec = ((hlAddress - 1) & 0xFFFF);
-            setHL(hlAddressDec);
+            const hl = getHL();
+            Cpu.A = readByte(hl);
+            const hlDec = ((hl - 1) & 0xFFFF);
+            setHL(hlDec);
         }
         case 0xB: {
             trace("DEC SP");
-            Cpu.sp = ((Cpu.sp - 1) & 0xFFFF);
+            const spDec = ((Cpu.sp - 1) & 0xFFFF);
+            Cpu.sp = spDec;
             // syncCycle(4)
         }
         case 0xC: {
@@ -488,84 +505,84 @@ function handle4xOpcode(opcode: u8): void {
     switch (opcode) {
         case 0x0: {
             trace("LD B, B");
-            loadToRegister("B", Cpu.B);
+            Cpu.B = Cpu.B;
             break;
         }
         case 0x1: {
             trace("LD B, C");
-            loadToRegister("B", Cpu.C);
+            Cpu.B = Cpu.C;
             break;
         }
         case 0x2: {
             trace("LD B, D");
-            loadToRegister("B", Cpu.D);
+            Cpu.B = Cpu.D;
             break;
         }
         case 0x3: {
             trace("LD B, E");
-            loadToRegister("B", Cpu.E);
+            Cpu.B = Cpu.E;
             break;
         }
         case 0x4: {
             trace("LD B, H");
-            loadToRegister("B", Cpu.H);
+            Cpu.B = Cpu.H;
             break;
         }
         case 0x5: {
             trace("LD B, L");
-            loadToRegister("B", Cpu.L);
+            Cpu.B = Cpu.L;
             break;
         }
         case 0x6: {
             trace("LD B, (HL)");
-            const HL = getHL();
-            loadToRegister("B", readByte(HL));
+            const hl = getHL();
+            Cpu.B = readByte(hl);
             break;
         }
         case 0x7: {
             trace("LD B, A");
-            loadToRegister("B", Cpu.A);
+            Cpu.B = Cpu.A;
             break;
         }
         case 0x8: {
             trace("LD C, B");
-            loadToRegister("C", Cpu.B);
+            Cpu.C = Cpu.B;
             break;
         }
         case 0x9: {
             trace("LD C, C");
-            loadToRegister("C", Cpu.C);
+            Cpu.C = Cpu.C;
             break;
         }
         case 0xA: {
             trace("LD C, D");
-            loadToRegister("C", Cpu.D);
+            Cpu.C = Cpu.D;
             break;
         }
         case 0xB: {
             trace("LD C, E");
-            loadToRegister("C", Cpu.E);
+            Cpu.C = Cpu.E;
             break;
         }
         case 0xC: {
             trace("LD C, H");
-            loadToRegister("C", Cpu.H);
+            Cpu.C = Cpu.H;
             break;
         }
         case 0xD: {
             trace("LD C, L");
-            loadToRegister("C", Cpu.L);
+            Cpu.C = Cpu.L;
             break;
         }
         case 0xE: {
             trace("LD C, (HL)");
-            const HL = getHL();
-            loadToRegister("C", readByte(HL));
+            const hl = getHL();
+            Cpu.C = readByte(hl);
             break;
         }
         case 0xF: {
             trace("LD C, A");
-            loadToRegister("C", Cpu.A);
+            Cpu.C = Cpu.A;
             break;
         }
         default: {
@@ -579,84 +596,84 @@ function handle5xOpcode(opcode: u8): void {
     switch (opcode) {
         case 0x0: {
             trace("LD D, B");
-            loadToRegister("D", Cpu.B);
+            Cpu.D = Cpu.B;
             break;
         }
         case 0x1: {
             trace("LD D, C");
-            loadToRegister("D", Cpu.C);
+            Cpu.D = Cpu.C;
             break;
         }
         case 0x2: {
             trace("LD D, D");
-            loadToRegister("D", Cpu.D);
+            Cpu.D = Cpu.D;
             break;
         }
         case 0x3: {
             trace("LD D, E");
-            loadToRegister("D", Cpu.E);
+            Cpu.D = Cpu.E;
             break;
         }
         case 0x4: {
             trace("LD D, H");
-            loadToRegister("D", Cpu.H);
+            Cpu.D = Cpu.H;
             break;
         }
         case 0x5: {
             trace("LD D, L");
-            loadToRegister("D", Cpu.L);
+            Cpu.D = Cpu.L;
             break;
         }
         case 0x6: {
             trace("LD D, (HL)");
-            const HL = getHL();
-            loadToRegister("D", readByte(HL));
+            const hl = getHL();
+            Cpu.D = readByte(hl);
             break;
         }
         case 0x7: {
             trace("LD D, A");
-            loadToRegister("D", Cpu.A);
+            Cpu.D = Cpu.A;
             break;
         }
         case 0x8: {
             trace("LD E, B");
-            loadToRegister("E", Cpu.B);
+            Cpu.E = Cpu.B;
             break;
         }
         case 0x9: {
             trace("LD E, C");
-            loadToRegister("E", Cpu.C);
+            Cpu.E = Cpu.C;
             break;
         }
         case 0xA: {
             trace("LD E, D");
-            loadToRegister("E", Cpu.D);
+            Cpu.E = Cpu.D;
             break;
         }
         case 0xB: {
             trace("LD E, E");
-            loadToRegister("E", Cpu.E);
+            Cpu.E = Cpu.E;
             break;
         }
         case 0xC: {
             trace("LD E, H");
-            loadToRegister("E", Cpu.H);
+            Cpu.E = Cpu.H;
             break;
         }
         case 0xD: {
             trace("LD E, L");
-            loadToRegister("E", Cpu.L);
+            Cpu.E = Cpu.L;
             break;
         }
         case 0xE: {
             trace("LD E, (HL)");
-            const HL = getHL();
-            loadToRegister("E", readByte(HL));
+            const hl = getHL();
+            Cpu.E = readByte(hl);
             break;
         }
         case 0xF: {
             trace("LD E, A");
-            loadToRegister("E", Cpu.A);
+            Cpu.E = Cpu.A;
             break;
         }
         default: {
@@ -670,84 +687,84 @@ function handle6xOpcode(opcode: u8): void {
     switch (opcode) {
         case 0x0: {
             trace("LD H, B");
-            loadToRegister("H", Cpu.B);
+            Cpu.H = Cpu.B;
             break;
         }
         case 0x1: {
             trace("LD H, C");
-            loadToRegister("H", Cpu.C);
+            Cpu.H = Cpu.C;
             break;
         }
         case 0x2: {
             trace("LD H, D");
-            loadToRegister("H", Cpu.D);
+            Cpu.H = Cpu.D;
             break;
         }
         case 0x3: {
             trace("LD H, E");
-            loadToRegister("H", Cpu.E);
+            Cpu.H = Cpu.E;
             break;
         }
         case 0x4: {
             trace("LD H, H");
-            loadToRegister("H", Cpu.H);
+            Cpu.H = Cpu.H;
             break;
         }
         case 0x5: {
             trace("LD H, L");
-            loadToRegister("H", Cpu.L);
+            Cpu.H = Cpu.L;
             break;
         }
         case 0x6: {
             trace("LD H, (HL)");
-            const HL = getHL();
-            loadToRegister("H", readByte(HL));
+            const hl = getHL();
+            Cpu.H = readByte(hl);
             break;
         }
         case 0x7: {
             trace("LD H, A");
-            loadToRegister("H", Cpu.A);
+            Cpu.H = Cpu.A;
             break;
         }
         case 0x8: {
             trace("LD L, B");
-            loadToRegister("L", Cpu.B);
+            Cpu.L = Cpu.B;
             break;
         }
         case 0x9: {
             trace("LD L, C");
-            loadToRegister("L", Cpu.C);
+            Cpu.L = Cpu.C;
             break;
         }
         case 0xA: {
             trace("LD L, D");
-            loadToRegister("L", Cpu.D);
+            Cpu.L = Cpu.D;
             break;
         }
         case 0xB: {
             trace("LD L, E");
-            loadToRegister("L", Cpu.E);
+            Cpu.L = Cpu.E;
             break;
         }
         case 0xC: {
             trace("LD L, H");
-            loadToRegister("L", Cpu.H);
+            Cpu.L = Cpu.H;
             break;
         }
         case 0xD: {
             trace("LD L, L");
-            loadToRegister("L", Cpu.L);
+            Cpu.L = Cpu.L;
             break;
         }
         case 0xE: {
             trace("LD L, (HL)");
-            const HL = getHL();
-            loadToRegister("L", readByte(HL));
+            const hl = getHL();
+            Cpu.L = readByte(hl);
             break;
         }
         case 0xF: {
             trace("LD L, A");
-            loadToRegister("L", Cpu.A);
+            Cpu.L = Cpu.A;
             break;
         }
         default: {
@@ -761,38 +778,38 @@ function handle7xOpcode(opcode: u8): void {
     switch (opcode) {
         case 0x0: {
             trace("LD (HL), B");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.B);
+            const hl = getHL();
+            writeByte(hl, Cpu.B);
             break;
         }
         case 0x1: {
             trace("LD (HL), C");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.C);
+            const hl = getHL();
+            writeByte(hl, Cpu.C);
             break;
         }
         case 0x2: {
             trace("LD (HL), D");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.D);
+            const hl = getHL();
+            writeByte(hl, Cpu.D);
             break;
         }
         case 0x3: {
             trace("LD (HL), E");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.E);
+            const hl = getHL();
+            writeByte(hl, Cpu.E);
             break;
         }
         case 0x4: {
             trace("LD (HL), H");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.H);
+            const hl = getHL();
+            writeByte(hl, Cpu.H);
             break;
         }
         case 0x5: {
             trace("LD (HL), L");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.L);
+            const hl = getHL();
+            writeByte(hl, Cpu.L);
             break;
         }
         case 0x6: {
@@ -805,49 +822,49 @@ function handle7xOpcode(opcode: u8): void {
         }
         case 0x7: {
             trace("LD (HL), A");
-            const HL = getHL();
-            loadToMemoryAddress(HL, Cpu.A);
+            const hl = getHL();
+            writeByte(hl, Cpu.A);
             break;
         }
         case 0x8: {
             trace("LD A, B");
-            loadToRegister("A", Cpu.B);
+            Cpu.A = Cpu.B;
             break;
         }
         case 0x9: {
             trace("LD A, C");
-            loadToRegister("A", Cpu.C);
+            Cpu.A = Cpu.C;
             break;
         }
         case 0xA: {
             trace("LD A, D");
-            loadToRegister("A", Cpu.D);
+            Cpu.A = Cpu.D;
             break;
         }
         case 0xB: {
             trace("LD A, E");
-            loadToRegister("A", Cpu.E);
+            Cpu.A = Cpu.E;
             break;
         }
         case 0xC: {
             trace("LD A, H");
-            loadToRegister("A", Cpu.H);
+            Cpu.A = Cpu.H;
             break;
         }
         case 0xD: {
             trace("LD A, L");
-            loadToRegister("A", Cpu.L);
+            Cpu.A = Cpu.L;
             break;
         }
         case 0xE: {
             trace("LD A, (HL)");
-            const HL = getHL();
-            loadToRegister("A", readByte(HL));
+            const hl = getHL();
+            Cpu.A = readByte(hl);
             break;
         }
         case 0xF: {
             trace("LD A, A");
-            loadToRegister("A", Cpu.A);
+            Cpu.A = Cpu.A;
             break;
         }
         default: {
@@ -905,4 +922,4 @@ function executeOpcode(opcode: u8): void {
     }
 }
 
-export { fetchOpcode, executeOpcode };
+export { executeOpcode };

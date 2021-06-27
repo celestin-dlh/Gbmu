@@ -1,8 +1,9 @@
 import { Cpu } from './cpuState';
-import { executeOpcode, fetchOpcode } from './opcode';
+import { executeOpcode } from './opcode';
+import { readByteAtPc } from './readWriteOperations';
 
 export function step(): void {
-  const opcode: u8 = fetchOpcode();
+  const opcode: u8 = readByteAtPc();
   executeOpcode(opcode);
 }
 
