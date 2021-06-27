@@ -1676,7 +1676,7 @@ function handleCxOpcode(opcode: u8): void {
             trace("PUSH BC");
             // syncCycle(4)
             writeByte(Cpu.sp - 1, Cpu.B);
-            writeByte(Cpu.sp - 1, Cpu.C);
+            writeByte(Cpu.sp - 2, Cpu.C);
             Cpu.sp -= 2;
             break;
         }
@@ -1784,6 +1784,152 @@ function handleCxOpcode(opcode: u8): void {
     }
 }
 
+function handleDxOpcode(opcode: u8): void {
+    switch (opcode) {
+        case 0x0: {
+            trace("RET NC");
+            const carryFlag = getCarryFlag();
+            // syncCycle(4)
+            if (carryFlag == 0) {
+                const lowByte = readByte(Cpu.sp);
+                const highByte = readByte(Cpu.sp + 1);
+                Cpu.sp += 2;
+                // syncCycle(4)
+                Cpu.pc = combineBytes(highByte, lowByte);
+            }
+            break;
+        }
+        case 0x1: {
+            trace("POP DE");
+            const lowByte = readByte(Cpu.sp);
+            const highByte = readByte(Cpu.sp + 1);
+            Cpu.sp += 2;
+            setDE(combineBytes(highByte, lowByte));
+            break;
+        }
+        case 0x2: {
+            trace("JP NC, nn");
+            const carryFlag = getCarryFlag();
+            const nn = readWordAtPc();
+            if (carryFlag == 0) {
+                // syncCycle(4)
+                Cpu.pc = nn;
+            }
+            break;
+        }
+        case 0x4: {
+            trace("CALL NC, nn");
+            const carryFlag = getCarryFlag();
+            const nn = readWordAtPc();
+            if (carryFlag == 0) {
+                // syncCycle(4)
+                writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+                writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+                Cpu.sp -= 2;
+                Cpu.pc = nn;
+            }
+            break;
+        }
+        case 0x5: {
+            trace("PUSH DE");
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, Cpu.D);
+            writeByte(Cpu.sp - 2, Cpu.E);
+            Cpu.sp -= 2;
+            break;
+        }
+        case 0x6: {
+            trace("SUB A, n");
+            const n = readByteAtPc();
+            const result = Cpu.A - n;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0x7: {
+            trace("RST 10h");
+            // OPCODE_TDB
+            break;
+        }
+        case 0x8: {
+            trace("RET C");
+            const carryFlag = getCarryFlag();
+            // syncCycle(4)
+            if (carryFlag == 1) {
+                const lowByte = readByte(Cpu.sp);
+                const highByte = readByte(Cpu.sp + 1);
+                Cpu.sp += 2;
+                // syncCycle(4)
+                Cpu.pc = combineBytes(highByte, lowByte);
+            }
+            break;
+        }
+        case 0x9: {
+            trace("RETI");
+            const lowByte = readByte(Cpu.sp);
+            const highByte = readByte(Cpu.sp + 1);
+            Cpu.sp += 2;
+            // syncCycle(4)
+            Cpu.pc = combineBytes(highByte, lowByte);
+            // NEED TO SET IME HERE
+            // NEED TO SET IME HERE
+            // NEED TO SET IME HERE
+            // NEED TO SET IME HERE
+            break;
+        }
+        case 0xA: {
+            trace("JP C");
+            const carryFlag = getCarryFlag();
+            const nn = readWordAtPc();
+            if (carryFlag == 1) {
+                // syncCycle(4);
+                Cpu.pc = nn;
+            }
+            break;
+        }
+        case 0xC: {
+            trace("CALL C, nn");
+            const carryFlag = getCarryFlag();
+            const nn = readWordAtPc();
+            if (carryFlag == 1) {
+                // syncCycle(4)
+                writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+                writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+                Cpu.sp -= 2;
+                Cpu.pc = nn;
+            }
+            break;
+        }
+        case 0xE: {
+            trace("SBC A, n");
+            const carry = <u8>getCarryFlag();
+            const n = readByteAtPc();
+            const result = Cpu.A - n - carry;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(n) - carry) & 0x10) > 0 ? 1 : 0;
+            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setNegativeFlag(1);
+            setHalfCarryFlag(halfCarry);
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            Cpu.A = result & 0xFF;
+            break;
+        }
+        case 0xF: {
+            trace("RST 18h");
+            // OPCODE_TDB
+            break;
+
+        }
+        default: {
+            new Error("Unreachable code");
+            break;
+        }
+    }
+}
+
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
@@ -1842,6 +1988,10 @@ function executeOpcode(opcode: u8): void {
         }
         case 0xC: {
             handleCxOpcode(secondNibble);
+            break;
+        }
+        case 0xD: {
+            handleDxOpcode(secondNibble);
             break;
         }
  
