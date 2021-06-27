@@ -40,7 +40,10 @@ export class Cpu {
   static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
 }
 
+
+
 export function setZeroFlag(value: i32): void {
+  Cpu.F = Cpu.F & 0b1111_0000;
   if (value == 1) {
     Cpu.F = Cpu.F | 0b1000_0000;
   } else {
@@ -53,6 +56,7 @@ export function getZeroFlag(): bool {
 }
 
 export function setNegativeFlag(value: i32): void {
+  Cpu.F = Cpu.F & 0b1111_0000;
   if (value == 1) {
     Cpu.F = Cpu.F | 0b0100_0000;
   } else {
@@ -65,6 +69,7 @@ export function getNegativeFlag(): bool {
 }
 
 export function setHalfCarryFlag(value: i32): void {
+  Cpu.F = Cpu.F & 0b1111_0000;
   if (value == 1) {
     Cpu.F = Cpu.F | 0b0010_0000;
   } else {
@@ -77,6 +82,7 @@ export function getHalfCarryFlag(): bool {
 }
 
 export function setCarryFlag(value: i32): void {
+  Cpu.F = Cpu.F & 0b1111_0000;
   if (value == 1) {
     Cpu.F = Cpu.F | 0b0001_0000;
   } else {
@@ -118,4 +124,9 @@ export function setDE(word: u16): void {
 export function setHL(word: u16): void {
   Cpu.L = getLowByte(word);
   Cpu.H = getHighByte(word);
+}
+
+export function setAF(word: u16): void {
+  Cpu.F = getLowByte(word) & 0b1111_0000;
+  Cpu.A = getHighByte(word);
 }

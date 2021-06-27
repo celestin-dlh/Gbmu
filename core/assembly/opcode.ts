@@ -1,5 +1,5 @@
 import { readByteAtPc, readWordAtPc, readByte, writeByte } from './readWriteOperations';
-import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag } from './cpuState';
+import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag, setAF } from './cpuState';
 import { loadToRegister, loadToPairRegister, loadToMemoryAddress } from './instructions';
 import { getLowNibble, getHighByte, getLowByte, combineBytes } from './helpers';
 
@@ -2024,6 +2024,111 @@ function handleExOpcode(opcode: u8): void {
     }
 }
 
+function handleFxOpcode(opcode: u8): void {
+    switch (opcode) {
+        case 0x0: {
+            trace("LD A, (FF00 + n)");
+            const n = readByteAtPc();
+            const address = combineBytes(0xFF, n);
+            Cpu.A = readByte(address);
+            break;
+        }
+        case 0x1: {
+            trace("POP AF");
+            const lowByte = readByte(Cpu.sp);
+            const highByte = readByte(Cpu.sp + 1);
+            Cpu.sp += 2;
+            setAF(combineBytes(highByte, lowByte));
+            break;
+        }
+        case 0x2: {
+            trace("LD A, (FF00 + C)");
+            const address = combineBytes(0xFF, Cpu.C);
+            Cpu.A = readByte(address);
+            break;
+        }
+        case 0x3: {
+            trace("DI");
+            // OPCODE_TBD
+        }
+        case 0x5: {
+            trace("PUSH AF");
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, Cpu.A);
+            writeByte(Cpu.sp - 2, Cpu.F);
+            Cpu.sp -= 2;
+            break;
+        }
+        case 0x6: {
+            trace("OR A, n");
+            const n = readByteAtPc();
+            const result = Cpu.A | n;
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            setNegativeFlag(0);
+            setHalfCarryFlag(0);
+            setCarryFlag(0);
+            Cpu.A = result;
+            break;
+        }
+        case 0x7: {
+            trace("RST 30h");
+            // OPCODE_TDB
+            break;
+        }
+        case 0x8: {
+            trace("LD HL, SP + n");
+            // not sure about this instruction
+            const n = <i8>readByteAtPc();
+            const result = Cpu.sp + n;
+            const lowSp = getLowByte(Cpu.sp);
+            const halfCarry = ((getLowNibble(lowSp) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
+            setHalfCarryFlag(halfCarry);
+            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            setZeroFlag(0);
+            setNegativeFlag(0);
+            // syncCycle(4)
+            setHL(result);
+            break;
+        }
+        case 0x9: {
+            trace("LD SP, HL");
+            // syncCycle(4)
+            Cpu.sp = getHL();
+            break;
+        }
+        case 0xA: {
+            trace("LD A, (nn)");
+            const nn = readWordAtPc();
+            Cpu.A = readByte(nn);
+            break;
+        }
+        case 0xB: {
+            trace("EI");
+            // OPCODE_TBD
+        }
+        case 0xE: {
+            trace("CP A, n");
+            const n = readByteAtPc();
+            const result = Cpu.A - n;
+            const halfCarry = ((getLowNibble(Cpu.A) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
+            setZeroFlag(result > 0 ? 0 : 1);
+            setCarryFlag(result > 0xFF ? 1 : 0);
+            setHalfCarryFlag(halfCarry);
+            setNegativeFlag(1);
+            break;
+        }
+        case 0xF: {
+            trace("RST 38h");
+            // OPCODE_TDB
+            break;
+        }
+        default: {
+            new Error("Unreachable code");
+            break;
+        }
+    }
+}
+
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
@@ -2092,7 +2197,10 @@ function executeOpcode(opcode: u8): void {
             handleExOpcode(secondNibble);
             break;
         }
-        
+        case 0xF: {
+            handleFxOpcode(secondNibble);
+            break;
+        }
         default: {
             trace("This opcode isnt implemented yet");
             break;
