@@ -1930,6 +1930,100 @@ function handleDxOpcode(opcode: u8): void {
     }
 }
 
+function handleExOpcode(opcode: u8): void {
+    switch (opcode) {
+        case 0x0: {
+            trace("LD (FF00 + n), A");
+            const n = readByteAtPc();
+            const address = combineBytes(0xFF, n);
+            writeByte(address, Cpu.A);
+            break;
+        }
+        case 0x1: {
+            trace("POP HL");
+            const lowByte = readByte(Cpu.sp);
+            const highByte = readByte(Cpu.sp + 1);
+            Cpu.sp += 2;
+            setHL(combineBytes(highByte, lowByte));
+            break;
+        }
+        case 0x2: {
+            trace("LD (FF00 + C), A");
+            const address = combineBytes(0xFF, Cpu.C);
+            writeByte(address, Cpu.A);
+            break;
+        }
+        case 0x5: {
+            trace("PUSH HL");
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, Cpu.H);
+            writeByte(Cpu.sp - 2, Cpu.L);
+            Cpu.sp -= 2;
+            break;
+        }
+        case 0x6: {
+            trace("AND A, n");
+            const n = readByteAtPc();
+            const result = Cpu.A & n;
+            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
+            setNegativeFlag(0);
+            setCarryFlag(0);
+            setHalfCarryFlag(1);
+            Cpu.A = result;
+            break;
+        }
+        case 0x7: {
+            trace("RST 20h");
+            // OPCODE_TDB
+            break;
+        }
+        case 0x8: {
+            trace("ADD SP, n");
+            const n = <i8>readByteAtPc();
+            const result = Cpu.sp + n;
+            const lowSp = getLowByte(Cpu.sp);
+            const halfCarry = ((getLowNibble(lowSp) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
+            setHalfCarryFlag(halfCarry);
+            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            setZeroFlag(0);
+            setNegativeFlag(0);
+            Cpu.sp = result & 0xFFFF;
+            break;
+        }
+        case 0x9: {
+            trace("JP HL");
+            Cpu.pc = getHL();
+            break;
+        }
+        case 0xA: {
+            trace("LD (nn), A");
+            const nn = readWordAtPc();
+            writeByte(nn, Cpu.A);
+            break;
+        }
+        case 0xE: {
+            trace("XOR A, n");
+            const n = readByteAtPc();
+            const result = Cpu.A ^ n;
+            setZeroFlag(result > 0 ? 0 : 1);
+            setCarryFlag(0);
+            setHalfCarryFlag(0);
+            setNegativeFlag(0);
+            Cpu.A = result;
+            break;
+        }
+        case 0xF: {
+            trace("RST 28h");
+            // OPCODE_TDB
+            break;
+        }
+        default: {
+            new Error("Unreachable code");
+            break;
+        }
+    }
+}
+
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
@@ -1994,7 +2088,11 @@ function executeOpcode(opcode: u8): void {
             handleDxOpcode(secondNibble);
             break;
         }
- 
+        case 0xE: {
+            handleExOpcode(secondNibble);
+            break;
+        }
+        
         default: {
             trace("This opcode isnt implemented yet");
             break;
