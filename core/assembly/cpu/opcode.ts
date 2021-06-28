@@ -2193,7 +2193,8 @@ function handleFxOpcode(opcode: u8): void {
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
-function executeOpcode(opcode: u8): void {
+export function fetchExecuteOpcode(): void {
+    const opcode: u8 = readByteAtPc();
     const firstNibble: u8 = opcode >> 4;
     const secondNibble: u8 = opcode & 0xF;
 
@@ -2268,5 +2269,3 @@ function executeOpcode(opcode: u8): void {
         }
     }
 }
-
-export { executeOpcode };

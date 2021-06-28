@@ -21,8 +21,8 @@ function Controls({ executeStep }) {
             <p>Step exec: {execSinceStart}</p>
             <button class="controls__button">Reset</button>
             <button class="controls__button" onClick={() => handleStep(1)}>Step</button>
-            <button class="controls__button" onClick={() => handleStep(step)}>Step {step}</button>
             <input class="controls__input" placeholder="Step number" value={step} onChange={handleChange} />
+            <button class="controls__button" onClick={() => handleStep(step)}>Step {step}</button>
             <button class="controls__button">Run one frame</button>
             <button class="controls__button">Run one second</button>
         </div>

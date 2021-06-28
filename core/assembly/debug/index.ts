@@ -2,18 +2,18 @@ import { Cpu, getBC, getDE, getHL } from '../cpu/state';
 import { readMemoryMap } from '../readWriteOperations';
 
 export function getRegisters(): u16[] {
-    const registersArray = new Array<u16>(6).fill(0);
-    const af = (<u16>Cpu.A << 8) | Cpu.F;
+    const registersArray = new Array<u16>(7).fill(0);
     const bc = getBC();
     const de = getDE();
     const hl = getHL();
 
     registersArray[0] = Cpu.pc;
-    registersArray[1] = af;
-    registersArray[2] = bc;
-    registersArray[3] = de;
-    registersArray[4] = hl;
-    registersArray[5] = Cpu.sp;
+    registersArray[1] = bc;
+    registersArray[2] = de;
+    registersArray[3] = hl;
+    registersArray[4] = Cpu.sp;
+    registersArray[5] = Cpu.A;
+    registersArray[6] = Cpu.F;
     return registersArray;
 }
 

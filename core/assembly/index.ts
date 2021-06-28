@@ -1,11 +1,19 @@
 import { Cpu } from './cpu/state';
-import { executeOpcode } from './cpu/opcode';
+import { fetchExecuteOpcode } from './cpu/opcode';
 import { readByteAtPc } from './readWriteOperations';
 
 export function step(stepTimes: i32): void {
   for (let index = 0; index < stepTimes; index++) {
-    const opcode: u8 = readByteAtPc();
-    executeOpcode(opcode);
+    fetchExecuteOpcode();
+  }
+}
+
+const CYCLE_PER_FRAME = 69905;
+
+export function runFrame(): void {
+  let cycle = 0;
+  while (cycle < CYCLE_PER_FRAME) {
+    cycle += 4;
   }
 }
 
