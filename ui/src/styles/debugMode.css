@@ -5,16 +5,25 @@ main.debug {
         "screen disassembler registers other_registers ."
         "memory memory memory other_registers .";
     grid-template-columns: 200px auto 120px 200px 200px;
-    grid-template-rows: 80px 300px auto;
+    grid-template-rows: 100px 300px auto;
     column-gap: 10px;
     row-gap: 10px;
+}
+
+h3 {
+    font-size: 16px;
 }
 
 /* controls */
 .controls {
     grid-area: controls;
     display: flex;
+    justify-content: space-evenly;
     align-items: center;
+}
+
+.controls__input {
+    width: 80px;
 }
 
 .controls__button {
@@ -58,7 +67,6 @@ main.debug {
 .registers__header {
     margin: 0px;
     margin-bottom: 10px;
-    font-size: 16px;
 }
 
 .registers__table {

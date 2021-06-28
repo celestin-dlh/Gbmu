@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --watchAll --verbose",
     "dev": "asc assembly/index.ts --target debug --transform as-bind",
-    "build": "asc assembly/index.ts --target release --transform as-bind",
+    "build": "asc assembly/index.ts --target release --transform as-bind --use trace=assembly/index/notPrintingTrace",
     "watch": "watch 'npm run dev' assembly --interval=1"
   },
   "author": "zeeeratul",

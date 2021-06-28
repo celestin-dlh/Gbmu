@@ -4,6 +4,7 @@ import * as Comlink from 'comlink';
 import Disassembler from './component/Disassembler';
 import Memory from './component/Memory';
 import Registers from './component/Registers';
+import Controls from './component/Controls';
 import OtherRegisters from './component/OtherRegisters';
 
 function DebugMode({ workerApi, uiState }) {
@@ -19,19 +20,15 @@ function DebugMode({ workerApi, uiState }) {
         workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));
     }, [memoryAddress, uiState])
 
-    const handleStep = () => {
-        workerApi.step();
+    const executeStep = (stepTimes = 1) => {
+        workerApi.step(stepTimes);
         workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));
     }
 
     return (
         <main class="debug">
-            <div class="controls">
-                <button class="controls__button">Reset</button>
-                <button class="controls__button" onClick={handleStep}>Step</button>
-                <button class="controls__button">Run one frame</button>
-                <button class="controls__button">Run one second</button>
-            </div>
+
+            <Controls executeStep={executeStep} />
 
             <Disassembler data={debugState.disassembler} />
 

@@ -51,6 +51,7 @@ function writeMemoryMap(address: u16, byte: u8): void {
         new Error("Nintendo says use of this area is prohibited.");
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
+        trace("trying to access IO");
         Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {

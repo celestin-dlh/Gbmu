@@ -43,8 +43,8 @@ const gameboyWorker = {
         return this.exports.getOtherRegister();
     },
 
-    async step() {
-        this.exports.step();
+    async step(stepTimes) {
+        this.exports.step(stepTimes);
     },
 
     async getDebug(memoryAddress, cb) {

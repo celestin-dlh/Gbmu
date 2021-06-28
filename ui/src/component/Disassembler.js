@@ -1,6 +1,6 @@
 import { h, Fragment } from 'preact';
 
-// for the 0xCB instruction 
+// 0xCB instruction 
 const callbackInstruction = (secondOpcode) => {
     switch (secondOpcode) {
         case 0x0: return 'RLC B';
@@ -420,12 +420,143 @@ const hexToInstructionName = (instruction) => {
         case 0x7E: return "LD L, (HL)";
         case 0x7F: return "LD L, A";
 
-        // instruction to be done are from 0x80 to 0xFF (0xCB is already done)
+        case 0x80: return "ADD A, B";
+        case 0x81: return "ADD A, C";
+        case 0x82: return "ADD A, D";
+        case 0x83: return "ADD A, E";
+        case 0x84: return "ADD A, H";
+        case 0x85: return "ADD A, L";
+        case 0x86: return "ADD A, (HL)";
+        case 0x87: return "ADD A, A";
+        case 0x88: return "ADC A, B";
+        case 0x89: return "ADC A, C";
+        case 0x8A: return "ADC A, D";
+        case 0x8B: return "ADC A, E";
+        case 0x8C: return "ADC A, H";
+        case 0x8D: return "ADC A, L";
+        case 0x8E: return "ADC A, (HL)";
+        case 0x8F: return "ADC A, A";
 
+        case 0x90: return "SUB A, B";
+        case 0x91: return "SUB A, C";
+        case 0x92: return "SUB A, D";
+        case 0x93: return "SUB A, E";
+        case 0x94: return "SUB A, H";
+        case 0x95: return "SUB A, L";
+        case 0x96: return "SUB A, (HL)";
+        case 0x97: return "SUB A, A";
+        case 0x98: return "SBC A, B";
+        case 0x99: return "SBC A, C";
+        case 0x9A: return "SBC A, D";
+        case 0x9B: return "SBC A, E";
+        case 0x9C: return "SBC A, H";
+        case 0x9D: return "SBC A, L";
+        case 0x9E: return "SBC A, (HL)";
+        case 0x9F: return "SBC A, A";
 
+        case 0xA0: return "AND A, B";
+        case 0xA1: return "AND A, C";
+        case 0xA2: return "AND A, D";
+        case 0xA3: return "AND A, E";
+        case 0xA4: return "AND A, H";
+        case 0xA5: return "AND A, L";
+        case 0xA6: return "AND A, (HL)";
+        case 0xA7: return "AND A, A";
+        case 0xA8: return "XOR A, B";
+        case 0xA9: return "XOR A, C";
+        case 0xAA: return "XOR A, D";
+        case 0xAB: return "XOR A, E";
+        case 0xAC: return "XOR A, H";
+        case 0xAD: return "XOR A, L";
+        case 0xAE: return "XOR A, (HL)";
+        case 0xAF: return "XOR A, A";
+
+        case 0xB0: return "OR A, B";
+        case 0xB1: return "OR A, C";
+        case 0xB2: return "OR A, D";
+        case 0xB3: return "OR A, E";
+        case 0xB4: return "OR A, H";
+        case 0xB5: return "OR A, L";
+        case 0xB6: return "OR A, (HL)";
+        case 0xB7: return "OR A, A";
+        case 0xB8: return "CP A, B";
+        case 0xB9: return "CP A, C";
+        case 0xBA: return "CP A, D";
+        case 0xBB: return "CP A, E";
+        case 0xBC: return "CP A, H";
+        case 0xBD: return "CP A, L";
+        case 0xBE: return "CP A, (HL)";
+        case 0xBF: return "CP A, A";
+
+        case 0xC0: return "RET NZ";
+        case 0xC1: return "POP BC";
+        case 0xC2: return "JP NZ, nn";
+        case 0xC3: return "JP nn";
+        case 0xC4: return "CALL NZ, nn";
+        case 0xC5: return "PUSH BC";
+        case 0xC6: return "ADD A, n";
+        case 0xC7: return "RST 00h";
+        case 0xC8: return "RET Z";
+        case 0xC9: return "RET";
+        case 0xCA: return "JP Z, nn";
         case 0xCB: return callbackInstruction(instruction[2]);
+        case 0xCC: return "CALL Z, nn";
+        case 0xCD: return "CALL nn";
+        case 0xCE: return "ADC A, n";
+        case 0xCF: return "RST 08h";
 
-        default: return 'OPCODE TO BE CODE :)'
+        case 0xD0: return "RET NC";
+        case 0xD1: return "POP DE";
+        case 0xD2: return "JP NC, nn";
+        case 0xD3: return "IMPOSSIBLE";
+        case 0xD4: return "CALL NC, nn";
+        case 0xD5: return "PUSH DE";
+        case 0xD6: return "SUB A, n";
+        case 0xD7: return "RST 10h";
+        case 0xD8: return "RET C";
+        case 0xD9: return "RETI";
+        case 0xDA: return "JP C, nn";
+        case 0xDB: return "IMPOSSIBLE"
+        case 0xDC: return "CALL C, nn";
+        case 0xDD: return "IMPOSSIBLE"
+        case 0xDE: return "SBC A, n";
+        case 0xDF: return "RST 18h";
+
+        case 0xE0: return "LD (FF00 + n), A";
+        case 0xE1: return "POP HL";
+        case 0xE2: return "LD (FF00 + C), A";
+        case 0xE3: return "IMPOSSIBLE";
+        case 0xE4: return "IMPOSSIBLE";
+        case 0xE5: return "PUSH HL";
+        case 0xE6: return "AND A, n";
+        case 0xE7: return "RST 20h";
+        case 0xE8: return "ADD SP, i8";
+        case 0xE9: return "JP HL";
+        case 0xEA: return "LD (nn), A";
+        case 0xEB: return "IMPOSSIBLE"
+        case 0xEC: return "IMPOSSIBLE"
+        case 0xED: return "IMPOSSIBLE"
+        case 0xEE: return "XOR A, n";
+        case 0xEF: return "RST 28h";
+
+        case 0xF0: return "LD A, (FF00 + n)";
+        case 0xF1: return "POP AF";
+        case 0xF2: return "LD A, (FF00 + C)";
+        case 0xF3: return "DI";
+        case 0xF4: return "IMPOSSIBLE";
+        case 0xF5: return "PUSH AF";
+        case 0xF6: return "OR A, n";
+        case 0xF7: return "RST 30h";
+        case 0xF8: return "LD HL, SP + i8";
+        case 0xF9: return "LD SP, HL";
+        case 0xFA: return "LD A, (nn)";
+        case 0xFB: return "EI"
+        case 0xFC: return "IMPOSSIBLE"
+        case 0xFD: return "IMPOSSIBLE"
+        case 0xFE: return "CP A, n";
+        case 0xFF: return "RST 38h";
+
+        default: return "UNREACHABLE"
     }
 }
 
