@@ -38,9 +38,17 @@ export class Cpu {
   static ioRegisters: Uint8Array = new Uint8Array(IO_REGISTERS_SIZE).fill(0);
   static highRam: Uint8Array = new Uint8Array(HIGH_RAM_SIZE).fill(0);
   static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
+
+  static ime: bool = false;
 }
 
+export function setIme(): void {
+  Cpu.ime = true;
+}
 
+export function unsetIme(): void {
+  Cpu.ime = false;
+}
 
 export function setZeroFlag(value: bool): void {
   Cpu.F = Cpu.F & 0b1111_0000;

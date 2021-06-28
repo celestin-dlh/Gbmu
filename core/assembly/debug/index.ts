@@ -17,6 +17,20 @@ export function getRegisters(): u16[] {
     return registersArray;
 }
 
+export function getOtherRegister(): u8[] {
+    const otherRegistersArray = new Array<u8>(9).fill(0);
+    otherRegistersArray[0] = readMemoryMap(0xFF00); // P1
+    otherRegistersArray[1] = readMemoryMap(0xFF01); // SB
+    otherRegistersArray[2] = readMemoryMap(0xFF02); // SC
+    otherRegistersArray[3] = readMemoryMap(0xFF04); // DIV
+    otherRegistersArray[4] = readMemoryMap(0xFF05); // TIMA
+    otherRegistersArray[5] = readMemoryMap(0xFF06); // TMA
+    otherRegistersArray[6] = readMemoryMap(0xFF07); // TAC
+    otherRegistersArray[7] = readMemoryMap(0xFF0F); // IF
+    otherRegistersArray[8] = readMemoryMap(0xFFFF); // IE
+    return otherRegistersArray;
+}
+
 // Disassembler functions
 export function getInstructionLength(opcode: i32): u16 {
     switch (opcode) {

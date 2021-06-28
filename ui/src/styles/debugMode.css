@@ -1,10 +1,10 @@
 main.debug {
     display: grid;
     grid-template-areas: 
-        "screen controls . . ."
-        "screen disassembler registers . ."
-        "memory memory memory . .";
-    grid-template-columns: 340px auto 120px 120px 120px;
+        "screen controls controls controls ."
+        "screen disassembler registers other_registers ."
+        "memory memory memory other_registers .";
+    grid-template-columns: 200px auto 120px 200px 200px;
     grid-template-rows: 80px 300px auto;
     column-gap: 10px;
     row-gap: 10px;
@@ -58,9 +58,11 @@ main.debug {
 .registers__header {
     margin: 0px;
     margin-bottom: 10px;
+    font-size: 16px;
 }
 
 .registers__table {
+    text-align: center;
     flex-grow: 1;
     border: 1px solid white; 
     border-collapse: collapse;
@@ -72,6 +74,11 @@ main.debug {
 
 .registers__table td {
     padding: 5px;
+}
+
+/* other_registers */
+.other_registers {
+    grid-area: other_registers;
 }
 
 /* memory */

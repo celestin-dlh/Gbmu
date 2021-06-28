@@ -4,12 +4,14 @@ import * as Comlink from 'comlink';
 import Disassembler from './component/Disassembler';
 import Memory from './component/Memory';
 import Registers from './component/Registers';
+import OtherRegisters from './component/OtherRegisters';
 
 function DebugMode({ workerApi, uiState }) {
     const [debugState, setDebugState] = useState({
         memory: [],
         disassembler: [],
-        registers: []
+        registers: [],
+        otherRegisters: []
     })
     const [memoryAddress, setMemoryAddress] = useState(0);
 
@@ -40,6 +42,7 @@ function DebugMode({ workerApi, uiState }) {
             />
 
             <Registers data={debugState.registers} />
+            <OtherRegisters data={debugState.otherRegisters} />
         </main>
     )
 };

@@ -39,9 +39,11 @@ const gameboyWorker = {
         return this.exports.getRegisters();
     },
 
+    getOtherRegister() {
+        return this.exports.getOtherRegister();
+    },
+
     async step() {
-        // run wasm step (not implemented yet)
-        console.log('running step in wasm module');
         this.exports.step();
     },
 
@@ -49,11 +51,13 @@ const gameboyWorker = {
         const memory = await this.getMemory(memoryAddress);
         const disassembler = this.getDisassembler();
         const registers = this.getRegisters();
+        const otherRegisters = this.getOtherRegister();
 
         await cb({
             memory,
             disassembler,
-            registers
+            registers,
+            otherRegisters
         })
     }
 };

@@ -1,5 +1,5 @@
 import { readByteAtPc, readWordAtPc, readByte, writeByte } from '../readWriteOperations';
-import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setAF, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag } from './state';
+import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setAF, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag, setIme, unsetIme } from './state';
 import { getLowNibble, getHighByte, getLowByte, combineBytes, getBitValue, setBitValue } from '../helpers';
 import { handleCBOpcode } from './callbackOpcode';
 
@@ -2107,7 +2107,8 @@ function handleFxOpcode(opcode: u8): void {
         }
         case 0x3: {
             trace("DI");
-            // OPCODE_TBD
+            unsetIme();
+            break;
         }
         case 0x5: {
             trace("PUSH AF");
@@ -2162,7 +2163,8 @@ function handleFxOpcode(opcode: u8): void {
         }
         case 0xB: {
             trace("EI");
-            // OPCODE_TBD
+            setIme();
+            break;
         }
         case 0xE: {
             trace("CP A, n");
