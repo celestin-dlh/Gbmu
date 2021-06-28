@@ -9,8 +9,8 @@ import {
   IO_REGISTERS_SIZE,
   HIGH_RAM_SIZE,
   IE_SIZE
-} from './constants';
-import { combineBytes, getHighByte, getLowByte } from './helpers';
+} from '../constants';
+import { combineBytes, getHighByte, getLowByte } from '../helpers';
 
 export class Cpu {
   static A: u8 = 0;

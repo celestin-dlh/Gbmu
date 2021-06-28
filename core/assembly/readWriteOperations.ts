@@ -1,4 +1,4 @@
-import { Cpu } from './cpuState';
+import { Cpu } from './cpu/state';
 import {
     ROM_START,
     ROM_END,

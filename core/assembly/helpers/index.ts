@@ -1,4 +1,4 @@
-import { setCarryFlag } from "../cpuState";
+import { setCarryFlag } from "../cpu/state";
 
 export function getLowNibble(byte: u8): u8 {
     return (byte & 0xF);    
@@ -37,13 +37,4 @@ export function setBitValue(byte: u8, bitIndex: u8, bitValue: bool): u8 {
     } else {
         return byte & bitOffMask;
     }
-}
-
-
-
-export function rotateLeftByte(byte: u8): void {
-// rotate + bit qui sort dans carry flag
-
-    // const leftMostBit = getBitValue(byte, 7);
-    // setCarryFlag(leftMostBit);
 }

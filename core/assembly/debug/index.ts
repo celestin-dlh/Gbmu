@@ -1,4 +1,4 @@
-import { Cpu, getBC, getDE, getHL } from '../cpuState';
+import { Cpu, getBC, getDE, getHL } from '../cpu/state';
 import { readMemoryMap } from '../readWriteOperations';
 
 export function getRegisters(): u16[] {
