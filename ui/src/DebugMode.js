@@ -14,7 +14,7 @@ function DebugMode({ workerApi, uiState }) {
         registers: [],
         otherRegisters: []
     })
-    const [memoryAddress, setMemoryAddress] = useState(0);
+    const [memoryAddress, setMemoryAddress] = useState(0x100);
 
     useEffect(() => {
         workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));

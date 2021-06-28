@@ -308,7 +308,7 @@ function getInstructionData(byteToGet: i32, programCounter: u16): Array<u16> {
     const instructionData = new Array<u16>();
     instructionData.push(programCounter);
     for (let index = 0; index < byteToGet; index++) {
-        const byte = Cpu.rom[index + programCounter];
+        const byte = readMemoryMap(<u16>index + programCounter);
         instructionData.push(byte);
     }
     return instructionData;
@@ -319,7 +319,7 @@ export function getDisassembler(): u16[][]  {
     const instructionArray = new Array<u16[]>();
     
     for (let instructionCount = 0; instructionCount < 6; instructionCount++) {
-        const opcode = Cpu.rom[programCounter];
+        const opcode = readMemoryMap(programCounter);
         const instructionLength = getInstructionLength(opcode);
         const instructionData = getInstructionData(instructionLength, programCounter);
         instructionArray.push(instructionData);

@@ -1713,6 +1713,7 @@ function handleCxOpcode(opcode: u8): void {
         case 0x3: {
             trace("JP nn");
             const nn = readWordAtPc();
+            trace("NN", 1, nn);
             // syncCycle(4)
             Cpu.pc = nn;
             break;
