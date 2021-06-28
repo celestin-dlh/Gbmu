@@ -47,6 +47,11 @@ const gameboyWorker = {
         this.exports.step(stepTimes);
     },
 
+    async runFrame() {
+        console.log('run frame')
+        this.exports.runFrame();
+    },
+
     async getDebug(memoryAddress, cb) {
         const memory = await this.getMemory(memoryAddress);
         const disassembler = this.getDisassembler();

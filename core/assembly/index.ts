@@ -13,7 +13,7 @@ const CYCLE_PER_FRAME = 69905;
 export function runFrame(): void {
   let cycle = 0;
   while (cycle < CYCLE_PER_FRAME) {
-    cycle += 4;
+    cycle += fetchExecuteOpcode();
   }
 }
 

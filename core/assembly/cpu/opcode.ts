@@ -3,30 +3,30 @@ import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setAF, setZeroFlag, setH
 import { getLowNibble, getHighByte, getLowByte, combineBytes, getBitValue, setBitValue } from '../helpers';
 import { handleCBOpcode } from './callbackOpcode';
 
-function handle0xOpcode(opcode: u8): void {
+function handle0xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("NOP");
-            break;
+            return 4;
         }
         case 0x1: {
             trace("LD BC, nn");
             Cpu.C = readByteAtPc();
             Cpu.B = readByteAtPc();
-            break;
+            return 12;
         }
         case 0x2: {
             trace("LD (BC), A");
             const bcAddress = getBC();
             writeByte(bcAddress, Cpu.A);
-            break;
+            return 8;
         }
         case 0x3: {
             trace("INC BC");
             const value = ((getBC() + 1) & 0xFFFF); 
             setBC(value);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0x4: {
             trace("INC B");
@@ -36,7 +36,7 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.B = value;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("DEC B");
@@ -46,12 +46,12 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.B = value;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("LD B, n");
             Cpu.B = readByteAtPc();
-            break;
+            return 8;
         }
         case 0x7: {
             trace("RLCA");
@@ -62,7 +62,7 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag(0);
             setCarryFlag(eighthBit);
-            break;
+            return 4;
         }
         case 0x8: {
             trace("LD (nn), SP");
@@ -70,7 +70,7 @@ function handle0xOpcode(opcode: u8): void {
             writeByte(lowN, getLowByte(Cpu.sp));
             const highN = readByteAtPc();
             writeByte(highN, getHighByte(Cpu.sp));
-            break;
+            return 20;
         }
         case 0x9: {
             trace("ADD HL, BC");
@@ -83,13 +83,13 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setHL(result & 0xFFFF);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xA: {
             trace("LD A, (BC)");
             const bcAddress = getBC();
             Cpu.A = readByte(bcAddress);
-            break;
+            return 8;
         }
         case 0xB: {
             trace("DEC BC");
@@ -97,7 +97,7 @@ function handle0xOpcode(opcode: u8): void {
             const bcDec = ((bc - 1) & 0xFFFF);
             setBC(bcDec);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xC: {
             trace("INC C");
@@ -107,7 +107,7 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.C = value;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("DEC C");
@@ -117,12 +117,12 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.C = value;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD C, n");
             Cpu.C = readByteAtPc();
-            break;
+            return 8;
         }
         case 0xF: {
             trace("RRCA");
@@ -133,41 +133,42 @@ function handle0xOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag(0);
             setCarryFlag(firstBit);
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle1xOpcode(opcode: u8): void {
+function handle1xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("STOP");
+            abort("STOP CRASH IN GAMEBOY CLASSIC");
             // WEIRD_INSTRUCTION ONLY USE IN GBC
             Cpu.pc += 1;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("LD DE, nn");
             Cpu.E = readByteAtPc();
             Cpu.D = readByteAtPc();
-            break;
+            return 12;
         }
         case 0x2: {
             trace("LD (DE), A");
             const deAddress = getDE();
             writeByte(deAddress, Cpu.A);
-            break;
+            return 8;
         }
         case 0x3: {
             trace("INC DE");
             const value = ((getDE() + 1) & 0xFFFF); 
             setDE(value);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0x4: {
             trace("INC D");
@@ -177,7 +178,7 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.D = value;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("DEC D");
@@ -187,12 +188,12 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.D = value;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("LD D, n");
             Cpu.D = readByteAtPc();
-            break;
+            return 8;
         }
         case 0x7: {
             trace("RLA");
@@ -203,14 +204,14 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag(0);
             setCarryFlag(eighthBit);
-            break;
+            return 4;
         }
         case 0x8: {
             trace("JR e");
             const relativeOffset: i8 = <i8>readByteAtPc();
             // syncCycle(4)
             Cpu.pc += relativeOffset;
-            break;
+            return 12;
         }
         case 0x9: {
             trace("ADD HL, DE");
@@ -223,20 +224,20 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setHL(result & 0xFFFF);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xA: {
             trace("LD A, (DE)");
             const deAddress = getDE();
             Cpu.A = readByte(deAddress);
-            break;
+            return 8;
         }
         case 0xB: {
             trace("DEC DE");
             const value = ((getDE() - 1) & 0xFFFF); 
             setDE(value);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xC: {
             trace("INC E");
@@ -246,7 +247,7 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.E = value;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("DEC E");
@@ -256,12 +257,12 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.E = value;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD E, n");
             Cpu.E = readByteAtPc();
-            break;
+            return 8;
         }
         case 0xF: {
             trace("RRA");
@@ -272,16 +273,16 @@ function handle1xOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag(0);
             setCarryFlag(firstBit);
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle2xOpcode(opcode: u8): void {
+function handle2xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("JR NZ, e");
@@ -290,14 +291,15 @@ function handle2xOpcode(opcode: u8): void {
             if (zeroFlag == 0) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
+                return 12;
             }
-            break;
+            return 8;
         }
         case 0x1: {
             trace("LD HL, nn");
             Cpu.L = readByteAtPc();
             Cpu.H = readByteAtPc();
-            break;
+            return 12;
         }
         case 0x2: {
             trace("LD (HL+), A");
@@ -305,14 +307,14 @@ function handle2xOpcode(opcode: u8): void {
             writeByte(hl, Cpu.A);
             const hlInc = ((hl + 1) & 0xFFFF);
             setBC(hlInc);
-            break;
+            return 8;
         }
         case 0x3: {
             trace("INC HL");
             const value = ((getHL() + 1) & 0xFFFF); 
             setHL(value);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0x4: {
             trace("INC H");
@@ -322,7 +324,7 @@ function handle2xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.H = value;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("DEC H");
@@ -332,17 +334,17 @@ function handle2xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.H = value;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("LD H, n");
             Cpu.H = readByteAtPc();
-            break;
+            return 8;
         }
         case 0x7: {
             trace("DAA");
             // OPCODE_TBD
-            break;
+            return 4;
         }
         case 0x8: {
             trace("JR Z, e");
@@ -351,8 +353,9 @@ function handle2xOpcode(opcode: u8): void {
             if (zeroFlag == 1) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
+                return 12;
             }
-            break;
+            return 8;
         }
         case 0x9: {
             trace("ADD HL, HL");
@@ -364,7 +367,7 @@ function handle2xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setHL(result & 0xFFFF);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xA: {
             trace("LD A, (HL+)");
@@ -372,14 +375,14 @@ function handle2xOpcode(opcode: u8): void {
             Cpu.A = readByte(hl);
             const hlInc = ((hl + 1) & 0xFFFF);
             setHL(hlInc);
-            break;
+            return 8;
         }
         case 0xB: {
             trace("DEC HL");
             const value = ((getHL() - 1) & 0xFFFF); 
             setHL(value);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xC: {
             trace("INC L");
@@ -389,7 +392,7 @@ function handle2xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.L = value;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("DEC L");
@@ -399,28 +402,28 @@ function handle2xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.L = value;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD L, n");
             Cpu.L = readByteAtPc();
-            break;
+            return 8;
         }
         case 0xF: {
             trace("CPL");
             Cpu.A = Cpu.A ^ 0xFF;
             setHalfCarryFlag(1);
             setNegativeFlag(1);
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }    
 }
 
-function handle3xOpcode(opcode: u8): void {
+function handle3xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("JR NC, e");
@@ -429,13 +432,14 @@ function handle3xOpcode(opcode: u8): void {
             if (carryFlag == 0) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
+                return 12;
             }
-            break;
+            return 8;
         }
         case 0x1: {
             trace("LD SP, nn");
             Cpu.sp = readWordAtPc();
-            break;
+            return 12;
         }
         case 0x2: {
             trace("LD (HL-), A");
@@ -443,14 +447,14 @@ function handle3xOpcode(opcode: u8): void {
             writeByte(hl, Cpu.A);
             const hlDec = ((hl - 1) & 0xFFFF);
             setHL(hlDec);
-            break;
+            return 8;
         }
         case 0x3: {
             trace("INC SP");
             const spInc = ((Cpu.sp + 1) & 0xFFFF);
             Cpu.sp = spInc;
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0x4: {
             trace("INC (HL)");
@@ -462,7 +466,7 @@ function handle3xOpcode(opcode: u8): void {
             setZeroFlag(valueInc > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);
             writeByte(hl, valueInc);
-            break;
+            return 12;
         }
         case 0x5: {
             trace("DEC (HL)");
@@ -474,21 +478,21 @@ function handle3xOpcode(opcode: u8): void {
             setZeroFlag(valueDec > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);
             writeByte(hl, valueDec);
-            break;
+            return 12;
         }
         case 0x6: {
             trace("LD (HL), n");
             const n = readByteAtPc();
             const hlAddress = getHL();
             writeByte(hlAddress, n);
-            break;
+            return 12;
         }
         case 0x7: {
             trace("SCF");
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setCarryFlag(1);
-            break;
+            return 4;
         }
         case 0x8: {
             trace("JR C, e");
@@ -497,8 +501,9 @@ function handle3xOpcode(opcode: u8): void {
             if (carryFlag) {
                 Cpu.pc += relativeOffset;
                 // syncCycle(4)
+                return 12;
             }
-            break;
+            return 8;
         }
         case 0x9: {
             trace("ADD HL, SP");
@@ -510,7 +515,7 @@ function handle3xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setHL(result & 0xFFFF);
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xA: {
             trace("LD A, (HL-)");
@@ -518,14 +523,14 @@ function handle3xOpcode(opcode: u8): void {
             Cpu.A = readByte(hl);
             const hlDec = ((hl - 1) & 0xFFFF);
             setHL(hlDec);
-            break;
+            return 8;
         }
         case 0xB: {
             trace("DEC SP");
             const spDec = ((Cpu.sp - 1) & 0xFFFF);
             Cpu.sp = spDec;
             // syncCycle(4)
-            break;
+            return 8;
         }
         case 0xC: {
             trace("INC A");
@@ -535,7 +540,7 @@ function handle3xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(0);
             Cpu.A = value;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("DEC A");
@@ -545,335 +550,335 @@ function handle3xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             Cpu.A = value;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD A, n");
             Cpu.A = readByteAtPc();
-            break;
+            return 8;
         }
         case 0xF: {
             trace("CCF");
             // OPCODE_TBD
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }    
 }
 
-function handle4xOpcode(opcode: u8): void {
+function handle4xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("LD B, B");
             Cpu.B = Cpu.B;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("LD B, C");
             Cpu.B = Cpu.C;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("LD B, D");
             Cpu.B = Cpu.D;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("LD B, E");
             Cpu.B = Cpu.E;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("LD B, H");
             Cpu.B = Cpu.H;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("LD B, L");
             Cpu.B = Cpu.L;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("LD B, (HL)");
             const hl = getHL();
             Cpu.B = readByte(hl);
-            break;
+            return 8;
         }
         case 0x7: {
             trace("LD B, A");
             Cpu.B = Cpu.A;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("LD C, B");
             Cpu.C = Cpu.B;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("LD C, C");
             Cpu.C = Cpu.C;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("LD C, D");
             Cpu.C = Cpu.D;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("LD C, E");
             Cpu.C = Cpu.E;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("LD C, H");
             Cpu.C = Cpu.H;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("LD C, L");
             Cpu.C = Cpu.L;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD C, (HL)");
             const hl = getHL();
             Cpu.C = readByte(hl);
-            break;
+            return 8;
         }
         case 0xF: {
             trace("LD C, A");
             Cpu.C = Cpu.A;
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle5xOpcode(opcode: u8): void {
+function handle5xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("LD D, B");
             Cpu.D = Cpu.B;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("LD D, C");
             Cpu.D = Cpu.C;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("LD D, D");
             Cpu.D = Cpu.D;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("LD D, E");
             Cpu.D = Cpu.E;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("LD D, H");
             Cpu.D = Cpu.H;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("LD D, L");
             Cpu.D = Cpu.L;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("LD D, (HL)");
             const hl = getHL();
             Cpu.D = readByte(hl);
-            break;
+            return 8;
         }
         case 0x7: {
             trace("LD D, A");
             Cpu.D = Cpu.A;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("LD E, B");
             Cpu.E = Cpu.B;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("LD E, C");
             Cpu.E = Cpu.C;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("LD E, D");
             Cpu.E = Cpu.D;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("LD E, E");
             Cpu.E = Cpu.E;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("LD E, H");
             Cpu.E = Cpu.H;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("LD E, L");
             Cpu.E = Cpu.L;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD E, (HL)");
             const hl = getHL();
             Cpu.E = readByte(hl);
-            break;
+            return 8;
         }
         case 0xF: {
             trace("LD E, A");
             Cpu.E = Cpu.A;
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle6xOpcode(opcode: u8): void {
+function handle6xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("LD H, B");
             Cpu.H = Cpu.B;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("LD H, C");
             Cpu.H = Cpu.C;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("LD H, D");
             Cpu.H = Cpu.D;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("LD H, E");
             Cpu.H = Cpu.E;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("LD H, H");
             Cpu.H = Cpu.H;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("LD H, L");
             Cpu.H = Cpu.L;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("LD H, (HL)");
             const hl = getHL();
             Cpu.H = readByte(hl);
-            break;
+            return 8;
         }
         case 0x7: {
             trace("LD H, A");
             Cpu.H = Cpu.A;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("LD L, B");
             Cpu.L = Cpu.B;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("LD L, C");
             Cpu.L = Cpu.C;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("LD L, D");
             Cpu.L = Cpu.D;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("LD L, E");
             Cpu.L = Cpu.E;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("LD L, H");
             Cpu.L = Cpu.H;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("LD L, L");
             Cpu.L = Cpu.L;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD L, (HL)");
             const hl = getHL();
             Cpu.L = readByte(hl);
-            break;
+            return 8;
         }
         case 0xF: {
             trace("LD L, A");
             Cpu.L = Cpu.A;
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle7xOpcode(opcode: u8): void {
+function handle7xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("LD (HL), B");
             const hl = getHL();
             writeByte(hl, Cpu.B);
-            break;
+            return 8;
         }
         case 0x1: {
             trace("LD (HL), C");
             const hl = getHL();
             writeByte(hl, Cpu.C);
-            break;
+            return 8;
         }
         case 0x2: {
             trace("LD (HL), D");
             const hl = getHL();
             writeByte(hl, Cpu.D);
-            break;
+            return 8;
         }
         case 0x3: {
             trace("LD (HL), E");
             const hl = getHL();
             writeByte(hl, Cpu.E);
-            break;
+            return 8;
         }
         case 0x4: {
             trace("LD (HL), H");
             const hl = getHL();
             writeByte(hl, Cpu.H);
-            break;
+            return 8;
         }
         case 0x5: {
             trace("LD (HL), L");
             const hl = getHL();
             writeByte(hl, Cpu.L);
-            break;
+            return 8;
         }
         case 0x6: {
 
@@ -881,63 +886,63 @@ function handle7xOpcode(opcode: u8): void {
             trace("HALT");
             // TBD
 
-            break;
+            return 4;
         }
         case 0x7: {
             trace("LD (HL), A");
             const hl = getHL();
             writeByte(hl, Cpu.A);
-            break;
+            return 8;
         }
         case 0x8: {
             trace("LD A, B");
             Cpu.A = Cpu.B;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("LD A, C");
             Cpu.A = Cpu.C;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("LD A, D");
             Cpu.A = Cpu.D;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("LD A, E");
             Cpu.A = Cpu.E;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("LD A, H");
             Cpu.A = Cpu.H;
-            break;
+            return 8;
         }
         case 0xD: {
             trace("LD A, L");
             Cpu.A = Cpu.L;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("LD A, (HL)");
             const hl = getHL();
             Cpu.A = readByte(hl);
-            break;
+            return 8;
         }
         case 0xF: {
             trace("LD A, A");
             Cpu.A = Cpu.A;
-            break;
+            return 8;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle8xOpcode(opcode: u8): void {
+function handle8xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("ADD A, B");
@@ -948,7 +953,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("ADD A, C");
@@ -959,7 +964,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("ADD A, D");
@@ -970,7 +975,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("ADD A, E");
@@ -981,7 +986,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("ADD A, H");
@@ -992,7 +997,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("ADD A, L");
@@ -1003,7 +1008,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("ADD A, (HL)");
@@ -1016,7 +1021,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("ADD A, A");
@@ -1027,7 +1032,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("ADC A, B");
@@ -1039,7 +1044,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("ADC A, C");
@@ -1051,7 +1056,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("ADC A, D");
@@ -1063,7 +1068,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("ADC A, E");
@@ -1075,7 +1080,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("ADC A, H");
@@ -1087,7 +1092,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("ADC A, L");
@@ -1099,7 +1104,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("ADC A, (HL)");
@@ -1113,7 +1118,7 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0xF: {
             trace("ADC A, A");
@@ -1125,16 +1130,16 @@ function handle8xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handle9xOpcode(opcode: u8): void {
+function handle9xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("SUB A, B");
@@ -1145,7 +1150,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("SUB A, C");
@@ -1156,7 +1161,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("SUB A, D");
@@ -1167,7 +1172,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("SUB A, E");
@@ -1178,7 +1183,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("SUB A, H");
@@ -1189,7 +1194,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("SUB A, L");
@@ -1200,7 +1205,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("SUB A, (HL)");
@@ -1213,7 +1218,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("SUB A, A");
@@ -1224,7 +1229,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("SBC A, B");
@@ -1236,7 +1241,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("SBC A, C");
@@ -1248,7 +1253,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("SBC A, D");
@@ -1260,7 +1265,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("SBC A, E");
@@ -1272,7 +1277,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("SBC A, H");
@@ -1284,7 +1289,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("SBC A, L");
@@ -1296,7 +1301,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("SBC A, (HL)");
@@ -1310,7 +1315,7 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0xF: {
             trace("SBC A, A");
@@ -1322,16 +1327,16 @@ function handle9xOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handleAxOpcode(opcode: u8): void {
+function handleAxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("AND A, B");
@@ -1341,7 +1346,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("AND A, C");
@@ -1351,7 +1356,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("AND A, D");
@@ -1361,7 +1366,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("AND A, E");
@@ -1371,7 +1376,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("AND A, H");
@@ -1381,7 +1386,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("AND A, L");
@@ -1391,7 +1396,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("AND A, (HL)");
@@ -1403,7 +1408,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("AND A, A");
@@ -1413,7 +1418,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(1);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("XOR A, B");
@@ -1423,7 +1428,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x9: {
             trace("XOR A, C");
@@ -1433,7 +1438,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0xA: {
             trace("XOR A, D");
@@ -1443,7 +1448,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0xB: {
             trace("XOR A, E");
@@ -1453,7 +1458,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0xC: {
             trace("XOR A, H");
@@ -1463,7 +1468,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0xD: {
             trace("XOR A, L");
@@ -1473,7 +1478,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0xE: {
             trace("XOR A, (HL)");
@@ -1485,7 +1490,7 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 8;
         }
         case 0xF: {
             trace("XOR A, A");
@@ -1495,16 +1500,16 @@ function handleAxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handleBxOpcode(opcode: u8): void {
+function handleBxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("OR A, B");
@@ -1514,7 +1519,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x1: {
             trace("OR A, C");
@@ -1524,7 +1529,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x2: {
             trace("OR A, D");
@@ -1534,7 +1539,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x3: {
             trace("OR A, E");
@@ -1544,7 +1549,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x4: {
             trace("OR A, H");
@@ -1554,7 +1559,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x5: {
             trace("OR A, L");
@@ -1564,7 +1569,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x6: {
             trace("OR A, (HL)");
@@ -1576,7 +1581,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("OR A, A");
@@ -1586,7 +1591,7 @@ function handleBxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result;
-            break;
+            return 4;
         }
         case 0x8: {
             trace("CP A, B");
@@ -1596,7 +1601,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         case 0x9: {
             trace("CP A, C");
@@ -1606,7 +1611,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         case 0xA: {
             trace("CP A, D");
@@ -1616,7 +1621,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         case 0xB: {
             trace("CP A, E");
@@ -1626,7 +1631,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         case 0xC: {
             trace("CP A, H");
@@ -1636,7 +1641,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         case 0xD: {
             trace("CP A, L");
@@ -1646,7 +1651,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         case 0xE: {
             trace("CP A, (HL)");
@@ -1658,7 +1663,7 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 8;
         }
         case 0xF: {
             trace("CP A, A");
@@ -1668,16 +1673,16 @@ function handleBxOpcode(opcode: u8): void {
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            break;
+            return 4;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handleCxOpcode(opcode: u8): void {
+function handleCxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("RET NZ");
@@ -1689,8 +1694,9 @@ function handleCxOpcode(opcode: u8): void {
                 Cpu.sp += 2;
                 // syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
+                return 20;
             }
-            break;
+            return 8;
         }
         case 0x1: {
             trace("POP BC");
@@ -1698,7 +1704,7 @@ function handleCxOpcode(opcode: u8): void {
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
             setBC(combineBytes(highByte, lowByte));
-            break;
+            return 12;
         }
         case 0x2: {
             trace("JP NZ, nn");
@@ -1707,8 +1713,9 @@ function handleCxOpcode(opcode: u8): void {
             if (zeroFlag == 0) {
                 // syncCycle(4)
                 Cpu.pc = nn;
+                return 16;
             }
-            break;
+            return 12;
         }
         case 0x3: {
             trace("JP nn");
@@ -1716,7 +1723,7 @@ function handleCxOpcode(opcode: u8): void {
             trace("NN", 1, nn);
             // syncCycle(4)
             Cpu.pc = nn;
-            break;
+            return 16;
         }
         case 0x4: {
             trace("CALL NZ, nn");
@@ -1728,8 +1735,9 @@ function handleCxOpcode(opcode: u8): void {
                 writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
+                return 24;
             }
-            break;
+            return 12;
         }
         case 0x5: {
             trace("PUSH BC");
@@ -1737,7 +1745,7 @@ function handleCxOpcode(opcode: u8): void {
             writeByte(Cpu.sp - 1, Cpu.B);
             writeByte(Cpu.sp - 2, Cpu.C);
             Cpu.sp -= 2;
-            break;
+            return 16;
         }
         case 0x6: {
             trace("ADD A, n");
@@ -1749,12 +1757,12 @@ function handleCxOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("RST 00h");
             // OPCODE_TDB
-            break;
+            return 16;
         }
         case 0x8: {
             trace("RET Z");
@@ -1766,8 +1774,9 @@ function handleCxOpcode(opcode: u8): void {
                 Cpu.sp += 2;
                 // syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
+                return 20;
             }
-            break;
+            return 8;
         }
         case 0x9: {
             trace("RET");
@@ -1776,7 +1785,7 @@ function handleCxOpcode(opcode: u8): void {
             Cpu.sp += 2;
             // syncCycle(4)
             Cpu.pc = combineBytes(highByte, lowByte);
-            break;
+            return 16;
         }
         case 0xA: {
             trace("JP Z");
@@ -1785,14 +1794,14 @@ function handleCxOpcode(opcode: u8): void {
             if (zeroFlag == 1) {
                 // syncCycle(4);
                 Cpu.pc = nn;
+                return 16;
             }
-            break;
+            return 12;
         }
         case 0xB: {
             trace("PREFIX CB");
             const cbOpcode = readByteAtPc();
-            handleCBOpcode(cbOpcode);
-            break;
+            return handleCBOpcode(cbOpcode);
         }
         case 0xC: {
             trace("CALL Z, nn");
@@ -1804,8 +1813,9 @@ function handleCxOpcode(opcode: u8): void {
                 writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
+                return 24;
             }
-            break;
+            return 12;
         }
         case 0xD: {
             trace("CALL nn");
@@ -1815,7 +1825,7 @@ function handleCxOpcode(opcode: u8): void {
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = nn;
-            break;
+            return 24;
         }
         case 0xE: {
             trace("ADC A, n");
@@ -1828,22 +1838,21 @@ function handleCxOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0xF: {
             trace("RST 08h");
             // OPCODE_TDB
-            break;
-
+            return 16;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handleDxOpcode(opcode: u8): void {
+function handleDxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("RET NC");
@@ -1855,8 +1864,9 @@ function handleDxOpcode(opcode: u8): void {
                 Cpu.sp += 2;
                 // syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
+                return 20;
             }
-            break;
+            return 8;
         }
         case 0x1: {
             trace("POP DE");
@@ -1864,7 +1874,7 @@ function handleDxOpcode(opcode: u8): void {
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
             setDE(combineBytes(highByte, lowByte));
-            break;
+            return 12;
         }
         case 0x2: {
             trace("JP NC, nn");
@@ -1873,8 +1883,9 @@ function handleDxOpcode(opcode: u8): void {
             if (carryFlag == 0) {
                 // syncCycle(4)
                 Cpu.pc = nn;
+                return 16;
             }
-            break;
+            return 12;
         }
         case 0x4: {
             trace("CALL NC, nn");
@@ -1886,8 +1897,9 @@ function handleDxOpcode(opcode: u8): void {
                 writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
+                return 24;
             }
-            break;
+            return 12;
         }
         case 0x5: {
             trace("PUSH DE");
@@ -1895,7 +1907,7 @@ function handleDxOpcode(opcode: u8): void {
             writeByte(Cpu.sp - 1, Cpu.D);
             writeByte(Cpu.sp - 2, Cpu.E);
             Cpu.sp -= 2;
-            break;
+            return 16;
         }
         case 0x6: {
             trace("SUB A, n");
@@ -1907,12 +1919,12 @@ function handleDxOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("RST 10h");
             // OPCODE_TDB
-            break;
+            return 16;
         }
         case 0x8: {
             trace("RET C");
@@ -1924,8 +1936,9 @@ function handleDxOpcode(opcode: u8): void {
                 Cpu.sp += 2;
                 // syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
+                return 20;
             }
-            break;
+            return 8;
         }
         case 0x9: {
             trace("RETI");
@@ -1934,11 +1947,8 @@ function handleDxOpcode(opcode: u8): void {
             Cpu.sp += 2;
             // syncCycle(4)
             Cpu.pc = combineBytes(highByte, lowByte);
-            // NEED TO SET IME HERE
-            // NEED TO SET IME HERE
-            // NEED TO SET IME HERE
-            // NEED TO SET IME HERE
-            break;
+            setIme();
+            return 16;
         }
         case 0xA: {
             trace("JP C");
@@ -1947,8 +1957,9 @@ function handleDxOpcode(opcode: u8): void {
             if (carryFlag == 1) {
                 // syncCycle(4);
                 Cpu.pc = nn;
+                return 16;
             }
-            break;
+            return 12;
         }
         case 0xC: {
             trace("CALL C, nn");
@@ -1960,8 +1971,9 @@ function handleDxOpcode(opcode: u8): void {
                 writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
+                return 24;
             }
-            break;
+            return 12;
         }
         case 0xE: {
             trace("SBC A, n");
@@ -1974,29 +1986,29 @@ function handleDxOpcode(opcode: u8): void {
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
-            break;
+            return 8;
         }
         case 0xF: {
             trace("RST 18h");
             // OPCODE_TDB
-            break;
+            return 16;
 
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handleExOpcode(opcode: u8): void {
+function handleExOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("LD (FF00 + n), A");
             const n = readByteAtPc();
             const address = combineBytes(0xFF, n);
             writeByte(address, Cpu.A);
-            break;
+            return 12;
         }
         case 0x1: {
             trace("POP HL");
@@ -2004,13 +2016,13 @@ function handleExOpcode(opcode: u8): void {
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
             setHL(combineBytes(highByte, lowByte));
-            break;
+            return 12;
         }
         case 0x2: {
             trace("LD (FF00 + C), A");
             const address = combineBytes(0xFF, Cpu.C);
             writeByte(address, Cpu.A);
-            break;
+            return 8;
         }
         case 0x5: {
             trace("PUSH HL");
@@ -2018,7 +2030,7 @@ function handleExOpcode(opcode: u8): void {
             writeByte(Cpu.sp - 1, Cpu.H);
             writeByte(Cpu.sp - 2, Cpu.L);
             Cpu.sp -= 2;
-            break;
+            return 16;
         }
         case 0x6: {
             trace("AND A, n");
@@ -2029,12 +2041,12 @@ function handleExOpcode(opcode: u8): void {
             setCarryFlag(0);
             setHalfCarryFlag(1);
             Cpu.A = result;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("RST 20h");
             // OPCODE_TDB
-            break;
+            return 16;
         }
         case 0x8: {
             trace("ADD SP, n");
@@ -2047,18 +2059,18 @@ function handleExOpcode(opcode: u8): void {
             setZeroFlag(0);
             setNegativeFlag(0);
             Cpu.sp = result & 0xFFFF;
-            break;
+            return 16;
         }
         case 0x9: {
             trace("JP HL");
             Cpu.pc = getHL();
-            break;
+            return 4;
         }
         case 0xA: {
             trace("LD (nn), A");
             const nn = readWordAtPc();
             writeByte(nn, Cpu.A);
-            break;
+            return 16;
         }
         case 0xE: {
             trace("XOR A, n");
@@ -2069,28 +2081,28 @@ function handleExOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setNegativeFlag(0);
             Cpu.A = result;
-            break;
+            return 8;
         }
         case 0xF: {
             trace("RST 28h");
             // OPCODE_TDB
-            break;
+            return 16;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
 
-function handleFxOpcode(opcode: u8): void {
+function handleFxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             trace("LD A, (FF00 + n)");
             const n = readByteAtPc();
             const address = combineBytes(0xFF, n);
             Cpu.A = readByte(address);
-            break;
+            return 12;
         }
         case 0x1: {
             trace("POP AF");
@@ -2098,18 +2110,18 @@ function handleFxOpcode(opcode: u8): void {
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
             setAF(combineBytes(highByte, lowByte));
-            break;
+            return 12;
         }
         case 0x2: {
             trace("LD A, (FF00 + C)");
             const address = combineBytes(0xFF, Cpu.C);
             Cpu.A = readByte(address);
-            break;
+            return 8;
         }
         case 0x3: {
             trace("DI");
             unsetIme();
-            break;
+            return 4;
         }
         case 0x5: {
             trace("PUSH AF");
@@ -2117,7 +2129,7 @@ function handleFxOpcode(opcode: u8): void {
             writeByte(Cpu.sp - 1, Cpu.A);
             writeByte(Cpu.sp - 2, Cpu.F);
             Cpu.sp -= 2;
-            break;
+            return 16;
         }
         case 0x6: {
             trace("OR A, n");
@@ -2128,12 +2140,12 @@ function handleFxOpcode(opcode: u8): void {
             setHalfCarryFlag(0);
             setCarryFlag(0);
             Cpu.A = result;
-            break;
+            return 8;
         }
         case 0x7: {
             trace("RST 30h");
             // OPCODE_TDB
-            break;
+            return 16;
         }
         case 0x8: {
             trace("LD HL, SP + n");
@@ -2148,24 +2160,24 @@ function handleFxOpcode(opcode: u8): void {
             setNegativeFlag(0);
             // syncCycle(4)
             setHL(result);
-            break;
+            return 12;
         }
         case 0x9: {
             trace("LD SP, HL");
             // syncCycle(4)
             Cpu.sp = getHL();
-            break;
+            return 8;
         }
         case 0xA: {
             trace("LD A, (nn)");
             const nn = readWordAtPc();
             Cpu.A = readByte(nn);
-            break;
+            return 16;
         }
         case 0xB: {
             trace("EI");
             setIme();
-            break;
+            return 4;
         }
         case 0xE: {
             trace("CP A, n");
@@ -2176,16 +2188,16 @@ function handleFxOpcode(opcode: u8): void {
             setCarryFlag(result > 0xFF ? 1 : 0);
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
-            break;
+            return 8;
         }
         case 0xF: {
             trace("RST 38h");
             // OPCODE_TDB
-            break;
+            return 16;
         }
         default: {
-            new Error("Unreachable code");
-            break;
+            abort("Impossible opcode");
+            return -1;
         }
     }
 }
@@ -2193,79 +2205,31 @@ function handleFxOpcode(opcode: u8): void {
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
-export function fetchExecuteOpcode(): void {
+export function fetchExecuteOpcode(): i32 {
     const opcode: u8 = readByteAtPc();
     const firstNibble: u8 = opcode >> 4;
     const secondNibble: u8 = opcode & 0xF;
 
     switch (firstNibble) {
-        case 0x0: {
-            handle0xOpcode(secondNibble);
-            break;
-        }
-        case 0x1: {
-            handle1xOpcode(secondNibble);
-            break;
-        }
-        case 0x2: {
-            handle2xOpcode(secondNibble);
-            break;
-        }
-        case 0x3: {
-            handle3xOpcode(secondNibble);
-            break;
-        }
-        case 0x4: {
-            handle4xOpcode(secondNibble);
-            break;
-        }
-        case 0x5: {
-            handle5xOpcode(secondNibble);
-            break;
-        }
-        case 0x6: {
-            handle6xOpcode(secondNibble);
-            break;
-        }
-        case 0x7: {
-            handle7xOpcode(secondNibble);
-            break;
-        }
-        case 0x8: {
-            handle8xOpcode(secondNibble);
-            break;
-        }
-        case 0x9: {
-            handle9xOpcode(secondNibble);
-            break;
-        }
-        case 0xA: {
-            handleAxOpcode(secondNibble);
-            break;
-        }
-        case 0xB: {
-            handleBxOpcode(secondNibble);
-            break;
-        }
-        case 0xC: {
-            handleCxOpcode(secondNibble);
-            break;
-        }
-        case 0xD: {
-            handleDxOpcode(secondNibble);
-            break;
-        }
-        case 0xE: {
-            handleExOpcode(secondNibble);
-            break;
-        }
-        case 0xF: {
-            handleFxOpcode(secondNibble);
-            break;
-        }
+        case 0x0: return handle0xOpcode(secondNibble);
+        case 0x1: return handle1xOpcode(secondNibble);
+        case 0x2: return handle2xOpcode(secondNibble);
+        case 0x3: return handle3xOpcode(secondNibble);
+        case 0x4: return handle4xOpcode(secondNibble);
+        case 0x5: return handle5xOpcode(secondNibble);
+        case 0x6: return handle6xOpcode(secondNibble);
+        case 0x7: return handle7xOpcode(secondNibble);
+        case 0x8: return handle8xOpcode(secondNibble);
+        case 0x9: return handle9xOpcode(secondNibble);
+        case 0xA: return handleAxOpcode(secondNibble);
+        case 0xB: return handleBxOpcode(secondNibble);
+        case 0xC: return handleCxOpcode(secondNibble);
+        case 0xD: return handleDxOpcode(secondNibble);
+        case 0xE: return handleExOpcode(secondNibble);
+        case 0xF: return handleFxOpcode(secondNibble);
         default: {
-            trace("This opcode isnt implemented yet");
-            break;
+            abort("Imposible opcode");
+            return -1;
         }
     }
 }
