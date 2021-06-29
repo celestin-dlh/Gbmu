@@ -571,7 +571,7 @@ function Disassembler({ data }) {
             <h3 class="disassembler__header">Disassembler</h3>
             <table class="disassembler__table">
                 <tr>
-                    <th>Address</th>
+                    <th class="disassembler__address">Address</th>
                     <th>Instruction</th> 
                     <th>Data</th>
                 </tr>

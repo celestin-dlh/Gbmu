@@ -23,6 +23,8 @@ import {
 } from './constants';
 import { combineBytes } from './helpers';
 
+declare function consoleLog(message: string): void;
+
 export function writeByte(address: u16, byte: u8): void {
     // syncCycle(4);
     writeMemoryMap(address, byte);
@@ -53,6 +55,13 @@ function writeMemoryMap(address: u16, byte: u8): void {
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
         trace("trying to access IO");
         Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
+
+        // blarggs test - serial output
+        if (address === 0xFF02 && byte === 0x81) {
+            const char = String.fromCharCode(Cpu.ioRegisters[0xFF01 - IO_REGISTERS_START]);
+            consoleLog(char);
+            Cpu.ioRegisters[0xFF02 - IO_REGISTERS_START] = 0x0;
+        }
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
         Cpu.highRam[address - HIGH_RAM_START] = byte;

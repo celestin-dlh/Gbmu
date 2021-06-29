@@ -30,10 +30,15 @@ function DebugMode({ workerApi, uiState }) {
         workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));
     }
 
+    const reset = () => {
+        workerApi.reset();
+        workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));
+    }
+
     return (
         <main class="debug">
 
-            <Controls executeStep={executeStep} executeFrame={executeFrame} />
+            <Controls executeStep={executeStep} executeFrame={executeFrame} reset={reset} />
 
             <Disassembler data={debugState.disassembler} />
 

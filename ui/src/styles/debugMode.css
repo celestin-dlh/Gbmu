@@ -28,6 +28,7 @@ h3 {
 
 .controls__button {
     background-color: white;
+    height: 30px;
 }
 
 /* disassembler */
@@ -51,6 +52,11 @@ h3 {
 .disassembler__table th {
     border: 1px solid white;
     padding: 3px;
+    width: 40%;
+}
+
+.disassembler__table th.disassembler__address {
+    width: 20%;
 }
 
 .disassembler__table td {

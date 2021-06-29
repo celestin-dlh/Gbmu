@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
 
-function Controls({ executeStep, executeFrame }) {
+function Controls({ executeStep, executeFrame, reset }) {
 
     const [step, setStep] = useState(10);
     const [execSinceStart, setExecSinceStart] = useState(0);
@@ -16,14 +16,23 @@ function Controls({ executeStep, executeFrame }) {
         setExecSinceStart(execSinceStart + stepNumber);
     }
     
+    const handleFrame = () => {
+        executeFrame();
+    }
+
+    const handleReset = () => {
+        reset();
+        setExecSinceStart(0);
+    }
+    
     return (
         <div class="controls">
             <p>Step exec: {execSinceStart}</p>
-            <button class="controls__button">Reset</button>
+            <button class="controls__button" onClick={handleReset}>Reset</button>
             <button class="controls__button" onClick={() => handleStep(1)}>Step</button>
             <input class="controls__input" placeholder="Step number" value={step} onChange={handleChange} />
             <button class="controls__button" onClick={() => handleStep(step)}>Step {step}</button>
-            <button class="controls__button" onClick={executeFrame}>Run one frame</button>
+            <button class="controls__button" onClick={handleFrame}>Run one frame</button>
             <button class="controls__button">Run one second</button>
         </div>
     )

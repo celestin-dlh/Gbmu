@@ -306,7 +306,7 @@ function handle2xOpcode(opcode: u8): i32 {
             const hl = getHL();
             writeByte(hl, Cpu.A);
             const hlInc = ((hl + 1) & 0xFFFF);
-            setBC(hlInc);
+            setHL(hlInc);
             return 8;
         }
         case 0x3: {

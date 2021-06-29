@@ -48,8 +48,13 @@ const gameboyWorker = {
     },
 
     async runFrame() {
-        console.log('run frame')
         this.exports.runFrame();
+    },
+
+    async reset() {
+        this.exports.reset();
+        if (this.romBuffer && this.romBuffer.length> 0)
+            this.exports.loadRom(this.romBuffer);
     },
 
     async getDebug(memoryAddress, cb) {

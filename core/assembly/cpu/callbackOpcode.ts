@@ -758,7 +758,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x41: {
@@ -766,7 +766,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x42: {
@@ -774,7 +774,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x43: {
@@ -782,7 +782,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x44: {
@@ -790,7 +790,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x45: {
@@ -798,7 +798,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x46: {
@@ -808,7 +808,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x47: {
@@ -816,7 +816,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x48: {
@@ -824,7 +824,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x49: {
@@ -832,7 +832,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x4A: {
@@ -840,7 +840,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x4B: {
@@ -848,7 +848,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x4C: {
@@ -856,7 +856,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x4D: {
@@ -864,7 +864,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x4E: {
@@ -874,7 +874,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x4F: {
@@ -882,7 +882,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x50: {
@@ -890,7 +890,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x51: {
@@ -898,7 +898,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x52: {
@@ -906,7 +906,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x53: {
@@ -914,7 +914,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x54: {
@@ -922,7 +922,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x55: {
@@ -930,7 +930,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x56: {
@@ -940,7 +940,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x57: {
@@ -948,7 +948,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x58: {
@@ -956,7 +956,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x59: {
@@ -964,7 +964,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x5A: {
@@ -972,7 +972,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x5B: {
@@ -980,7 +980,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x5C: {
@@ -988,7 +988,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x5D: {
@@ -996,7 +996,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x5E: {
@@ -1006,7 +1006,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x5F: {
@@ -1014,7 +1014,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x60: {
@@ -1022,7 +1022,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x61: {
@@ -1030,7 +1030,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x62: {
@@ -1038,7 +1038,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x63: {
@@ -1046,7 +1046,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x64: {
@@ -1054,7 +1054,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x65: {
@@ -1062,7 +1062,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x66: {
@@ -1072,7 +1072,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x67: {
@@ -1080,7 +1080,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x68: {
@@ -1088,7 +1088,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x69: {
@@ -1096,7 +1096,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x6A: {
@@ -1104,7 +1104,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x6B: {
@@ -1112,7 +1112,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x6C: {
@@ -1120,7 +1120,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x6D: {
@@ -1128,7 +1128,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x6E: {
@@ -1138,7 +1138,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x6F: {
@@ -1146,7 +1146,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x70: {
@@ -1154,7 +1154,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x71: {
@@ -1162,7 +1162,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x72: {
@@ -1170,7 +1170,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x73: {
@@ -1178,7 +1178,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x74: {
@@ -1186,7 +1186,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x75: {
@@ -1194,7 +1194,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x76: {
@@ -1204,7 +1204,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x77: {
@@ -1212,7 +1212,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x78: {
@@ -1220,7 +1220,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.B, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x79: {
@@ -1228,7 +1228,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.C, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x7A: {
@@ -1236,7 +1236,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.D, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x7B: {
@@ -1244,7 +1244,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.E, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x7C: {
@@ -1252,7 +1252,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.H, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x7D: {
@@ -1260,7 +1260,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.L, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x7E: {
@@ -1270,7 +1270,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(value, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 12;
         }
         case 0x7F: {
@@ -1278,7 +1278,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             const bit = getBitValue(Cpu.A, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
-            setZeroFlag(bit);
+            setZeroFlag(bit ? 0 : 1);
             return 8;
         }
         case 0x80: {

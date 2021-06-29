@@ -13,17 +13,17 @@ import {
 import { combineBytes, getHighByte, getLowByte } from '../helpers';
 
 export class Cpu {
-  static A: u8 = 0;
-  static B: u8 = 0;
-  static C: u8 = 0;
+  static A: u8 = 0x01;
+  static B: u8 = 0x0;
+  static C: u8 = 0x13;
   static D: u8 = 0;
-  static E: u8 = 0;
-  static H: u8 = 0;
-  static L: u8 = 0;
-  static F: u8 = 0;
+  static E: u8 = 0xD8;
+  static H: u8 = 0x01;
+  static L: u8 = 0x4D;
+  static F: u8 = 0xB0;
 
   static pc: u16 = 0x100;
-  static sp: u16 = 0;
+  static sp: u16 = 0xFFFE;
 
   static cycle: i32 = 0;
 
@@ -40,6 +40,35 @@ export class Cpu {
   static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
 
   static ime: bool = false;
+
+  static reset(): void {
+    Cpu.A = 0x01;
+    Cpu.B = 0x0;
+    Cpu.C = 0x13;
+    Cpu.D = 0;
+    Cpu.E = 0xD8;
+    Cpu.H = 0x01;
+    Cpu.L = 0x4D;
+    Cpu.F = 0xB0;
+
+    Cpu.pc = 0x100;
+    Cpu.sp = 0xFFFE;
+
+    Cpu.cycle = 0;
+
+    Cpu.rom = new Uint8Array(ROM_SIZE).fill(0);
+    Cpu.videoRam = new Uint8Array(VIDEO_RAM_SIZE).fill(0);
+    Cpu.externalRam = new Uint8Array(EXTERNAL_RAM_SIZE).fill(0);
+    Cpu.workRam = new Uint8Array(WORK_RAM_SIZE).fill(0);
+    Cpu.echoRam = new Uint8Array(ECHO_RAM_SIZE).fill(0);
+    Cpu.oam = new Uint8Array(OAM_SIZE).fill(0);
+    Cpu.unusedMemory = new Uint8Array(UNUSED_MEMORY_SIZE).fill(0);
+    Cpu.ioRegisters = new Uint8Array(IO_REGISTERS_SIZE).fill(0);
+    Cpu.highRam = new Uint8Array(HIGH_RAM_SIZE).fill(0);
+    Cpu.IE = new Uint8Array(IE_SIZE).fill(0);
+  
+    Cpu.ime = false;
+  }
 }
 
 export function setIme(): void {

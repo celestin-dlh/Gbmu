@@ -2,8 +2,11 @@ import { Cpu } from './cpu/state';
 import { fetchExecuteOpcode } from './cpu/opcode';
 import { readByteAtPc } from './readWriteOperations';
 
+declare function consoleLog(message: string): void;
+
 export function step(stepTimes: i32): void {
   for (let index = 0; index < stepTimes; index++) {
+    trace('step !')
     fetchExecuteOpcode();
   }
 }
@@ -17,6 +20,11 @@ export function runFrame(): void {
   }
 }
 
+export function reset(): void {
+  Cpu.reset();
+  consoleLog("Reset");
+}
+
 export function loadRom(buffer: Uint8Array): void {
   for (let index = 0; index < buffer.length; index++) {
     if (index >= 0x8000) {
@@ -25,7 +33,7 @@ export function loadRom(buffer: Uint8Array): void {
     }
     Cpu.rom[index] = buffer[index];
   }
-  trace("Rom loaded");
+  consoleLog("Rom loaded");
 }
 
 export { getRegisters, getOtherRegister, getDisassembler, getMemory } from './debug/index';
