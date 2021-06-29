@@ -20,6 +20,15 @@ export function runFrame(): void {
   }
 }
 
+export function runOneSecond(): void {
+  for (let index = 0; index < 60; index++) {
+    let cycle = 0;
+    while (cycle < CYCLE_PER_FRAME) {
+      cycle += fetchExecuteOpcode();
+    }
+  }
+}
+
 export function reset(): void {
   Cpu.reset();
   consoleLog("Reset");

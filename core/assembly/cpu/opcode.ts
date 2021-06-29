@@ -1761,7 +1761,11 @@ function handleCxOpcode(opcode: u8): i32 {
         }
         case 0x7: {
             trace("RST 00h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x0;
             return 16;
         }
         case 0x8: {
@@ -1842,7 +1846,11 @@ function handleCxOpcode(opcode: u8): i32 {
         }
         case 0xF: {
             trace("RST 08h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x08;
             return 16;
         }
         default: {
@@ -1923,7 +1931,11 @@ function handleDxOpcode(opcode: u8): i32 {
         }
         case 0x7: {
             trace("RST 10h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x10;
             return 16;
         }
         case 0x8: {
@@ -1990,7 +2002,11 @@ function handleDxOpcode(opcode: u8): i32 {
         }
         case 0xF: {
             trace("RST 18h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x18;
             return 16;
 
         }
@@ -2045,7 +2061,11 @@ function handleExOpcode(opcode: u8): i32 {
         }
         case 0x7: {
             trace("RST 20h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x20;
             return 16;
         }
         case 0x8: {
@@ -2085,7 +2105,11 @@ function handleExOpcode(opcode: u8): i32 {
         }
         case 0xF: {
             trace("RST 28h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x28;
             return 16;
         }
         default: {
@@ -2144,7 +2168,11 @@ function handleFxOpcode(opcode: u8): i32 {
         }
         case 0x7: {
             trace("RST 30h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x30;
             return 16;
         }
         case 0x8: {
@@ -2192,7 +2220,11 @@ function handleFxOpcode(opcode: u8): i32 {
         }
         case 0xF: {
             trace("RST 38h");
-            // OPCODE_TDB
+            // syncCycle(4)
+            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            Cpu.sp -= 2;
+            Cpu.pc = 0x38;
             return 16;
         }
         default: {

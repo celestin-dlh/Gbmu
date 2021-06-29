@@ -51,6 +51,10 @@ const gameboyWorker = {
         this.exports.runFrame();
     },
 
+    async runOneSecond() {
+        this.exports.runOneSecond();
+    },
+
     async reset() {
         this.exports.reset();
         if (this.romBuffer && this.romBuffer.length> 0)
