@@ -11,8 +11,11 @@ import {
   IE_SIZE
 } from '../constants';
 import { combineBytes, getHighByte, getLowByte } from '../helpers';
+import { writeMemoryMap } from '../readWriteOperations';
+
 
 export class Cpu {
+
   static A: u8 = 0x01;
   static B: u8 = 0x0;
   static C: u8 = 0x13;
@@ -68,7 +71,45 @@ export class Cpu {
     Cpu.IE = new Uint8Array(IE_SIZE).fill(0);
   
     Cpu.ime = false;
+    setDefaultValue();
   }
+}
+
+function setDefaultValue(): void {
+  writeMemoryMap(0xFF05, 0x0);
+  writeMemoryMap(0xFF06, 0x0);
+  writeMemoryMap(0xFF07, 0x0);
+  writeMemoryMap(0xFF10, 0x80);
+  writeMemoryMap(0xFF11, 0xBF);
+  writeMemoryMap(0xFF12, 0xF3);
+  writeMemoryMap(0xFF14, 0xBF);
+  writeMemoryMap(0xFF16, 0x3F);
+  writeMemoryMap(0xFF17, 0x00);
+  writeMemoryMap(0xFF19, 0xBF);
+  writeMemoryMap(0xFF1A, 0x7F);
+  writeMemoryMap(0xFF1B, 0xFF);
+  writeMemoryMap(0xFF1C, 0x9F);
+  writeMemoryMap(0xFF1E, 0xBF);
+  writeMemoryMap(0xFF20, 0xFF);
+  writeMemoryMap(0xFF21, 0x00);
+  writeMemoryMap(0xFF22, 0x00);
+  writeMemoryMap(0xFF23, 0xBF);
+  writeMemoryMap(0xFF24, 0x77);
+  writeMemoryMap(0xFF25, 0xF3);
+  writeMemoryMap(0xFF26, 0xF1);
+  writeMemoryMap(0xFF40, 0x91);
+  writeMemoryMap(0xFF42, 0x00);
+  writeMemoryMap(0xFF43, 0x00);
+  // not sure
+  writeMemoryMap(0xFF44, 0x90);
+  // not sure
+  writeMemoryMap(0xFF45, 0x00);
+  writeMemoryMap(0xFF47, 0xFC);
+  writeMemoryMap(0xFF48, 0xFF);
+  writeMemoryMap(0xFF49, 0xFF);
+  writeMemoryMap(0xFF4A, 0x00);
+  writeMemoryMap(0xFF4B, 0x00);
+  writeMemoryMap(0xFFFF, 0x00);
 }
 
 export function setIme(): void {

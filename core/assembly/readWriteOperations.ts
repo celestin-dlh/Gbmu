@@ -30,7 +30,7 @@ export function writeByte(address: u16, byte: u8): void {
     writeMemoryMap(address, byte);
 }
 
-function writeMemoryMap(address: u16, byte: u8): void {
+export function writeMemoryMap(address: u16, byte: u8): void {
     if (address >= ROM_START && address <= ROM_END) {
         new Error("ROM IS READ ONLY");
     } 

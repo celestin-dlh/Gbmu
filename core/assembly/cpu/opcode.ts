@@ -241,7 +241,7 @@ function handle1xOpcode(opcode: u8): i32 {
         }
         case 0xC: {
             trace("INC E");
-            const value = ((Cpu.E + 1) & 0xFF); 
+            const value = Cpu.E + 1;
             const halfCarry: bool = ((getLowNibble(Cpu.E) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);

@@ -20,18 +20,6 @@ export default function Registers({ data }) {
                     <td>{formatHexNumber(data[0])}</td>
                 </tr>
                 <tr>
-                    <th>BC</th>
-                    <td>{formatHexNumber(data[1])}</td>
-                </tr>
-                <tr>
-                    <th>DE</th>
-                    <td>{formatHexNumber(data[2])}</td>
-                </tr>
-                <tr>
-                    <th>HL</th>
-                    <td>{formatHexNumber(data[3])}</td>
-                </tr>
-                <tr>
                     <th>SP</th>
                     <td>{formatHexNumber(data[4])}</td>
                 </tr>
@@ -42,6 +30,19 @@ export default function Registers({ data }) {
                 <tr>
                     <th>F</th>
                     <td>{flags}</td>
+                </tr>
+   
+                <tr>
+                    <th>BC</th>
+                    <td>{formatHexNumber(data[1])}</td>
+                </tr>
+                <tr>
+                    <th>DE</th>
+                    <td>{formatHexNumber(data[2])}</td>
+                </tr>
+                <tr>
+                    <th>HL</th>
+                    <td>{formatHexNumber(data[3])}</td>
                 </tr>
             </table>
         </div>

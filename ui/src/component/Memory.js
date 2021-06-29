@@ -1,7 +1,7 @@
 import { h } from 'preact';
+import { formatHexNumber } from '../utils/format';
 
 const regexp = /[0-9A-Fa-f]{1,4}/g;
-const numberToHex = (number) => number.toString(16).padStart(4, '0').toUpperCase();
 
 function Memory({ data, setMemoryAddress, memoryAddress }) {
     // Not really clean code but working ...
@@ -31,7 +31,7 @@ function Memory({ data, setMemoryAddress, memoryAddress }) {
                     <input 
                         class="memory__input" 
                         type='text'
-                        value={numberToHex(memoryAddress)} 
+                        value={formatHexNumber(memoryAddress)} 
                         maxLength={4}
                     />
                 </form>
@@ -58,9 +58,9 @@ function Memory({ data, setMemoryAddress, memoryAddress }) {
                 </tr>
                 {data.map((row, index) => (
                     <tr key={`memory_table_row${index}`}>
-                        <th>{(memoryAddress + index * 16).toString(16).padStart(4, '0').toUpperCase()}:</th>
+                        <th>{formatHexNumber(memoryAddress + index * 16)}:</th>
                         {row.map((byte) => (
-                            <td>{byte.toString(16).padStart(2, '0')}</td>
+                            <td>{formatHexNumber(byte, 2)}</td>
                         ))}
                     </tr>
                 ))}

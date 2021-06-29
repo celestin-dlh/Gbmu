@@ -1,4 +1,5 @@
 import { h, Fragment } from 'preact';
+import { formatHexNumber } from '../utils/format';
 
 // 0xCB instruction 
 const callbackInstruction = (secondOpcode) => {
@@ -558,11 +559,6 @@ const hexToInstructionName = (instruction) => {
 
         default: return "UNREACHABLE"
     }
-}
-
-const formatHexNumber = (number, leadingZero = 4) => {
-    const hexNumber = number.toString(16).toUpperCase();
-    return hexNumber.padStart(leadingZero, '0');
 }
 
 function Disassembler({ data }) {
