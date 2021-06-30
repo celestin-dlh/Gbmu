@@ -404,22 +404,22 @@ const hexToInstructionName = (instruction) => {
         case 0x6E: return "LD L, (HL)";
         case 0x6F: return "LD L, A";
 
-        case 0x70: return "LD H, B";
-        case 0x71: return "LD H, C";
-        case 0x72: return "LD H, D";
-        case 0x73: return "LD H, E";
-        case 0x74: return "LD H, H";
-        case 0x75: return "LD H, L";
-        case 0x76: return "LD H, (HL)";
-        case 0x77: return "LD H, A";
-        case 0x78: return "LD L, B";
-        case 0x79: return "LD L, C";
-        case 0x7A: return "LD L, D";
-        case 0x7B: return "LD L, E";
-        case 0x7C: return "LD L, H";
-        case 0x7D: return "LD L, L";
-        case 0x7E: return "LD L, (HL)";
-        case 0x7F: return "LD L, A";
+        case 0x70: return "LD (HL), B";
+        case 0x71: return "LD (HL), C";
+        case 0x72: return "LD (HL), D";
+        case 0x73: return "LD (HL), E";
+        case 0x74: return "LD (HL), H";
+        case 0x75: return "LD (HL), L";
+        case 0x76: return "HALT";
+        case 0x77: return "LD (HL), A";
+        case 0x78: return "LD A, B";
+        case 0x79: return "LD A, C";
+        case 0x7A: return "LD A, D";
+        case 0x7B: return "LD A, E";
+        case 0x7C: return "LD A, H";
+        case 0x7D: return "LD A, L";
+        case 0x7E: return "LD A, (HL)";
+        case 0x7F: return "LD A, A";
 
         case 0x80: return "ADD A, B";
         case 0x81: return "ADD A, C";
