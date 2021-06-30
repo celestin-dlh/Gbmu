@@ -54,7 +54,8 @@ export class Cpu {
     Cpu.L = 0x4D;
     Cpu.F = 0xB0;
 
-    Cpu.pc = 0x100;
+    Cpu.pc = 0x0;
+    // Cpu.pc = 0x100;
     Cpu.sp = 0xFFFE;
 
     Cpu.cycle = 0;
@@ -100,9 +101,7 @@ function setDefaultValue(): void {
   writeMemoryMap(0xFF40, 0x91);
   writeMemoryMap(0xFF42, 0x00);
   writeMemoryMap(0xFF43, 0x00);
-  // not sure
-  writeMemoryMap(0xFF44, 0x90);
-  // not sure
+
   writeMemoryMap(0xFF45, 0x00);
   writeMemoryMap(0xFF47, 0xFC);
   writeMemoryMap(0xFF48, 0xFF);

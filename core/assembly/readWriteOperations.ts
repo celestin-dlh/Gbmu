@@ -54,6 +54,7 @@ export function writeMemoryMap(address: u16, byte: u8): void {
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
         trace("trying to access IO");
+        // consoleLog(`trying to write IO ${address}`);
         Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
 
         // blarggs test - serial output
@@ -115,6 +116,11 @@ export function readMemoryMap(address: u16): u8 {
         return Cpu.unusedMemory[address - UNUSED_MEMORY_START];
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
+        // consoleLog(`trying to read IO ${address}`);
+
+        // temp because we dont have ppu yet
+        if (address == 0xFF44)
+            return 0x90;
         return Cpu.ioRegisters[address - IO_REGISTERS_START];
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
