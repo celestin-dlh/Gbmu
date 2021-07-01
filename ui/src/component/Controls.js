@@ -13,7 +13,7 @@ function Controls({ executeStep, executeFrame, executeOneSecond, reset }) {
 
     const handleStep = (stepNumber) => {
         executeStep(stepNumber);
-        setExecSinceStart(execSinceStart + stepNumber);
+        setExecSinceStart(execSinceStart => execSinceStart + stepNumber);
     }
     
     const handleFrame = () => {
@@ -24,6 +24,15 @@ function Controls({ executeStep, executeFrame, executeOneSecond, reset }) {
         reset();
         setExecSinceStart(0);
     }
+
+
+    useEffect(() => {
+        window.addEventListener('keydown', (ev) => {
+            if (ev.key === 's') {
+                handleStep(1)
+            }
+        })
+    }, []);
     
     return (
         <div class="controls">
