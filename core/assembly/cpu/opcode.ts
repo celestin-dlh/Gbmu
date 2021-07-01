@@ -1922,7 +1922,7 @@ function handleDxOpcode(opcode: u8): i32 {
             const n = readByteAtPc();
             const result = Cpu.A - n;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
-            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setCarryFlag((n > Cpu.A) ? 1 : 0);
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
@@ -1993,7 +1993,7 @@ function handleDxOpcode(opcode: u8): i32 {
             const n = readByteAtPc();
             const result = Cpu.A - n - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(n) - carry) & 0x10) > 0 ? 1 : 0;
-            setCarryFlag((result > 0xFF) ? 1 : 0);
+            setCarryFlag((n > Cpu.A) ? 1 : 0);
             setNegativeFlag(1);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
@@ -2213,7 +2213,7 @@ function handleFxOpcode(opcode: u8): i32 {
             const result = Cpu.A - n;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(result > 0 ? 0 : 1);
-            setCarryFlag(result > 0xFF ? 1 : 0);
+            setCarryFlag((n > Cpu.A) ? 1 : 0);
             setHalfCarryFlag(halfCarry);
             setNegativeFlag(1);
             return 8;

@@ -24,6 +24,7 @@ import {
 import { combineBytes } from './helpers';
 
 declare function consoleLog(message: string): void;
+declare function consoleNum(num: i32): void;
 
 export function writeByte(address: u16, byte: u8): void {
     // syncCycle(4);
@@ -54,7 +55,7 @@ export function writeMemoryMap(address: u16, byte: u8): void {
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
         // trace("trying to access IO");
-        consoleLog(`trying to write IO ${address.toString(16)}`);
+        // consoleLog(`trying to write IO ${address.toString(16)}`);
         Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
 
         // blarggs test - serial output
@@ -69,9 +70,8 @@ export function writeMemoryMap(address: u16, byte: u8): void {
     } 
     else if (address >= IE_START && address <= IE_END) {
         Cpu.IE[address - IE_START] = byte;
-    } 
-
-    new Error("Error: This should be unreachable");
+    }
+    else abort("Error: This should be unreachable");
 }
 
 export function readByteAtPc(): u8 {
@@ -117,7 +117,7 @@ export function readMemoryMap(address: u16): u8 {
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
         
-        consoleLog(`trying to read IO ${address.toString(16)}`);
+        // consoleLog(`trying to read IO ${address.toString(16)}`);
 
         // temp because we dont have ppu yet
         if (address == 0xFF44) {
@@ -132,7 +132,8 @@ export function readMemoryMap(address: u16): u8 {
     else if (address >= IE_START && address <= IE_END) {
         return Cpu.IE[address - IE_START];
     } 
-
-    trace("Error: This should be unreachable");
-    return 0;
+    else {
+        abort("Error: This should be unreachable");
+        return 0;
+    }
 }
