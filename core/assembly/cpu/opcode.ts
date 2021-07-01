@@ -6,30 +6,30 @@ import { handleCBOpcode } from './callbackOpcode';
 function handle0xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("NOP");
+            // "NOP"
             return 4;
         }
         case 0x1: {
-            trace("LD BC, nn");
+            // "LD BC, nn"
             Cpu.C = readByteAtPc();
             Cpu.B = readByteAtPc();
             return 12;
         }
         case 0x2: {
-            trace("LD (BC), A");
+            // "LD (BC), A"
             const bcAddress = getBC();
             writeByte(bcAddress, Cpu.A);
             return 8;
         }
         case 0x3: {
-            trace("INC BC");
+            // "INC BC"
             const value = ((getBC() + 1) & 0xFFFF); 
             setBC(value);
             // syncCycle(4)
             return 8;
         }
         case 0x4: {
-            trace("INC B");
+            // "INC B"
             const value = ((Cpu.B + 1) & 0xFF); 
             const halfCarry: bool = ((getLowNibble(Cpu.B) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -39,7 +39,7 @@ function handle0xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("DEC B");
+            // "DEC B"
             const value = ((Cpu.B - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.B) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -49,12 +49,12 @@ function handle0xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("LD B, n");
+            // "LD B, n"
             Cpu.B = readByteAtPc();
             return 8;
         }
         case 0x7: {
-            trace("RLCA");
+            // "RLCA"
             const eighthBit = getBitValue(Cpu.A, 7);
             const shiftedValue = Cpu.A << 1;
             Cpu.A = setBitValue(shiftedValue, 0, eighthBit);
@@ -65,7 +65,7 @@ function handle0xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x8: {
-            trace("LD (nn), SP");
+            // "LD (nn), SP"
             const lowN = readByteAtPc();
             writeByte(lowN, getLowByte(Cpu.sp));
             const highN = readByteAtPc();
@@ -73,7 +73,7 @@ function handle0xOpcode(opcode: u8): i32 {
             return 20;
         }
         case 0x9: {
-            trace("ADD HL, BC");
+            // "ADD HL, BC"
             const hl = getHL();
             const bc = getBC();
             const result = hl + bc;
@@ -86,13 +86,13 @@ function handle0xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xA: {
-            trace("LD A, (BC)");
+            // "LD A, (BC)"
             const bcAddress = getBC();
             Cpu.A = readByte(bcAddress);
             return 8;
         }
         case 0xB: {
-            trace("DEC BC");
+            // "DEC BC"
             const bc = getBC();
             const bcDec = ((bc - 1) & 0xFFFF);
             setBC(bcDec);
@@ -100,7 +100,7 @@ function handle0xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xC: {
-            trace("INC C");
+            // "INC C"
             const value = ((Cpu.C + 1) & 0xFF); 
             const halfCarry: bool = ((getLowNibble(Cpu.C) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -110,7 +110,7 @@ function handle0xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("DEC C");
+            // "DEC C"
             const value = ((Cpu.C - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.C) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -120,12 +120,12 @@ function handle0xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("LD C, n");
+            // "LD C, n"
             Cpu.C = readByteAtPc();
             return 8;
         }
         case 0xF: {
-            trace("RRCA");
+            // "RRCA"
             const firstBit = getBitValue(Cpu.A, 0);
             const shiftedValue = Cpu.A >> 1;
             Cpu.A = setBitValue(shiftedValue, 7, firstBit);
@@ -145,33 +145,33 @@ function handle0xOpcode(opcode: u8): i32 {
 function handle1xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("STOP");
+            // "STOP"
             abort("STOP CRASH IN GAMEBOY CLASSIC");
             // WEIRD_INSTRUCTION ONLY USE IN GBC
             Cpu.pc += 1;
             return 4;
         }
         case 0x1: {
-            trace("LD DE, nn");
+            // "LD DE, nn"
             Cpu.E = readByteAtPc();
             Cpu.D = readByteAtPc();
             return 12;
         }
         case 0x2: {
-            trace("LD (DE), A");
+            // "LD (DE), A"
             const deAddress = getDE();
             writeByte(deAddress, Cpu.A);
             return 8;
         }
         case 0x3: {
-            trace("INC DE");
+            // "INC DE"
             const value = ((getDE() + 1) & 0xFFFF); 
             setDE(value);
             // syncCycle(4)
             return 8;
         }
         case 0x4: {
-            trace("INC D");
+            // "INC D"
             const value = ((Cpu.D + 1) & 0xFF); 
             const halfCarry: bool = ((getLowNibble(Cpu.D) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -181,7 +181,7 @@ function handle1xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("DEC D");
+            // "DEC D"
             const value = ((Cpu.D - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.D) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -191,12 +191,12 @@ function handle1xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("LD D, n");
+            // "LD D, n"
             Cpu.D = readByteAtPc();
             return 8;
         }
         case 0x7: {
-            trace("RLA");
+            // "RLA"
             const eighthBit = getBitValue(Cpu.B, 7);
             const shiftedValue = Cpu.A << 1;
             Cpu.A = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -207,14 +207,14 @@ function handle1xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x8: {
-            trace("JR e");
+            // "JR e"
             const relativeOffset: i8 = <i8>readByteAtPc();
             // syncCycle(4)
             Cpu.pc += relativeOffset;
             return 12;
         }
         case 0x9: {
-            trace("ADD HL, DE");
+            // "ADD HL, DE"
             const hl = getHL();
             const de = getDE();
             const result = hl + de;
@@ -227,20 +227,20 @@ function handle1xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xA: {
-            trace("LD A, (DE)");
+            // "LD A, (DE)"
             const deAddress = getDE();
             Cpu.A = readByte(deAddress);
             return 8;
         }
         case 0xB: {
-            trace("DEC DE");
+            // "DEC DE"
             const value = ((getDE() - 1) & 0xFFFF); 
             setDE(value);
             // syncCycle(4)
             return 8;
         }
         case 0xC: {
-            trace("INC E");
+            // "INC E"
             const value = Cpu.E + 1;
             const halfCarry: bool = ((getLowNibble(Cpu.E) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -250,7 +250,7 @@ function handle1xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("DEC E");
+            // "DEC E"
             const value = ((Cpu.E - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.E) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -260,12 +260,12 @@ function handle1xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("LD E, n");
+            // "LD E, n"
             Cpu.E = readByteAtPc();
             return 8;
         }
         case 0xF: {
-            trace("RRA");
+            // "RRA"
             const firstBit = getBitValue(Cpu.A, 0);
             const shiftedValue = Cpu.A >> 1;
             Cpu.A = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -285,7 +285,7 @@ function handle1xOpcode(opcode: u8): i32 {
 function handle2xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("JR NZ, e");
+            // "JR NZ, e"
             const relativeOffset: i8 = <i8>readByteAtPc();
             const zeroFlag = getZeroFlag();
             if (zeroFlag == 0) {
@@ -296,13 +296,13 @@ function handle2xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1: {
-            trace("LD HL, nn");
+            // "LD HL, nn"
             Cpu.L = readByteAtPc();
             Cpu.H = readByteAtPc();
             return 12;
         }
         case 0x2: {
-            trace("LD (HL+), A");
+            // "LD (HL+), A"
             const hl = getHL();
             writeByte(hl, Cpu.A);
             const hlInc = ((hl + 1) & 0xFFFF);
@@ -310,14 +310,14 @@ function handle2xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3: {
-            trace("INC HL");
+            // "INC HL"
             const value = ((getHL() + 1) & 0xFFFF); 
             setHL(value);
             // syncCycle(4)
             return 8;
         }
         case 0x4: {
-            trace("INC H");
+            // "INC H"
             const value = ((Cpu.H + 1) & 0xFF); 
             const halfCarry: bool = ((getLowNibble(Cpu.H) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -327,7 +327,7 @@ function handle2xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("DEC H");
+            // "DEC H"
             const value = ((Cpu.H - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.H) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -337,17 +337,17 @@ function handle2xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("LD H, n");
+            // "LD H, n"
             Cpu.H = readByteAtPc();
             return 8;
         }
         case 0x7: {
-            trace("DAA");
+            // "DAA"
             // OPCODE_TBD
             return 4;
         }
         case 0x8: {
-            trace("JR Z, e");
+            // "JR Z, e"
             const relativeOffset: i8 = <i8>readByteAtPc();
             const zeroFlag = getZeroFlag();
             if (zeroFlag == 1) {
@@ -358,7 +358,7 @@ function handle2xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x9: {
-            trace("ADD HL, HL");
+            // "ADD HL, HL"
             const hl = getHL();
             const result = hl + hl;
             const halfCarry: bool = ((getLowNibble(Cpu.L) + getLowByte(Cpu.L)) & 0x10) > 0 ? 1 : 0;
@@ -370,7 +370,7 @@ function handle2xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xA: {
-            trace("LD A, (HL+)");
+            // "LD A, (HL+)"
             const hl = getHL();
             Cpu.A = readByte(hl);
             const hlInc = ((hl + 1) & 0xFFFF);
@@ -378,14 +378,14 @@ function handle2xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xB: {
-            trace("DEC HL");
+            // "DEC HL"
             const value = ((getHL() - 1) & 0xFFFF); 
             setHL(value);
             // syncCycle(4)
             return 8;
         }
         case 0xC: {
-            trace("INC L");
+            // "INC L"
             const value = ((Cpu.L + 1) & 0xFF); 
             const halfCarry: bool = ((getLowNibble(Cpu.L) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -395,7 +395,7 @@ function handle2xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("DEC L");
+            // "DEC L"
             const value = ((Cpu.L - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.L) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -405,12 +405,12 @@ function handle2xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("LD L, n");
+            // "LD L, n"
             Cpu.L = readByteAtPc();
             return 8;
         }
         case 0xF: {
-            trace("CPL");
+            // "CPL"
             Cpu.A = Cpu.A ^ 0xFF;
             setHalfCarryFlag(1);
             setNegativeFlag(1);
@@ -426,7 +426,7 @@ function handle2xOpcode(opcode: u8): i32 {
 function handle3xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("JR NC, e");
+            // "JR NC, e"
             const relativeOffset: i8 = <i8>readByteAtPc();
             const carryFlag = getCarryFlag();
             if (carryFlag == 0) {
@@ -437,12 +437,12 @@ function handle3xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1: {
-            trace("LD SP, nn");
+            // "LD SP, nn"
             Cpu.sp = readWordAtPc();
             return 12;
         }
         case 0x2: {
-            trace("LD (HL-), A");
+            // "LD (HL-), A"
             const hl = getHL();
             writeByte(hl, Cpu.A);
             const hlDec = ((hl - 1) & 0xFFFF);
@@ -450,14 +450,14 @@ function handle3xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3: {
-            trace("INC SP");
+            // "INC SP"
             const spInc = ((Cpu.sp + 1) & 0xFFFF);
             Cpu.sp = spInc;
             // syncCycle(4)
             return 8;
         }
         case 0x4: {
-            trace("INC (HL)");
+            // "INC (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const valueInc = ((value + 1) & 0xFF);
@@ -469,7 +469,7 @@ function handle3xOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x5: {
-            trace("DEC (HL)");
+            // "DEC (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const valueDec = ((value - 1) & 0xFF);
@@ -481,21 +481,21 @@ function handle3xOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x6: {
-            trace("LD (HL), n");
+            // "LD (HL), n"
             const n = readByteAtPc();
             const hlAddress = getHL();
             writeByte(hlAddress, n);
             return 12;
         }
         case 0x7: {
-            trace("SCF");
+            // "SCF"
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setCarryFlag(1);
             return 4;
         }
         case 0x8: {
-            trace("JR C, e");
+            // "JR C, e"
             const relativeOffset: i8 = <i8>readByteAtPc();
             const carryFlag = getCarryFlag();
             if (carryFlag) {
@@ -506,7 +506,7 @@ function handle3xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x9: {
-            trace("ADD HL, SP");
+            // "ADD HL, SP"
             const hl = getHL();
             const result = hl + Cpu.sp;
             const halfCarry: bool = ((getLowNibble(Cpu.L) + getLowByte(Cpu.sp)) & 0x10) > 0 ? 1 : 0;
@@ -518,7 +518,7 @@ function handle3xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xA: {
-            trace("LD A, (HL-)");
+            // "LD A, (HL-)"
             const hl = getHL();
             Cpu.A = readByte(hl);
             const hlDec = ((hl - 1) & 0xFFFF);
@@ -526,14 +526,14 @@ function handle3xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xB: {
-            trace("DEC SP");
+            // "DEC SP"
             const spDec = ((Cpu.sp - 1) & 0xFFFF);
             Cpu.sp = spDec;
             // syncCycle(4)
             return 8;
         }
         case 0xC: {
-            trace("INC A");
+            // "INC A"
             const value = ((Cpu.A + 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.A) + 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -543,7 +543,7 @@ function handle3xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("DEC A");
+            // "DEC A"
             const value = ((Cpu.A - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(Cpu.A) - 1) & 0x10) > 0 ? 1 : 0;
             setZeroFlag(value > 0 ? 0 : 1);
@@ -553,12 +553,12 @@ function handle3xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("LD A, n");
+            // "LD A, n"
             Cpu.A = readByteAtPc();
             return 8;
         }
         case 0xF: {
-            trace("CCF");
+            // "CCF"
             // OPCODE_TBD
             return 4;
         }
@@ -572,84 +572,84 @@ function handle3xOpcode(opcode: u8): i32 {
 function handle4xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("LD B, B");
+            // "LD B, B"
             Cpu.B = Cpu.B;
             return 4;
         }
         case 0x1: {
-            trace("LD B, C");
+            // "LD B, C"
             Cpu.B = Cpu.C;
             return 4;
         }
         case 0x2: {
-            trace("LD B, D");
+            // "LD B, D"
             Cpu.B = Cpu.D;
             return 4;
         }
         case 0x3: {
-            trace("LD B, E");
+            // "LD B, E"
             Cpu.B = Cpu.E;
             return 4;
         }
         case 0x4: {
-            trace("LD B, H");
+            // "LD B, H"
             Cpu.B = Cpu.H;
             return 4;
         }
         case 0x5: {
-            trace("LD B, L");
+            // "LD B, L"
             Cpu.B = Cpu.L;
             return 4;
         }
         case 0x6: {
-            trace("LD B, (HL)");
+            // "LD B, (HL)"
             const hl = getHL();
             Cpu.B = readByte(hl);
             return 8;
         }
         case 0x7: {
-            trace("LD B, A");
+            // "LD B, A"
             Cpu.B = Cpu.A;
             return 4;
         }
         case 0x8: {
-            trace("LD C, B");
+            // "LD C, B"
             Cpu.C = Cpu.B;
             return 4;
         }
         case 0x9: {
-            trace("LD C, C");
+            // "LD C, C"
             Cpu.C = Cpu.C;
             return 4;
         }
         case 0xA: {
-            trace("LD C, D");
+            // "LD C, D"
             Cpu.C = Cpu.D;
             return 4;
         }
         case 0xB: {
-            trace("LD C, E");
+            // "LD C, E"
             Cpu.C = Cpu.E;
             return 4;
         }
         case 0xC: {
-            trace("LD C, H");
+            // "LD C, H"
             Cpu.C = Cpu.H;
             return 4;
         }
         case 0xD: {
-            trace("LD C, L");
+            // "LD C, L"
             Cpu.C = Cpu.L;
             return 4;
         }
         case 0xE: {
-            trace("LD C, (HL)");
+            // "LD C, (HL)"
             const hl = getHL();
             Cpu.C = readByte(hl);
             return 8;
         }
         case 0xF: {
-            trace("LD C, A");
+            // "LD C, A"
             Cpu.C = Cpu.A;
             return 4;
         }
@@ -663,84 +663,84 @@ function handle4xOpcode(opcode: u8): i32 {
 function handle5xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("LD D, B");
+            // "LD D, B"
             Cpu.D = Cpu.B;
             return 4;
         }
         case 0x1: {
-            trace("LD D, C");
+            // "LD D, C"
             Cpu.D = Cpu.C;
             return 4;
         }
         case 0x2: {
-            trace("LD D, D");
+            // "LD D, D"
             Cpu.D = Cpu.D;
             return 4;
         }
         case 0x3: {
-            trace("LD D, E");
+            // "LD D, E"
             Cpu.D = Cpu.E;
             return 4;
         }
         case 0x4: {
-            trace("LD D, H");
+            // "LD D, H"
             Cpu.D = Cpu.H;
             return 4;
         }
         case 0x5: {
-            trace("LD D, L");
+            // "LD D, L"
             Cpu.D = Cpu.L;
             return 4;
         }
         case 0x6: {
-            trace("LD D, (HL)");
+            // "LD D, (HL)"
             const hl = getHL();
             Cpu.D = readByte(hl);
             return 8;
         }
         case 0x7: {
-            trace("LD D, A");
+            // "LD D, A"
             Cpu.D = Cpu.A;
             return 4;
         }
         case 0x8: {
-            trace("LD E, B");
+            // "LD E, B"
             Cpu.E = Cpu.B;
             return 4;
         }
         case 0x9: {
-            trace("LD E, C");
+            // "LD E, C"
             Cpu.E = Cpu.C;
             return 4;
         }
         case 0xA: {
-            trace("LD E, D");
+            // "LD E, D"
             Cpu.E = Cpu.D;
             return 4;
         }
         case 0xB: {
-            trace("LD E, E");
+            // "LD E, E"
             Cpu.E = Cpu.E;
             return 4;
         }
         case 0xC: {
-            trace("LD E, H");
+            // "LD E, H"
             Cpu.E = Cpu.H;
             return 4;
         }
         case 0xD: {
-            trace("LD E, L");
+            // "LD E, L"
             Cpu.E = Cpu.L;
             return 4;
         }
         case 0xE: {
-            trace("LD E, (HL)");
+            // "LD E, (HL)"
             const hl = getHL();
             Cpu.E = readByte(hl);
             return 8;
         }
         case 0xF: {
-            trace("LD E, A");
+            // "LD E, A"
             Cpu.E = Cpu.A;
             return 4;
         }
@@ -754,84 +754,84 @@ function handle5xOpcode(opcode: u8): i32 {
 function handle6xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("LD H, B");
+            // "LD H, B"
             Cpu.H = Cpu.B;
             return 4;
         }
         case 0x1: {
-            trace("LD H, C");
+            // "LD H, C"
             Cpu.H = Cpu.C;
             return 4;
         }
         case 0x2: {
-            trace("LD H, D");
+            // "LD H, D"
             Cpu.H = Cpu.D;
             return 4;
         }
         case 0x3: {
-            trace("LD H, E");
+            // "LD H, E"
             Cpu.H = Cpu.E;
             return 4;
         }
         case 0x4: {
-            trace("LD H, H");
+            // "LD H, H"
             Cpu.H = Cpu.H;
             return 4;
         }
         case 0x5: {
-            trace("LD H, L");
+            // "LD H, L"
             Cpu.H = Cpu.L;
             return 4;
         }
         case 0x6: {
-            trace("LD H, (HL)");
+            // "LD H, (HL)"
             const hl = getHL();
             Cpu.H = readByte(hl);
             return 8;
         }
         case 0x7: {
-            trace("LD H, A");
+            // "LD H, A"
             Cpu.H = Cpu.A;
             return 4;
         }
         case 0x8: {
-            trace("LD L, B");
+            // "LD L, B"
             Cpu.L = Cpu.B;
             return 4;
         }
         case 0x9: {
-            trace("LD L, C");
+            // "LD L, C"
             Cpu.L = Cpu.C;
             return 4;
         }
         case 0xA: {
-            trace("LD L, D");
+            // "LD L, D"
             Cpu.L = Cpu.D;
             return 4;
         }
         case 0xB: {
-            trace("LD L, E");
+            // "LD L, E"
             Cpu.L = Cpu.E;
             return 4;
         }
         case 0xC: {
-            trace("LD L, H");
+            // "LD L, H"
             Cpu.L = Cpu.H;
             return 4;
         }
         case 0xD: {
-            trace("LD L, L");
+            // "LD L, L"
             Cpu.L = Cpu.L;
             return 4;
         }
         case 0xE: {
-            trace("LD L, (HL)");
+            // "LD L, (HL)"
             const hl = getHL();
             Cpu.L = readByte(hl);
             return 8;
         }
         case 0xF: {
-            trace("LD L, A");
+            // "LD L, A"
             Cpu.L = Cpu.A;
             return 4;
         }
@@ -845,37 +845,37 @@ function handle6xOpcode(opcode: u8): i32 {
 function handle7xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("LD (HL), B");
+            // "LD (HL), B"
             const hl = getHL();
             writeByte(hl, Cpu.B);
             return 8;
         }
         case 0x1: {
-            trace("LD (HL), C");
+            // "LD (HL), C"
             const hl = getHL();
             writeByte(hl, Cpu.C);
             return 8;
         }
         case 0x2: {
-            trace("LD (HL), D");
+            // "LD (HL), D"
             const hl = getHL();
             writeByte(hl, Cpu.D);
             return 8;
         }
         case 0x3: {
-            trace("LD (HL), E");
+            // "LD (HL), E"
             const hl = getHL();
             writeByte(hl, Cpu.E);
             return 8;
         }
         case 0x4: {
-            trace("LD (HL), H");
+            // "LD (HL), H"
             const hl = getHL();
             writeByte(hl, Cpu.H);
             return 8;
         }
         case 0x5: {
-            trace("LD (HL), L");
+            // "LD (HL), L"
             const hl = getHL();
             writeByte(hl, Cpu.L);
             return 8;
@@ -883,55 +883,55 @@ function handle7xOpcode(opcode: u8): i32 {
         case 0x6: {
 
             // TBD
-            trace("HALT");
+            // "HALT"
             // TBD
 
             return 4;
         }
         case 0x7: {
-            trace("LD (HL), A");
+            // "LD (HL), A"
             const hl = getHL();
             writeByte(hl, Cpu.A);
             return 8;
         }
         case 0x8: {
-            trace("LD A, B");
+            // "LD A, B"
             Cpu.A = Cpu.B;
             return 4;
         }
         case 0x9: {
-            trace("LD A, C");
+            // "LD A, C"
             Cpu.A = Cpu.C;
             return 4;
         }
         case 0xA: {
-            trace("LD A, D");
+            // "LD A, D"
             Cpu.A = Cpu.D;
             return 4;
         }
         case 0xB: {
-            trace("LD A, E");
+            // "LD A, E"
             Cpu.A = Cpu.E;
             return 4;
         }
         case 0xC: {
-            trace("LD A, H");
+            // "LD A, H"
             Cpu.A = Cpu.H;
             return 8;
         }
         case 0xD: {
-            trace("LD A, L");
+            // "LD A, L"
             Cpu.A = Cpu.L;
             return 4;
         }
         case 0xE: {
-            trace("LD A, (HL)");
+            // "LD A, (HL)"
             const hl = getHL();
             Cpu.A = readByte(hl);
             return 8;
         }
         case 0xF: {
-            trace("LD A, A");
+            // "LD A, A"
             Cpu.A = Cpu.A;
             return 8;
         }
@@ -945,7 +945,7 @@ function handle7xOpcode(opcode: u8): i32 {
 function handle8xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("ADD A, B");
+            // "ADD A, B"
             const result = Cpu.A + Cpu.B;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.B)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -956,7 +956,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x1: {
-            trace("ADD A, C");
+            // "ADD A, C"
             const result = Cpu.A + Cpu.C;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.C)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -967,7 +967,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x2: {
-            trace("ADD A, D");
+            // "ADD A, D"
             const result = Cpu.A + Cpu.D;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.D)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -978,7 +978,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x3: {
-            trace("ADD A, E");
+            // "ADD A, E"
             const result = Cpu.A + Cpu.E;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.E)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -989,7 +989,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x4: {
-            trace("ADD A, H");
+            // "ADD A, H"
             const result = Cpu.A + Cpu.H;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.H)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1000,7 +1000,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("ADD A, L");
+            // "ADD A, L"
             const result = Cpu.A + Cpu.L;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.L)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1011,7 +1011,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("ADD A, (HL)");
+            // "ADD A, (HL)"
             const hl = getHL();
             const hlValue = readByte(hl);
             const result = Cpu.A + hlValue;
@@ -1024,7 +1024,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("ADD A, A");
+            // "ADD A, A"
             const result = Cpu.A + Cpu.A;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.A)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1035,7 +1035,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x8: {
-            trace("ADC A, B");
+            // "ADC A, B"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.B + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.B) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1047,7 +1047,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x9: {
-            trace("ADC A, C");
+            // "ADC A, C"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.C + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.C) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1059,7 +1059,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xA: {
-            trace("ADC A, D");
+            // "ADC A, D"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.D + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.D) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1071,7 +1071,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xB: {
-            trace("ADC A, E");
+            // "ADC A, E"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.E + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.E) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1083,7 +1083,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xC: {
-            trace("ADC A, H");
+            // "ADC A, H"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.H + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.H) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1095,7 +1095,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("ADC A, L");
+            // "ADC A, L"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.L + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.L) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1107,7 +1107,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("ADC A, (HL)");
+            // "ADC A, (HL)"
             const carry = <u8>getCarryFlag();
             const hl = getHL();
             const value = readByte(hl);
@@ -1121,7 +1121,7 @@ function handle8xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("ADC A, A");
+            // "ADC A, A"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A + Cpu.A + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(Cpu.A) + carry) & 0x10) > 0 ? 1 : 0;
@@ -1142,7 +1142,7 @@ function handle8xOpcode(opcode: u8): i32 {
 function handle9xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("SUB A, B");
+            // "SUB A, B"
             const result = Cpu.A - Cpu.B;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.B)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1153,7 +1153,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x1: {
-            trace("SUB A, C");
+            // "SUB A, C"
             const result = Cpu.A - Cpu.C;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.C)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1164,7 +1164,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x2: {
-            trace("SUB A, D");
+            // "SUB A, D"
             const result = Cpu.A - Cpu.D;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.D)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1175,7 +1175,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x3: {
-            trace("SUB A, E");
+            // "SUB A, E"
             const result = Cpu.A - Cpu.E;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.E)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1186,7 +1186,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x4: {
-            trace("SUB A, H");
+            // "SUB A, H"
             const result = Cpu.A - Cpu.H;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.H)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1197,7 +1197,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("SUB A, L");
+            // "SUB A, L"
             const result = Cpu.A - Cpu.L;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.L)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1208,7 +1208,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("SUB A, (HL)");
+            // "SUB A, (HL)"
             const hl = getHL();
             const hlValue = readByte(hl);
             const result = Cpu.A - hlValue;
@@ -1221,7 +1221,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("SUB A, A");
+            // "SUB A, A"
             const result = Cpu.A - Cpu.A;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.A)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1232,7 +1232,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x8: {
-            trace("SBC A, B");
+            // "SBC A, B"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.B - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.B) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1244,7 +1244,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x9: {
-            trace("SBC A, C");
+            // "SBC A, C"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.C - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.C) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1256,7 +1256,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xA: {
-            trace("SBC A, D");
+            // "SBC A, D"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.D - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.D) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1268,7 +1268,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xB: {
-            trace("SBC A, E");
+            // "SBC A, E"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.E - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.E) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1280,7 +1280,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xC: {
-            trace("SBC A, H");
+            // "SBC A, H"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.H - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.H) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1292,7 +1292,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("SBC A, L");
+            // "SBC A, L"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.L - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.L) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1304,7 +1304,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("SBC A, (HL)");
+            // "SBC A, (HL)"
             const carry = <u8>getCarryFlag();
             const hl = getHL();
             const value = readByte(hl);
@@ -1318,7 +1318,7 @@ function handle9xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("SBC A, A");
+            // "SBC A, A"
             const carry = <u8>getCarryFlag();
             const result = Cpu.A - Cpu.A - carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.A) - carry) & 0x10) > 0 ? 1 : 0;
@@ -1339,7 +1339,7 @@ function handle9xOpcode(opcode: u8): i32 {
 function handleAxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("AND A, B");
+            // "AND A, B"
             const result = Cpu.A & Cpu.B;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1349,7 +1349,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x1: {
-            trace("AND A, C");
+            // "AND A, C"
             const result = Cpu.A & Cpu.C;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1359,7 +1359,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x2: {
-            trace("AND A, D");
+            // "AND A, D"
             const result = Cpu.A & Cpu.D;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1369,7 +1369,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x3: {
-            trace("AND A, E");
+            // "AND A, E"
             const result = Cpu.A & Cpu.E;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1379,7 +1379,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x4: {
-            trace("AND A, H");
+            // "AND A, H"
             const result = Cpu.A & Cpu.H;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1389,7 +1389,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("AND A, L");
+            // "AND A, L"
             const result = Cpu.A & Cpu.L;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1399,7 +1399,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("AND A, (HL)");
+            // "AND A, (HL)"
             const hl = getHL();
             const hlValue = readByte(hl);
             const result = Cpu.A & hlValue;
@@ -1411,7 +1411,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("AND A, A");
+            // "AND A, A"
             const result = Cpu.A & Cpu.A;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1421,7 +1421,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x8: {
-            trace("XOR A, B");
+            // "XOR A, B"
             const result = Cpu.A ^ Cpu.B;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1431,7 +1431,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x9: {
-            trace("XOR A, C");
+            // "XOR A, C"
             const result = Cpu.A ^ Cpu.C;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1441,7 +1441,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xA: {
-            trace("XOR A, D");
+            // "XOR A, D"
             const result = Cpu.A ^ Cpu.D;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1451,7 +1451,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xB: {
-            trace("XOR A, E");
+            // "XOR A, E"
             const result = Cpu.A ^ Cpu.E;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1461,7 +1461,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xC: {
-            trace("XOR A, H");
+            // "XOR A, H"
             const result = Cpu.A ^ Cpu.H;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1471,7 +1471,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("XOR A, L");
+            // "XOR A, L"
             const result = Cpu.A ^ Cpu.L;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1481,7 +1481,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("XOR A, (HL)");
+            // "XOR A, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const result = Cpu.A ^ value;
@@ -1493,7 +1493,7 @@ function handleAxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("XOR A, A");
+            // "XOR A, A"
             const result = Cpu.A ^ Cpu.A;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1512,7 +1512,7 @@ function handleAxOpcode(opcode: u8): i32 {
 function handleBxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("OR A, B");
+            // "OR A, B"
             const result = Cpu.A | Cpu.B;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1522,7 +1522,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x1: {
-            trace("OR A, C");
+            // "OR A, C"
             const result = Cpu.A | Cpu.C;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1532,7 +1532,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x2: {
-            trace("OR A, D");
+            // "OR A, D"
             const result = Cpu.A | Cpu.D;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1542,7 +1542,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x3: {
-            trace("OR A, E");
+            // "OR A, E"
             const result = Cpu.A | Cpu.E;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1552,7 +1552,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x4: {
-            trace("OR A, H");
+            // "OR A, H"
             const result = Cpu.A | Cpu.H;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1562,7 +1562,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x5: {
-            trace("OR A, L");
+            // "OR A, L"
             const result = Cpu.A | Cpu.L;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1572,7 +1572,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x6: {
-            trace("OR A, (HL)");
+            // "OR A, (HL)"
             const hl = getHL();
             const hlValue = readByte(hl);
             const result = Cpu.A | hlValue;
@@ -1584,7 +1584,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("OR A, A");
+            // "OR A, A"
             const result = Cpu.A | Cpu.A;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1594,7 +1594,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x8: {
-            trace("CP A, B");
+            // "CP A, B"
             const result = Cpu.A - Cpu.B;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.B)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1604,7 +1604,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0x9: {
-            trace("CP A, C");
+            // "CP A, C"
             const result = Cpu.A - Cpu.C;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.C)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1614,7 +1614,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xA: {
-            trace("CP A, D");
+            // "CP A, D"
             const result = Cpu.A - Cpu.D;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.D)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1624,7 +1624,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xB: {
-            trace("CP A, E");
+            // "CP A, E"
             const result = Cpu.A - Cpu.E;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.E)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1634,7 +1634,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xC: {
-            trace("CP A, H");
+            // "CP A, H"
             const result = Cpu.A - Cpu.H;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.H)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1644,7 +1644,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xD: {
-            trace("CP A, L");
+            // "CP A, L"
             const result = Cpu.A - Cpu.L;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.L)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1654,7 +1654,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 4;
         }
         case 0xE: {
-            trace("CP A, (HL)");
+            // "CP A, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const result = Cpu.A - value;
@@ -1666,7 +1666,7 @@ function handleBxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("CP A, A");
+            // "CP A, A"
             const result = Cpu.A - Cpu.A;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(Cpu.A)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1685,7 +1685,7 @@ function handleBxOpcode(opcode: u8): i32 {
 function handleCxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("RET NZ");
+            // "RET NZ"
             const zeroFlag = getZeroFlag();
             // syncCycle(4)
             if (zeroFlag == 0) {
@@ -1699,7 +1699,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1: {
-            trace("POP BC");
+            // "POP BC"
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
@@ -1707,7 +1707,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x2: {
-            trace("JP NZ, nn");
+            // "JP NZ, nn"
             const zeroFlag = getZeroFlag();
             const nn = readWordAtPc();
             if (zeroFlag == 0) {
@@ -1718,15 +1718,15 @@ function handleCxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x3: {
-            trace("JP nn");
+            // "JP nn"
             const nn = readWordAtPc();
-            trace("NN", 1, nn);
+            // "NN", 1, nn
             // syncCycle(4)
             Cpu.pc = nn;
             return 16;
         }
         case 0x4: {
-            trace("CALL NZ, nn");
+            // "CALL NZ, nn"
             const zeroFlag = getZeroFlag();
             const nn = readWordAtPc();
             if (zeroFlag == 0) {
@@ -1740,7 +1740,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x5: {
-            trace("PUSH BC");
+            // "PUSH BC"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, Cpu.B);
             writeByte(Cpu.sp - 2, Cpu.C);
@@ -1748,7 +1748,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x6: {
-            trace("ADD A, n");
+            // "ADD A, n"
             const n = readByteAtPc();
             const result = Cpu.A + n;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
@@ -1760,7 +1760,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("RST 00h");
+            // "RST 00h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -1769,7 +1769,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x8: {
-            trace("RET Z");
+            // "RET Z"
             const zeroFlag = getZeroFlag();
             // syncCycle(4)
             if (zeroFlag == 1) {
@@ -1783,7 +1783,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x9: {
-            trace("RET");
+            // "RET"
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
@@ -1792,7 +1792,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0xA: {
-            trace("JP Z");
+            // "JP Z"
             const zeroFlag = getZeroFlag();
             const nn = readWordAtPc();
             if (zeroFlag == 1) {
@@ -1803,12 +1803,12 @@ function handleCxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0xB: {
-            trace("PREFIX CB");
+            // "PREFIX CB"
             const cbOpcode = readByteAtPc();
             return handleCBOpcode(cbOpcode);
         }
         case 0xC: {
-            trace("CALL Z, nn");
+            // "CALL Z, nn"
             const zeroFlag = getZeroFlag();
             const nn = readWordAtPc();
             if (zeroFlag == 1) {
@@ -1822,7 +1822,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0xD: {
-            trace("CALL nn");
+            // "CALL nn"
             const nn = readWordAtPc();
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
@@ -1832,7 +1832,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 24;
         }
         case 0xE: {
-            trace("ADC A, n");
+            // "ADC A, n"
             const carry = <u8>getCarryFlag();
             const n = readByteAtPc();
             const result = Cpu.A + n + carry;
@@ -1845,7 +1845,7 @@ function handleCxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("RST 08h");
+            // "RST 08h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -1863,7 +1863,7 @@ function handleCxOpcode(opcode: u8): i32 {
 function handleDxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("RET NC");
+            // "RET NC"
             const carryFlag = getCarryFlag();
             // syncCycle(4)
             if (carryFlag == 0) {
@@ -1877,7 +1877,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1: {
-            trace("POP DE");
+            // "POP DE"
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
@@ -1885,7 +1885,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x2: {
-            trace("JP NC, nn");
+            // "JP NC, nn"
             const carryFlag = getCarryFlag();
             const nn = readWordAtPc();
             if (carryFlag == 0) {
@@ -1896,7 +1896,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x4: {
-            trace("CALL NC, nn");
+            // "CALL NC, nn"
             const carryFlag = getCarryFlag();
             const nn = readWordAtPc();
             if (carryFlag == 0) {
@@ -1910,7 +1910,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x5: {
-            trace("PUSH DE");
+            // "PUSH DE"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, Cpu.D);
             writeByte(Cpu.sp - 2, Cpu.E);
@@ -1918,7 +1918,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x6: {
-            trace("SUB A, n");
+            // "SUB A, n"
             const n = readByteAtPc();
             const result = Cpu.A - n;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
@@ -1930,7 +1930,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("RST 10h");
+            // "RST 10h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -1939,7 +1939,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x8: {
-            trace("RET C");
+            // "RET C"
             const carryFlag = getCarryFlag();
             // syncCycle(4)
             if (carryFlag == 1) {
@@ -1953,7 +1953,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x9: {
-            trace("RETI");
+            // "RETI"
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
@@ -1963,7 +1963,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0xA: {
-            trace("JP C");
+            // "JP C"
             const carryFlag = getCarryFlag();
             const nn = readWordAtPc();
             if (carryFlag == 1) {
@@ -1974,7 +1974,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0xC: {
-            trace("CALL C, nn");
+            // "CALL C, nn"
             const carryFlag = getCarryFlag();
             const nn = readWordAtPc();
             if (carryFlag == 1) {
@@ -1988,7 +1988,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0xE: {
-            trace("SBC A, n");
+            // "SBC A, n"
             const carry = <u8>getCarryFlag();
             const n = readByteAtPc();
             const result = Cpu.A - n - carry;
@@ -2001,7 +2001,7 @@ function handleDxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("RST 18h");
+            // "RST 18h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -2020,14 +2020,14 @@ function handleDxOpcode(opcode: u8): i32 {
 function handleExOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("LD (FF00 + n), A");
+            // "LD (FF00 + n), A"
             const n = readByteAtPc();
             const address = combineBytes(0xFF, n);
             writeByte(address, Cpu.A);
             return 12;
         }
         case 0x1: {
-            trace("POP HL");
+            // "POP HL"
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
@@ -2035,13 +2035,13 @@ function handleExOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x2: {
-            trace("LD (FF00 + C), A");
+            // "LD (FF00 + C), A"
             const address = combineBytes(0xFF, Cpu.C);
             writeByte(address, Cpu.A);
             return 8;
         }
         case 0x5: {
-            trace("PUSH HL");
+            // "PUSH HL"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, Cpu.H);
             writeByte(Cpu.sp - 2, Cpu.L);
@@ -2049,7 +2049,7 @@ function handleExOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x6: {
-            trace("AND A, n");
+            // "AND A, n"
             const n = readByteAtPc();
             const result = Cpu.A & n;
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
@@ -2060,7 +2060,7 @@ function handleExOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("RST 20h");
+            // "RST 20h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -2069,7 +2069,7 @@ function handleExOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x8: {
-            trace("ADD SP, n");
+            // "ADD SP, n"
             const n = <i8>readByteAtPc();
             const result = Cpu.sp + n;
             const lowSp = getLowByte(Cpu.sp);
@@ -2082,18 +2082,18 @@ function handleExOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x9: {
-            trace("JP HL");
+            // "JP HL"
             Cpu.pc = getHL();
             return 4;
         }
         case 0xA: {
-            trace("LD (nn), A");
+            // "LD (nn), A"
             const nn = readWordAtPc();
             writeByte(nn, Cpu.A);
             return 16;
         }
         case 0xE: {
-            trace("XOR A, n");
+            // "XOR A, n"
             const n = readByteAtPc();
             const result = Cpu.A ^ n;
             setZeroFlag(result > 0 ? 0 : 1);
@@ -2104,7 +2104,7 @@ function handleExOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("RST 28h");
+            // "RST 28h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -2122,14 +2122,14 @@ function handleExOpcode(opcode: u8): i32 {
 function handleFxOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("LD A, (FF00 + n)");
+            // "LD A, (FF00 + n)"
             const n = readByteAtPc();
             const address = combineBytes(0xFF, n);
             Cpu.A = readByte(address);
             return 12;
         }
         case 0x1: {
-            trace("POP AF");
+            // "POP AF"
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
@@ -2137,18 +2137,18 @@ function handleFxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x2: {
-            trace("LD A, (FF00 + C)");
+            // "LD A, (FF00 + C)"
             const address = combineBytes(0xFF, Cpu.C);
             Cpu.A = readByte(address);
             return 8;
         }
         case 0x3: {
-            trace("DI");
+            // "DI"
             unsetIme();
             return 4;
         }
         case 0x5: {
-            trace("PUSH AF");
+            // "PUSH AF"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, Cpu.A);
             writeByte(Cpu.sp - 2, Cpu.F);
@@ -2156,7 +2156,7 @@ function handleFxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x6: {
-            trace("OR A, n");
+            // "OR A, n"
             const n = readByteAtPc();
             const result = Cpu.A | n;
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
@@ -2167,7 +2167,7 @@ function handleFxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7: {
-            trace("RST 30h");
+            // "RST 30h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
@@ -2176,7 +2176,7 @@ function handleFxOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x8: {
-            trace("LD HL, SP + n");
+            // "LD HL, SP + n"
             // not sure about this instruction
             const n = <i8>readByteAtPc();
             const result = Cpu.sp + n;
@@ -2191,24 +2191,24 @@ function handleFxOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x9: {
-            trace("LD SP, HL");
+            // "LD SP, HL"
             // syncCycle(4)
             Cpu.sp = getHL();
             return 8;
         }
         case 0xA: {
-            trace("LD A, (nn)");
+            // "LD A, (nn)"
             const nn = readWordAtPc();
             Cpu.A = readByte(nn);
             return 16;
         }
         case 0xB: {
-            trace("EI");
+            // "EI"
             setIme();
             return 4;
         }
         case 0xE: {
-            trace("CP A, n");
+            // "CP A, n"
             const n = readByteAtPc();
             const result = Cpu.A - n;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
@@ -2219,7 +2219,7 @@ function handleFxOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xF: {
-            trace("RST 38h");
+            // "RST 38h"
             // syncCycle(4)
             writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
             writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));

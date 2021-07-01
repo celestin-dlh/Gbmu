@@ -5,7 +5,7 @@ import { getLowNibble, getBitValue, setBitValue, getHighNibble, combineNibbles }
 export function handleCBOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
-            trace("RLC B");
+            // "RLC B"
             const eighthBit = getBitValue(Cpu.B, 7);
             const shiftedValue = Cpu.B << 1;
             Cpu.B = setBitValue(shiftedValue, 0, eighthBit);
@@ -16,7 +16,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1: {
-            trace("RLC C");
+            // "RLC C"
             const eighthBit = getBitValue(Cpu.C, 7);
             const shiftedValue = Cpu.C << 1;
             Cpu.C = setBitValue(shiftedValue, 0, eighthBit);
@@ -27,7 +27,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x2: {
-            trace("RLC D");
+            // "RLC D"
             const eighthBit = getBitValue(Cpu.D, 7);
             const shiftedValue = Cpu.D << 1;
             Cpu.D = setBitValue(shiftedValue, 0, eighthBit);
@@ -38,7 +38,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3: {
-            trace("RLC E");
+            // "RLC E"
             const eighthBit = getBitValue(Cpu.E, 7);
             const shiftedValue = Cpu.E << 1;
             Cpu.E = setBitValue(shiftedValue, 0, eighthBit);
@@ -49,7 +49,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x4: {
-            trace("RLC H");
+            // "RLC H"
             const eighthBit = getBitValue(Cpu.H, 7);
             const shiftedValue = Cpu.H << 1;
             Cpu.H = setBitValue(shiftedValue, 0, eighthBit);
@@ -60,7 +60,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x5: {
-            trace("RLC L");
+            // "RLC L"
             const eighthBit = getBitValue(Cpu.L, 7);
             const shiftedValue = Cpu.L << 1;
             Cpu.L = setBitValue(shiftedValue, 0, eighthBit);
@@ -71,7 +71,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6: {
-            trace("RLC (HL)");
+            // "RLC (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const eighthBit = getBitValue(value, 7);
@@ -85,7 +85,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x7: {
-            trace("RLC A");
+            // "RLC A"
             const eighthBit = getBitValue(Cpu.A, 7);
             const shiftedValue = Cpu.A << 1;
             Cpu.A = setBitValue(shiftedValue, 0, eighthBit);
@@ -96,7 +96,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x8: {
-            trace("RRC B");
+            // "RRC B"
             const firstBit = getBitValue(Cpu.B, 0);
             const shiftedValue = Cpu.B >> 1;
             Cpu.B = setBitValue(shiftedValue, 7, firstBit);
@@ -107,7 +107,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x9: {
-            trace("RRC C");
+            // "RRC C"
             const firstBit = getBitValue(Cpu.C, 0);
             const shiftedValue = Cpu.C >> 1;
             Cpu.C = setBitValue(shiftedValue, 7, firstBit);
@@ -118,7 +118,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xA: {
-            trace("RRC D");
+            // "RRC D"
             const firstBit = getBitValue(Cpu.D, 0);
             const shiftedValue = Cpu.D >> 1;
             Cpu.D = setBitValue(shiftedValue, 7, firstBit);
@@ -129,7 +129,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xB: {
-            trace("RRC E");
+            // "RRC E"
             const firstBit = getBitValue(Cpu.E, 0);
             const shiftedValue = Cpu.E >> 1;
             Cpu.E = setBitValue(shiftedValue, 7, firstBit);
@@ -140,7 +140,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xC: {
-            trace("RRC H");
+            // "RRC H"
             const firstBit = getBitValue(Cpu.H, 0);
             const shiftedValue = Cpu.H >> 1;
             Cpu.H = setBitValue(shiftedValue, 7, firstBit);
@@ -151,7 +151,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xD: {
-            trace("RRC L");
+            // "RRC L"
             const firstBit = getBitValue(Cpu.L, 0);
             const shiftedValue = Cpu.L >> 1;
             Cpu.L = setBitValue(shiftedValue, 7, firstBit);
@@ -162,7 +162,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0xE: {
-            trace("RRC (HL)");
+            // "RRC (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const firstBit = getBitValue(value, 0);
@@ -176,7 +176,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0xF: {
-            trace("RRC A");
+            // "RRC A"
             const firstBit = getBitValue(Cpu.A, 0);
             const shiftedValue = Cpu.A >> 1;
             Cpu.A = setBitValue(shiftedValue, 7, firstBit);
@@ -187,7 +187,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x10: {
-            trace("RL B");
+            // "RL B"
             const eighthBit = getBitValue(Cpu.B, 7);
             const shiftedValue = Cpu.B << 1;
             Cpu.B = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -198,7 +198,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x11: {
-            trace("RL C");
+            // "RL C"
             const eighthBit = getBitValue(Cpu.C, 7);
             const shiftedValue = Cpu.C << 1;
             Cpu.C = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -209,7 +209,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x12: {
-            trace("RL D");
+            // "RL D"
             const eighthBit = getBitValue(Cpu.D, 7);
             const shiftedValue = Cpu.D << 1;
             Cpu.D = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -220,7 +220,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x13: {
-            trace("RL E");
+            // "RL E"
             const eighthBit = getBitValue(Cpu.E, 7);
             const shiftedValue = Cpu.E << 1;
             Cpu.E = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -231,7 +231,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x14: {
-            trace("RL H");
+            // "RL H"
             const eighthBit = getBitValue(Cpu.H, 7);
             const shiftedValue = Cpu.H << 1;
             Cpu.H = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -243,7 +243,7 @@ export function handleCBOpcode(opcode: u8): i32 {
 
         }
         case 0x15: {
-            trace("RL L");
+            // "RL L"
             const eighthBit = getBitValue(Cpu.L, 7);
             const shiftedValue = Cpu.L << 1;
             Cpu.L = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -254,7 +254,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x16: {
-            trace("RL (HL)");
+            // "RL (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const eighthBit = getBitValue(value, 7);
@@ -268,7 +268,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x17: {
-            trace("RL A");
+            // "RL A"
             const eighthBit = getBitValue(Cpu.A, 7);
             const shiftedValue = Cpu.A << 1;
             Cpu.A = setBitValue(shiftedValue, 0, getCarryFlag());
@@ -279,7 +279,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x18: {
-            trace("RR B");
+            // "RR B"
             const firstBit = getBitValue(Cpu.B, 0);
             const shiftedValue = Cpu.B >> 1;
             Cpu.B = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -290,7 +290,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x19: {
-            trace("RR C");
+            // "RR C"
             const firstBit = getBitValue(Cpu.C, 0);
             const shiftedValue = Cpu.C >> 1;
             Cpu.C = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -301,7 +301,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1A: {
-            trace("RR D");
+            // "RR D"
             const firstBit = getBitValue(Cpu.D, 0);
             const shiftedValue = Cpu.D >> 1;
             Cpu.D = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -312,7 +312,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1B: {
-            trace("RR E");
+            // "RR E"
             const firstBit = getBitValue(Cpu.E, 0);
             const shiftedValue = Cpu.E >> 1;
             Cpu.E = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -323,7 +323,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1C: {
-            trace("RR H");
+            // "RR H"
             const firstBit = getBitValue(Cpu.H, 0);
             const shiftedValue = Cpu.H >> 1;
             Cpu.H = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -334,7 +334,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1D: {
-            trace("RR L");
+            // "RR L"
             const firstBit = getBitValue(Cpu.L, 0);
             const shiftedValue = Cpu.L >> 1;
             Cpu.L = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -345,7 +345,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x1E: {
-            trace("RR (HL)");
+            // "RR (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const firstBit = getBitValue(value, 0);
@@ -359,7 +359,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x1F: {
-            trace("RR A");
+            // "RR A"
             const firstBit = getBitValue(Cpu.A, 0);
             const shiftedValue = Cpu.A >> 1;
             Cpu.A = setBitValue(shiftedValue, 7, getCarryFlag());
@@ -370,7 +370,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x20: {
-            trace("SLA B");
+            // "SLA B"
             const eighthBit = getBitValue(Cpu.B, 7);
             const result = Cpu.B << 1;
             setHalfCarryFlag(0);
@@ -381,7 +381,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x21: {
-            trace("SLA C");
+            // "SLA C"
             const eighthBit = getBitValue(Cpu.C, 7);
             const result = Cpu.C << 1;
             setHalfCarryFlag(0);
@@ -392,7 +392,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x22: {
-            trace("SLA D");
+            // "SLA D"
             const eighthBit = getBitValue(Cpu.D, 7);
             const result = Cpu.D << 1;
             setHalfCarryFlag(0);
@@ -403,7 +403,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x23: {
-            trace("SLA E");
+            // "SLA E"
             const eighthBit = getBitValue(Cpu.E, 7);
             const result = Cpu.E << 1;
             setHalfCarryFlag(0);
@@ -414,7 +414,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x24: {
-            trace("SLA H");
+            // "SLA H"
             const eighthBit = getBitValue(Cpu.H, 7);
             const result = Cpu.H << 1;
             setHalfCarryFlag(0);
@@ -425,7 +425,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x25: {
-            trace("SLA L");
+            // "SLA L"
             const eighthBit = getBitValue(Cpu.L, 7);
             const result = Cpu.L << 1;
             setHalfCarryFlag(0);
@@ -436,7 +436,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x26: {
-            trace("SLA (HL)");
+            // "SLA (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const eighthBit = getBitValue(value, 7);
@@ -449,7 +449,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x27: {
-            trace("SLA A");
+            // "SLA A"
             const eighthBit = getBitValue(Cpu.A, 7);
             const result = Cpu.A << 1;
             setHalfCarryFlag(0);
@@ -460,7 +460,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x28: {
-            trace("SRA B");
+            // "SRA B"
             const eighthBit = getBitValue(Cpu.B, 7);
             const firstBit = getBitValue(Cpu.B, 0);
             let result = Cpu.B >> 1;
@@ -473,7 +473,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x29: {
-            trace("SRA C");
+            // "SRA C"
             const eighthBit = getBitValue(Cpu.C, 7);
             const firstBit = getBitValue(Cpu.C, 0);
             let result = Cpu.C >> 1;
@@ -486,7 +486,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x2A: {
-            trace("SRA D");
+            // "SRA D"
             const eighthBit = getBitValue(Cpu.D, 7);
             const firstBit = getBitValue(Cpu.D, 0);
             let result = Cpu.D >> 1;
@@ -499,7 +499,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x2B: {
-            trace("SRA E");
+            // "SRA E"
             const eighthBit = getBitValue(Cpu.E, 7);
             const firstBit = getBitValue(Cpu.E, 0);
             let result = Cpu.E >> 1;
@@ -512,7 +512,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x2C: {
-            trace("SRA H");
+            // "SRA H"
             const eighthBit = getBitValue(Cpu.H, 7);
             const firstBit = getBitValue(Cpu.H, 0);
             let result = Cpu.H >> 1;
@@ -525,7 +525,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x2D: {
-            trace("SRA L");
+            // "SRA L"
             const eighthBit = getBitValue(Cpu.L, 7);
             const firstBit = getBitValue(Cpu.L, 0);
             let result = Cpu.L >> 1;
@@ -538,7 +538,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x2E: {
-            trace("SRA (HL)");
+            // "SRA (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const eighthBit = getBitValue(value, 7);
@@ -553,7 +553,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x2F: {
-            trace("SRA A");
+            // "SRA A"
             const eighthBit = getBitValue(Cpu.A, 7);
             const firstBit = getBitValue(Cpu.A, 0);
             let result = Cpu.A >> 1;
@@ -566,7 +566,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x30: {
-            trace("SWAP B");
+            // "SWAP B"
             const lowNibble = getLowNibble(Cpu.B);
             const highNibble = getHighNibble(Cpu.B);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -578,7 +578,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x31: {
-            trace("SWAP C");
+            // "SWAP C"
             const lowNibble = getLowNibble(Cpu.C);
             const highNibble = getHighNibble(Cpu.C);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -590,7 +590,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x32: {
-            trace("SWAP D");
+            // "SWAP D"
             const lowNibble = getLowNibble(Cpu.D);
             const highNibble = getHighNibble(Cpu.D);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -602,7 +602,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x33: {
-            trace("SWAP E");
+            // "SWAP E"
             const lowNibble = getLowNibble(Cpu.E);
             const highNibble = getHighNibble(Cpu.E);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -614,7 +614,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x34: {
-            trace("SWAP H");
+            // "SWAP H"
             const lowNibble = getLowNibble(Cpu.H);
             const highNibble = getHighNibble(Cpu.H);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -626,7 +626,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x35: {
-            trace("SWAP L");
+            // "SWAP L"
             const lowNibble = getLowNibble(Cpu.L);
             const highNibble = getHighNibble(Cpu.L);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -638,7 +638,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x36: {
-            trace("SWAP (HL)");
+            // "SWAP (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const lowNibble = getLowNibble(value);
@@ -652,7 +652,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x37: {
-            trace("SWAP A");
+            // "SWAP A"
             const lowNibble = getLowNibble(Cpu.A);
             const highNibble = getHighNibble(Cpu.A);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -664,7 +664,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x38: {
-            trace("SRL B");
+            // "SRL B"
             const firstBit = getBitValue(Cpu.B, 0);
             const result = Cpu.B >> 1;
             setNegativeFlag(0);
@@ -675,7 +675,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x39: {
-            trace("SRL C");
+            // "SRL C"
             const firstBit = getBitValue(Cpu.C, 0);
             const result = Cpu.C >> 1;
             setNegativeFlag(0);
@@ -686,7 +686,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3A: {
-            trace("SRL D");
+            // "SRL D"
             const firstBit = getBitValue(Cpu.D, 0);
             const result = Cpu.D >> 1;
             setNegativeFlag(0);
@@ -697,7 +697,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3B: {
-            trace("SRL E");
+            // "SRL E"
             const firstBit = getBitValue(Cpu.E, 0);
             const result = Cpu.E >> 1;
             setNegativeFlag(0);
@@ -708,7 +708,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3C: {
-            trace("SRL H");
+            // "SRL H"
             const firstBit = getBitValue(Cpu.H, 0);
             const result = Cpu.H >> 1;
             setNegativeFlag(0);
@@ -719,7 +719,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3D: {
-            trace("SRL L");
+            // "SRL L"
             const firstBit = getBitValue(Cpu.L, 0);
             const result = Cpu.L >> 1;
             setNegativeFlag(0);
@@ -730,7 +730,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x3E: {
-            trace("SRL (HL)");
+            // "SRL (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const firstBit = getBitValue(value, 0);
@@ -743,7 +743,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 16;
         }
         case 0x3F: {
-            trace("SRL A");
+            // "SRL A"
             const firstBit = getBitValue(Cpu.A, 0);
             const result = Cpu.A >> 1;
             setNegativeFlag(0);
@@ -754,7 +754,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x40: {
-            trace("BIT 0, B");
+            // "BIT 0, B"
             const bit = getBitValue(Cpu.B, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -762,7 +762,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x41: {
-            trace("BIT 0, C");
+            // "BIT 0, C"
             const bit = getBitValue(Cpu.C, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -770,7 +770,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x42: {
-            trace("BIT 0, D");
+            // "BIT 0, D"
             const bit = getBitValue(Cpu.D, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -778,7 +778,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x43: {
-            trace("BIT 0, E");
+            // "BIT 0, E"
             const bit = getBitValue(Cpu.E, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -786,7 +786,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x44: {
-            trace("BIT 0, H");
+            // "BIT 0, H"
             const bit = getBitValue(Cpu.H, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -794,7 +794,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x45: {
-            trace("BIT 0, L");
+            // "BIT 0, L"
             const bit = getBitValue(Cpu.L, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -802,7 +802,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x46: {
-            trace("BIT 0, (HL)");
+            // "BIT 0, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 0);
@@ -812,7 +812,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x47: {
-            trace("BIT 0, A");
+            // "BIT 0, A"
             const bit = getBitValue(Cpu.A, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -820,7 +820,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x48: {
-            trace("BIT 1, B");
+            // "BIT 1, B"
             const bit = getBitValue(Cpu.B, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -828,7 +828,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x49: {
-            trace("BIT 1, C");
+            // "BIT 1, C"
             const bit = getBitValue(Cpu.C, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -836,7 +836,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x4A: {
-            trace("BIT 1, D");
+            // "BIT 1, D"
             const bit = getBitValue(Cpu.D, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -844,7 +844,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x4B: {
-            trace("BIT 1, E");
+            // "BIT 1, E"
             const bit = getBitValue(Cpu.E, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -852,7 +852,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x4C: {
-            trace("BIT 1, H");
+            // "BIT 1, H"
             const bit = getBitValue(Cpu.H, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -860,7 +860,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x4D: {
-            trace("BIT 1, L");
+            // "BIT 1, L"
             const bit = getBitValue(Cpu.L, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -868,7 +868,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x4E: {
-            trace("BIT 1, (HL)");
+            // "BIT 1, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 1);
@@ -878,7 +878,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x4F: {
-            trace("BIT 1, A");
+            // "BIT 1, A"
             const bit = getBitValue(Cpu.A, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -886,7 +886,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x50: {
-            trace("BIT 2, B");
+            // "BIT 2, B"
             const bit = getBitValue(Cpu.B, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -894,7 +894,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x51: {
-            trace("BIT 2, C");
+            // "BIT 2, C"
             const bit = getBitValue(Cpu.C, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -902,7 +902,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x52: {
-            trace("BIT 2, D");
+            // "BIT 2, D"
             const bit = getBitValue(Cpu.D, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -910,7 +910,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x53: {
-            trace("BIT 2, E");
+            // "BIT 2, E"
             const bit = getBitValue(Cpu.E, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -918,7 +918,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x54: {
-            trace("BIT 2, H");
+            // "BIT 2, H"
             const bit = getBitValue(Cpu.H, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -926,7 +926,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x55: {
-            trace("BIT 2, L");
+            // "BIT 2, L"
             const bit = getBitValue(Cpu.L, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -934,7 +934,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x56: {
-            trace("BIT 2, (HL)");
+            // "BIT 2, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 2);
@@ -944,7 +944,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x57: {
-            trace("BIT 2, A");
+            // "BIT 2, A"
             const bit = getBitValue(Cpu.A, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -952,7 +952,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x58: {
-            trace("BIT 3, B");
+            // "BIT 3, B"
             const bit = getBitValue(Cpu.B, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -960,7 +960,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x59: {
-            trace("BIT 3, C");
+            // "BIT 3, C"
             const bit = getBitValue(Cpu.C, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -968,7 +968,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x5A: {
-            trace("BIT 3, D");
+            // "BIT 3, D"
             const bit = getBitValue(Cpu.D, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -976,7 +976,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x5B: {
-            trace("BIT 3, E");
+            // "BIT 3, E"
             const bit = getBitValue(Cpu.E, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -984,7 +984,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x5C: {
-            trace("BIT 3, H");
+            // "BIT 3, H"
             const bit = getBitValue(Cpu.H, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -992,7 +992,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x5D: {
-            trace("BIT 3, L");
+            // "BIT 3, L"
             const bit = getBitValue(Cpu.L, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1000,7 +1000,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x5E: {
-            trace("BIT 3, (HL)");
+            // "BIT 3, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 3);
@@ -1010,7 +1010,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x5F: {
-            trace("BIT 3, A");
+            // "BIT 3, A"
             const bit = getBitValue(Cpu.A, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1018,7 +1018,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x60: {
-            trace("BIT 4, B");
+            // "BIT 4, B"
             const bit = getBitValue(Cpu.B, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1026,7 +1026,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x61: {
-            trace("BIT 4, C");
+            // "BIT 4, C"
             const bit = getBitValue(Cpu.C, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1034,7 +1034,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x62: {
-            trace("BIT 4, D");
+            // "BIT 4, D"
             const bit = getBitValue(Cpu.D, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1042,7 +1042,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x63: {
-            trace("BIT 4, E");
+            // "BIT 4, E"
             const bit = getBitValue(Cpu.E, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1050,7 +1050,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x64: {
-            trace("BIT 4, H");
+            // "BIT 4, H"
             const bit = getBitValue(Cpu.H, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1058,7 +1058,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x65: {
-            trace("BIT 4, L");
+            // "BIT 4, L"
             const bit = getBitValue(Cpu.L, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1066,7 +1066,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x66: {
-            trace("BIT 4, (HL)");
+            // "BIT 4, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 4);
@@ -1076,7 +1076,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x67: {
-            trace("BIT 4, A");
+            // "BIT 4, A"
             const bit = getBitValue(Cpu.A, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1084,7 +1084,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x68: {
-            trace("BIT 5, B");
+            // "BIT 5, B"
             const bit = getBitValue(Cpu.B, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1092,7 +1092,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x69: {
-            trace("BIT 5, C");
+            // "BIT 5, C"
             const bit = getBitValue(Cpu.C, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1100,7 +1100,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6A: {
-            trace("BIT 5, D");
+            // "BIT 5, D"
             const bit = getBitValue(Cpu.D, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1108,7 +1108,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6B: {
-            trace("BIT 5, E");
+            // "BIT 5, E"
             const bit = getBitValue(Cpu.E, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1116,7 +1116,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6C: {
-            trace("BIT 5, H");
+            // "BIT 5, H"
             const bit = getBitValue(Cpu.H, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1124,7 +1124,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6D: {
-            trace("BIT 5, L");
+            // "BIT 5, L"
             const bit = getBitValue(Cpu.L, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1132,7 +1132,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6E: {
-            trace("BIT 5, (HL)");
+            // "BIT 5, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 5);
@@ -1142,7 +1142,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x6F: {
-            trace("BIT 5, A");
+            // "BIT 5, A"
             const bit = getBitValue(Cpu.A, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1150,7 +1150,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x70: {
-            trace("BIT 6, B");
+            // "BIT 6, B"
             const bit = getBitValue(Cpu.B, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1158,7 +1158,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x71: {
-            trace("BIT 6, C");
+            // "BIT 6, C"
             const bit = getBitValue(Cpu.C, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1166,7 +1166,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x72: {
-            trace("BIT 6, D");
+            // "BIT 6, D"
             const bit = getBitValue(Cpu.D, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1174,7 +1174,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x73: {
-            trace("BIT 6, E");
+            // "BIT 6, E"
             const bit = getBitValue(Cpu.E, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1182,7 +1182,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x74: {
-            trace("BIT 6, H");
+            // "BIT 6, H"
             const bit = getBitValue(Cpu.H, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1190,7 +1190,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x75: {
-            trace("BIT 6, L");
+            // "BIT 6, L"
             const bit = getBitValue(Cpu.L, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1198,7 +1198,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x76: {
-            trace("BIT 6, (HL)");
+            // "BIT 6, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 6);
@@ -1208,7 +1208,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x77: {
-            trace("BIT 6, A");
+            // "BIT 6, A"
             const bit = getBitValue(Cpu.A, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1216,7 +1216,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x78: {
-            trace("BIT 7, B");
+            // "BIT 7, B"
             const bit = getBitValue(Cpu.B, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1224,7 +1224,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x79: {
-            trace("BIT 7, C");
+            // "BIT 7, C"
             const bit = getBitValue(Cpu.C, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1232,7 +1232,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7A: {
-            trace("BIT 7, D");
+            // "BIT 7, D"
             const bit = getBitValue(Cpu.D, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1240,7 +1240,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7B: {
-            trace("BIT 7, E");
+            // "BIT 7, E"
             const bit = getBitValue(Cpu.E, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1248,7 +1248,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7C: {
-            trace("BIT 7, H");
+            // "BIT 7, H"
             const bit = getBitValue(Cpu.H, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1256,7 +1256,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7D: {
-            trace("BIT 7, L");
+            // "BIT 7, L"
             const bit = getBitValue(Cpu.L, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1264,7 +1264,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x7E: {
-            trace("BIT 7, (HL)");
+            // "BIT 7, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             const bit = getBitValue(value, 7);
@@ -1274,7 +1274,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 12;
         }
         case 0x7F: {
-            trace("BIT 7, A");
+            // "BIT 7, A"
             const bit = getBitValue(Cpu.A, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1282,674 +1282,674 @@ export function handleCBOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x80: {
-            trace("RES 0, B");
+            // "RES 0, B"
             Cpu.B = setBitValue(Cpu.B, 0, 0);
             return 8;
         }
         case 0x81: {
-            trace("RES 0, C");
+            // "RES 0, C"
             Cpu.C = setBitValue(Cpu.C, 0, 0);
             return 8;
         }
         case 0x82: {
-            trace("RES 0, D");
+            // "RES 0, D"
             Cpu.D = setBitValue(Cpu.D, 0, 0);
             return 8;
         }
         case 0x83: {
-            trace("RES 0, E");
+            // "RES 0, E"
             Cpu.E = setBitValue(Cpu.E, 0, 0);
             return 8;
         }
         case 0x84: {
-            trace("RES 0, H");
+            // "RES 0, H"
             Cpu.H = setBitValue(Cpu.H, 0, 0);
             return 8;
         }
         case 0x85: {
-            trace("RES 0, L");
+            // "RES 0, L"
             Cpu.L = setBitValue(Cpu.L, 0, 0);
             return 8;
         }
         case 0x86: {
-            trace("RES 0, (HL)");
+            // "RES 0, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 0, 0));
             return 16;
         }
         case 0x87: {
-            trace("RES 0, A");
+            // "RES 0, A"
             Cpu.A = setBitValue(Cpu.A, 0, 0);
             return 8;
         }
         case 0x88: {
-            trace("RES 1, B");
+            // "RES 1, B"
             Cpu.B = setBitValue(Cpu.B, 1, 0);
             return 8;
         }
         case 0x89: {
-            trace("RES 1, C");
+            // "RES 1, C"
             Cpu.C = setBitValue(Cpu.C, 1, 0);
             return 8;
         }
         case 0x8A: {
-            trace("RES 1, D");
+            // "RES 1, D"
             Cpu.D = setBitValue(Cpu.D, 1, 0);
             return 8;
         }
         case 0x8B: {
-            trace("RES 1, E");
+            // "RES 1, E"
             Cpu.E = setBitValue(Cpu.E, 1, 0);
             return 8;
         }
         case 0x8C: {
-            trace("RES 1, H");
+            // "RES 1, H"
             Cpu.H = setBitValue(Cpu.H, 1, 0);
             return 8;
         }
         case 0x8D: {
-            trace("RES 1, L");
+            // "RES 1, L"
             Cpu.L = setBitValue(Cpu.L, 1, 0);
             return 8;
         }
         case 0x8E: {
-            trace("RES 1, (HL)");
+            // "RES 1, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 1, 0));
             return 16;
         }
         case 0x8F: {
-            trace("RES 1, A");
+            // "RES 1, A"
             Cpu.A = setBitValue(Cpu.A, 1, 0);
             return 8;
         }
         case 0x90: {
-            trace("RES 2, B");
+            // "RES 2, B"
             Cpu.B = setBitValue(Cpu.B, 2, 0);
             return 8;
         }
         case 0x91: {
-            trace("RES 2, C");
+            // "RES 2, C"
             Cpu.C = setBitValue(Cpu.C, 2, 0);
             return 8;
         }
         case 0x92: {
-            trace("RES 2, D");
+            // "RES 2, D"
             Cpu.D = setBitValue(Cpu.D, 2, 0);
             return 8;
         }
         case 0x93: {
-            trace("RES 2, E");
+            // "RES 2, E"
             Cpu.E = setBitValue(Cpu.E, 2, 0);
             return 8;
         }
         case 0x94: {
-            trace("RES 2, H");
+            // "RES 2, H"
             Cpu.H = setBitValue(Cpu.H, 2, 0);
             return 8;
         }
         case 0x95: {
-            trace("RES 2, L");
+            // "RES 2, L"
             Cpu.L = setBitValue(Cpu.L, 2, 0);
             return 8;
         }
         case 0x96: {
-            trace("RES 2, (HL)");
+            // "RES 2, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 2, 0));
             return 16;
         }
         case 0x97: {
-            trace("RES 2, A");
+            // "RES 2, A"
             Cpu.A = setBitValue(Cpu.A, 2, 0);
             return 8;
         }
         case 0x98: {
-            trace("RES 3, B");
+            // "RES 3, B"
             Cpu.B = setBitValue(Cpu.B, 3, 0);
             return 8;
         }
         case 0x99: {
-            trace("RES 3, C");
+            // "RES 3, C"
             Cpu.C = setBitValue(Cpu.C, 3, 0);
             return 8;
         }
         case 0x9A: {
-            trace("RES 3, D");
+            // "RES 3, D"
             Cpu.D = setBitValue(Cpu.D, 3, 0);
             return 8;
         }
         case 0x9B: {
-            trace("RES 3, E");
+            // "RES 3, E"
             Cpu.E = setBitValue(Cpu.E, 3, 0);
             return 8;
         }
         case 0x9C: {
-            trace("RES 3, H");
+            // "RES 3, H"
             Cpu.H = setBitValue(Cpu.H, 3, 0);
             return 8;
         }
         case 0x9D: {
-            trace("RES 3, L");
+            // "RES 3, L"
             Cpu.L = setBitValue(Cpu.L, 3, 0);
             return 8;
         }
         case 0x9E: {
-            trace("RES 3, (HL)");
+            // "RES 3, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 3, 0));
             return 16;
         }
         case 0x9F: {
-            trace("RES 3, A");
+            // "RES 3, A"
             Cpu.A = setBitValue(Cpu.A, 3, 0);
             return 8;
         }
         case 0xA0: {
-            trace("RES 4, B");
+            // "RES 4, B"
             Cpu.B = setBitValue(Cpu.B, 4, 0);
             return 8;
         }
         case 0xA1: {
-            trace("RES 4, C");
+            // "RES 4, C"
             Cpu.C = setBitValue(Cpu.C, 4, 0);
             return 8;
         }
         case 0xA2: {
-            trace("RES 4, D");
+            // "RES 4, D"
             Cpu.D = setBitValue(Cpu.D, 4, 0);
             return 8;
         }
         case 0xA3: {
-            trace("RES 4, E");
+            // "RES 4, E"
             Cpu.E = setBitValue(Cpu.E, 4, 0);
             return 8;
         }
         case 0xA4: {
-            trace("RES 4, H");
+            // "RES 4, H"
             Cpu.H = setBitValue(Cpu.H, 4, 0);
             return 8;
         }
         case 0xA5: {
-            trace("RES 4, L");
+            // "RES 4, L"
             Cpu.L = setBitValue(Cpu.L, 4, 0);
             return 8;
         }
         case 0xA6: {
-            trace("RES 4, (HL)");
+            // "RES 4, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 4, 0));
             return 16;
         }
         case 0xA7: {
-            trace("RES 4, A");
+            // "RES 4, A"
             Cpu.A = setBitValue(Cpu.A, 4, 0);
             return 8;
         }
         case 0xA8: {
-            trace("RES 5, B");
+            // "RES 5, B"
             Cpu.B = setBitValue(Cpu.B, 5, 0);
             return 8;
         }
         case 0xA9: {
-            trace("RES 5, C");
+            // "RES 5, C"
             Cpu.C = setBitValue(Cpu.C, 5, 0);
             return 8;
         }
         case 0xAA: {
-            trace("RES 5, D");
+            // "RES 5, D"
             Cpu.D = setBitValue(Cpu.D, 5, 0);
             return 8;
         }
         case 0xAB: {
-            trace("RES 5, E");
+            // "RES 5, E"
             Cpu.E = setBitValue(Cpu.E, 5, 0);
             return 8;
         }
         case 0xAC: {
-            trace("RES 5, H");
+            // "RES 5, H"
             Cpu.H = setBitValue(Cpu.H, 5, 0);
             return 8;
         }
         case 0xAD: {
-            trace("RES 5, L");
+            // "RES 5, L"
             Cpu.L = setBitValue(Cpu.L, 5, 0);
             return 8;
         }
         case 0xAE: {
-            trace("RES 5, (HL)");
+            // "RES 5, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 5, 0));
             return 16;
         }
         case 0xAF: {
-            trace("RES 5, A");
+            // "RES 5, A"
             Cpu.A = setBitValue(Cpu.A, 5, 0);
             return 8;
         }
         case 0xB0: {
-            trace("RES 6, B");
+            // "RES 6, B"
             Cpu.B = setBitValue(Cpu.B, 6, 0);
             return 8;
         }
         case 0xB1: {
-            trace("RES 6, C");
+            // "RES 6, C"
             Cpu.C = setBitValue(Cpu.C, 6, 0);
             return 8;
         }
         case 0xB2: {
-            trace("RES 6, D");
+            // "RES 6, D"
             Cpu.D = setBitValue(Cpu.D, 6, 0);
             return 8;
         }
         case 0xB3: {
-            trace("RES 6, E");
+            // "RES 6, E"
             Cpu.E = setBitValue(Cpu.E, 6, 0);
             return 8;
         }
         case 0xB4: {
-            trace("RES 6, H");
+            // "RES 6, H"
             Cpu.H = setBitValue(Cpu.H, 6, 0);
             return 8;
         }
         case 0xB5: {
-            trace("RES 6, L");
+            // "RES 6, L"
             Cpu.L = setBitValue(Cpu.L, 6, 0);
             return 8;
         }
         case 0xB6: {
-            trace("RES 6, (HL)");
+            // "RES 6, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 6, 0));
             return 16;
         }
         case 0xB7: {
-            trace("RES 6, A");
+            // "RES 6, A"
             Cpu.A = setBitValue(Cpu.A, 6, 0);
             return 8;
         }
         case 0xB8: {
-            trace("RES 7, B");
+            // "RES 7, B"
             Cpu.B = setBitValue(Cpu.B, 7, 0);
             return 8;
         }
         case 0xB9: {
-            trace("RES 7, C");
+            // "RES 7, C"
             Cpu.C = setBitValue(Cpu.C, 7, 0);
             return 8;
         }
         case 0xBA: {
-            trace("RES 7, D");
+            // "RES 7, D"
             Cpu.D = setBitValue(Cpu.D, 7, 0);
             return 8;
         }
         case 0xBB: {
-            trace("RES 7, E");
+            // "RES 7, E"
             Cpu.E = setBitValue(Cpu.E, 7, 0);
             return 8;
         }
         case 0xBC: {
-            trace("RES 7, H");
+            // "RES 7, H"
             Cpu.H = setBitValue(Cpu.H, 7, 0);
             return 8;
         }
         case 0xBD: {
-            trace("RES 7, L");
+            // "RES 7, L"
             Cpu.L = setBitValue(Cpu.L, 7, 0);
             return 8;
         }
         case 0xBE: {
-            trace("RES 7, (HL)");
+            // "RES 7, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 7, 0));
             return 16;
         }
         case 0xBF: {
-            trace("RES 7, A");
+            // "RES 7, A"
             Cpu.A = setBitValue(Cpu.A, 7, 0);
             return 8;
         }
         case 0xC0: {
-            trace("SET 0, B");
+            // "SET 0, B"
             Cpu.B = setBitValue(Cpu.B, 0, 1);
             return 8;
         }
         case 0xC1: {
-            trace("SET 0, C");
+            // "SET 0, C"
             Cpu.C = setBitValue(Cpu.C, 0, 1);
             return 8;
         }
         case 0xC2: {
-            trace("SET 0, D");
+            // "SET 0, D"
             Cpu.D = setBitValue(Cpu.D, 0, 1);
             return 8;
         }
         case 0xC3: {
-            trace("SET 0, E");
+            // "SET 0, E"
             Cpu.E = setBitValue(Cpu.E, 0, 1);
             return 8;
         }
         case 0xC4: {
-            trace("SET 0, H");
+            // "SET 0, H"
             Cpu.H = setBitValue(Cpu.H, 0, 1);
             return 8;
         }
         case 0xC5: {
-            trace("SET 0, L");
+            // "SET 0, L"
             Cpu.L = setBitValue(Cpu.L, 0, 1);
             return 8;
         }
         case 0xC6: {
-            trace("SET 0, (HL)");
+            // "SET 0, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 0, 1));
             return 16;
         }
         case 0xC7: {
-            trace("SET 0, A");
+            // "SET 0, A"
             Cpu.A = setBitValue(Cpu.A, 0, 1);
             return 8;
         }
         case 0xC8: {
-            trace("SET 1, B");
+            // "SET 1, B"
             Cpu.B = setBitValue(Cpu.B, 1, 1);
             return 8;
         }
         case 0xC9: {
-            trace("SET 1, C");
+            // "SET 1, C"
             Cpu.C = setBitValue(Cpu.C, 1, 1);
             return 8;
         }
         case 0xCA: {
-            trace("SET 1, D");
+            // "SET 1, D"
             Cpu.D = setBitValue(Cpu.D, 1, 1);
             return 8;
         }
         case 0xCB: {
-            trace("SET 1, E");
+            // "SET 1, E"
             Cpu.E = setBitValue(Cpu.E, 1, 1);
             return 8;
         }
         case 0xCC: {
-            trace("SET 1, H");
+            // "SET 1, H"
             Cpu.H = setBitValue(Cpu.H, 1, 1);
             return 8;
         }
         case 0xCD: {
-            trace("SET 1, L");
+            // "SET 1, L"
             Cpu.L = setBitValue(Cpu.L, 1, 1);
             return 8;
         }
         case 0xCE: {
-            trace("SET 1, (HL)");
+            // "SET 1, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 1, 1));
             return 16;
         }
         case 0xCF: {
-            trace("SET 1, A");
+            // "SET 1, A"
             Cpu.A = setBitValue(Cpu.A, 1, 1);
             return 8;
         }
         case 0xD0: {
-            trace("SET 2, B");
+            // "SET 2, B"
             Cpu.B = setBitValue(Cpu.B, 2, 1);
             return 8;
         }
         case 0xD1: {
-            trace("SET 2, C");
+            // "SET 2, C"
             Cpu.C = setBitValue(Cpu.C, 2, 1);
             return 8;
         }
         case 0xD2: {
-            trace("SET 2, D");
+            // "SET 2, D"
             Cpu.D = setBitValue(Cpu.D, 2, 1);
             return 8;
         }
         case 0xD3: {
-            trace("SET 2, E");
+            // "SET 2, E"
             Cpu.E = setBitValue(Cpu.E, 2, 1);
             return 8;
         }
         case 0xD4: {
-            trace("SET 2, H");
+            // "SET 2, H"
             Cpu.H = setBitValue(Cpu.H, 2, 1);
             return 8;
         }
         case 0xD5: {
-            trace("SET 2, L");
+            // "SET 2, L"
             Cpu.L = setBitValue(Cpu.L, 2, 1);
             return 8;
         }
         case 0xD6: {
-            trace("SET 2, (HL)");
+            // "SET 2, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 2, 1));
             return 16;
         }
         case 0xD7: {
-            trace("SET 2, A");
+            // "SET 2, A"
             Cpu.A = setBitValue(Cpu.A, 2, 1);
             return 8;
         }
         case 0xD8: {
-            trace("SET 3, B");
+            // "SET 3, B"
             Cpu.B = setBitValue(Cpu.B, 3, 1);
             return 8;
         }
         case 0xD9: {
-            trace("SET 3, C");
+            // "SET 3, C"
             Cpu.C = setBitValue(Cpu.C, 3, 1);
             return 8;
         }
         case 0xDA: {
-            trace("SET 3, D");
+            // "SET 3, D"
             Cpu.D = setBitValue(Cpu.D, 3, 1);
             return 8;
         }
         case 0xDB: {
-            trace("SET 3, E");
+            // "SET 3, E"
             Cpu.E = setBitValue(Cpu.E, 3, 1);
             return 8;
         }
         case 0xDC: {
-            trace("SET 3, H");
+            // "SET 3, H"
             Cpu.H = setBitValue(Cpu.H, 3, 1);
             return 8;
         }
         case 0xDD: {
-            trace("SET 3, L");
+            // "SET 3, L"
             Cpu.L = setBitValue(Cpu.L, 3, 1);
             return 8;
         }
         case 0xDE: {
-            trace("SET 3, (HL)");
+            // "SET 3, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 3, 1));
             return 16;
         }
         case 0xDF: {
-            trace("SET 3, A");
+            // "SET 3, A"
             Cpu.A = setBitValue(Cpu.A, 3, 1);
             return 8;
         }
         case 0xE0: {
-            trace("SET 4, B");
+            // "SET 4, B"
             Cpu.B = setBitValue(Cpu.B, 4, 1);
             return 8;
         }
         case 0xE1: {
-            trace("SET 4, C");
+            // "SET 4, C"
             Cpu.C = setBitValue(Cpu.C, 4, 1);
             return 8;
         }
         case 0xE2: {
-            trace("SET 4, D");
+            // "SET 4, D"
             Cpu.D = setBitValue(Cpu.D, 4, 1);
             return 8;
         }
         case 0xE3: {
-            trace("SET 4, E");
+            // "SET 4, E"
             Cpu.E = setBitValue(Cpu.E, 4, 1);
             return 8;
         }
         case 0xE4: {
-            trace("SET 4, H");
+            // "SET 4, H"
             Cpu.H = setBitValue(Cpu.H, 4, 1);
             return 8;
         }
         case 0xE5: {
-            trace("SET 4, L");
+            // "SET 4, L"
             Cpu.L = setBitValue(Cpu.L, 4, 1);
             return 8;
         }
         case 0xE6: {
-            trace("SET 4, (HL)");
+            // "SET 4, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 4, 1));
             return 16;
         }
         case 0xE7: {
-            trace("SET 4, A");
+            // "SET 4, A"
             Cpu.A = setBitValue(Cpu.A, 4, 1);
             return 8;
         }
         case 0xE8: {
-            trace("SET 5, B");
+            // "SET 5, B"
             Cpu.B = setBitValue(Cpu.B, 5, 1);
             return 8;
         }
         case 0xE9: {
-            trace("SET 5, C");
+            // "SET 5, C"
             Cpu.C = setBitValue(Cpu.C, 5, 1);
             return 8;
         }
         case 0xEA: {
-            trace("SET 5, D");
+            // "SET 5, D"
             Cpu.D = setBitValue(Cpu.D, 5, 1);
             return 8;
         }
         case 0xEB: {
-            trace("SET 5, E");
+            // "SET 5, E"
             Cpu.E = setBitValue(Cpu.E, 5, 1);
             return 8;
         }
         case 0xEC: {
-            trace("SET 5, H");
+            // "SET 5, H"
             Cpu.H = setBitValue(Cpu.H, 5, 1);
             return 8;
         }
         case 0xED: {
-            trace("SET 5, L");
+            // "SET 5, L"
             Cpu.L = setBitValue(Cpu.L, 5, 1);
             return 8;
         }
         case 0xEE: {
-            trace("SET 5, (HL)");
+            // "SET 5, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 5, 1));
             return 16;
         }
         case 0xEF: {
-            trace("SET 5, A");
+            // "SET 5, A"
             Cpu.A = setBitValue(Cpu.A, 5, 1);
             return 8;
         }
         case 0xF0: {
-            trace("SET 6, B");
+            // "SET 6, B"
             Cpu.B = setBitValue(Cpu.B, 6, 1);
             return 8;
         }
         case 0xF1: {
-            trace("SET 6, C");
+            // "SET 6, C"
             Cpu.C = setBitValue(Cpu.C, 6, 1);
             return 8;
         }
         case 0xF2: {
-            trace("SET 6, D");
+            // "SET 6, D"
             Cpu.D = setBitValue(Cpu.D, 6, 1);
             return 8;
         }
         case 0xF3: {
-            trace("SET 6, E");
+            // "SET 6, E"
             Cpu.E = setBitValue(Cpu.E, 6, 1);
             return 8;
         }
         case 0xF4: {
-            trace("SET 6, H");
+            // "SET 6, H"
             Cpu.H = setBitValue(Cpu.H, 6, 1);
             return 8;
         }
         case 0xF5: {
-            trace("SET 6, L");
+            // "SET 6, L"
             Cpu.L = setBitValue(Cpu.L, 6, 1);
             return 8;
         }
         case 0xF6: {
-            trace("SET 6, (HL)");
+            // "SET 6, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 6, 1));
             return 16;
         }
         case 0xF7: {
-            trace("SET 6, A");
+            // "SET 6, A"
             Cpu.A = setBitValue(Cpu.A, 6, 1);
             return 8;
         }
         case 0xF8: {
-            trace("SET 7, B");
+            // "SET 7, B"
             Cpu.B = setBitValue(Cpu.B, 7, 1);
             return 8;
         }
         case 0xF9: {
-            trace("SET 7, C");
+            // "SET 7, C"
             Cpu.C = setBitValue(Cpu.C, 7, 1);
             return 8;
         }
         case 0xFA: {
-            trace("SET 7, D");
+            // "SET 7, D"
             Cpu.D = setBitValue(Cpu.D, 7, 1);
             return 8;
         }
         case 0xFB: {
-            trace("SET 7, E");
+            // "SET 7, E"
             Cpu.E = setBitValue(Cpu.E, 7, 1);
             return 8;
         }
         case 0xFC: {
-            trace("SET 7, H");
+            // "SET 7, H"
             Cpu.H = setBitValue(Cpu.H, 7, 1);
             return 8;
         }
         case 0xFD: {
-            trace("SET 7, L");
+            // "SET 7, L"
             Cpu.L = setBitValue(Cpu.L, 7, 1);
             return 8;
         }
         case 0xFE: {
-            trace("SET 7, (HL)");
+            // "SET 7, (HL)"
             const hl = getHL();
             const value = readByte(hl);
             writeByte(hl, setBitValue(value, 7, 1));
             return 16;
         }
         case 0xFF: {
-            trace("SET 7, A");
+            // "SET 7, A"
             Cpu.A = setBitValue(Cpu.A, 7, 1);
             return 8;
         }

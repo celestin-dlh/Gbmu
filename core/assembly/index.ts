@@ -24,7 +24,6 @@ declare function consoleLog(message: string): void;
 
 export function step(stepTimes: i32): void {
   for (let index = 0; index < stepTimes; index++) {
-    trace('step !')
     fetchExecuteOpcode();
   }
 }
