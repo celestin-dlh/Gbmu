@@ -549,7 +549,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             setNegativeFlag(0);
             setZeroFlag(result > 0 ? 0 : 1);
             setCarryFlag(firstBit);
-            writeByte(hl, value);
+            writeByte(hl, result);
             return 16;
         }
         case 0x2F: {
@@ -739,7 +739,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             setHalfCarryFlag(0);
             setZeroFlag(result > 0 ? 0 : 1);
             setCarryFlag(firstBit);
-            writeByte(hl, value);
+            writeByte(hl, result);
             return 16;
         }
         case 0x3F: {
