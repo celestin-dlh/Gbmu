@@ -1,5 +1,3 @@
-import { setCarryFlag } from "../cpu/state";
-
 export function getLowNibble(byte: u8): u8 {
     return (byte & 0xF);    
 }

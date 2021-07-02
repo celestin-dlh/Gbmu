@@ -22,12 +22,13 @@ import {
     IE_END
 } from './constants';
 import { combineBytes } from './helpers';
+import { syncCycle } from './syncCycle';
 
 declare function consoleLog(message: string): void;
 declare function consoleNum(num: i32): void;
 
 export function writeByte(address: u16, byte: u8): void {
-    // syncCycle(4);
+    syncCycle(4);
     writeMemoryMap(address, byte);
 }
 
@@ -54,15 +55,18 @@ export function writeMemoryMap(address: u16, byte: u8): void {
         new Error("Nintendo says use of this area is prohibited.");
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
-        // trace("trying to access IO");
-        // consoleLog(`trying to write IO ${address.toString(16)}`);
         Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
+
+        // DIV Timer
+        if (address === 0xFF04) {
+            Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] = 0;
+        }
 
         // blarggs test - serial output
         if (address === 0xFF02 && byte === 0x81) {
             const char = String.fromCharCode(Cpu.ioRegisters[0xFF01 - IO_REGISTERS_START]);
             consoleLog(char);
-            Cpu.ioRegisters[0xFF02 - IO_REGISTERS_START] = 0x0;
+            Cpu.ioRegisters[0xFF02 - IO_REGISTERS_START] = 0;
         }
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
@@ -77,13 +81,13 @@ export function writeMemoryMap(address: u16, byte: u8): void {
 export function readByteAtPc(): u8 {
     const byte = readMemoryMap(Cpu.pc);
     Cpu.pc += 1;
-    // syncCycle(4);
+    syncCycle(4);
     return byte;
 } 
 
 export function readByte(address: u16): u8 {
     const byte = readMemoryMap(address);
-    // syncCycle(4);
+    syncCycle(4);
     return byte;
 }
   
@@ -116,12 +120,8 @@ export function readMemoryMap(address: u16): u8 {
         return Cpu.unusedMemory[address - UNUSED_MEMORY_START];
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
-        
-        // consoleLog(`trying to read IO ${address.toString(16)}`);
-
         // temp because we dont have ppu yet
         if (address == 0xFF44) {
-            // consoleLog(`trying to read IO ${address}`);
             return 0x90;
         }
         return Cpu.ioRegisters[address - IO_REGISTERS_START];

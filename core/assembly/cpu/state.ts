@@ -16,17 +16,27 @@ import { writeMemoryMap } from '../readWriteOperations';
 
 export class Cpu {
 
-  static A: u8 = 0x01;
-  static B: u8 = 0x0;
-  static C: u8 = 0x13;
+  static A: u8 = 0;
+  static B: u8 = 0;
+  static C: u8 = 0;
   static D: u8 = 0;
-  static E: u8 = 0xD8;
-  static H: u8 = 0x01;
-  static L: u8 = 0x4D;
-  static F: u8 = 0xB0;
+  static E: u8 = 0;
+  static H: u8 = 0;
+  static L: u8 = 0;
+  static F: u8 = 0;
+  // static A: u8 = 0x01;
+  // static B: u8 = 0x0;
+  // static C: u8 = 0x13;
+  // static D: u8 = 0;
+  // static E: u8 = 0xD8;
+  // static H: u8 = 0x01;
+  // static L: u8 = 0x4D;
+  // static F: u8 = 0xB0;
 
-  static pc: u16 = 0x100;
-  static sp: u16 = 0xFFFE;
+  static pc: u16 = 0x0;
+  // static pc: u16 = 0x100;
+  // static sp: u16 = 0xFFFE;
+  static sp: u16 = 0;
 
   static cycle: i32 = 0;
 
@@ -45,26 +55,26 @@ export class Cpu {
   static ime: bool = false;
 
   static reset(): void {
-    Cpu.A = 0x01;
-    Cpu.B = 0x0;
-    Cpu.C = 0x13;
-    Cpu.D = 0;
-    Cpu.E = 0xD8;
-    Cpu.H = 0x01;
-    Cpu.L = 0x4D;
-    Cpu.F = 0xB0;
-    // Cpu.A = 0x0;
+    // Cpu.A = 0x01;
     // Cpu.B = 0x0;
-    // Cpu.C = 0x0;
-    // Cpu.D = 0x0;
-    // Cpu.E = 0x0;
-    // Cpu.H = 0x0;
-    // Cpu.L = 0x0;
-    // Cpu.F = 0x0;
+    // Cpu.C = 0x13;
+    // Cpu.D = 0;
+    // Cpu.E = 0xD8;
+    // Cpu.H = 0x01;
+    // Cpu.L = 0x4D;
+    // Cpu.F = 0xB0;
+    Cpu.A = 0x0;
+    Cpu.B = 0x0;
+    Cpu.C = 0x0;
+    Cpu.D = 0x0;
+    Cpu.E = 0x0;
+    Cpu.H = 0x0;
+    Cpu.L = 0x0;
+    Cpu.F = 0x0;
 
-    // Cpu.pc = 0x0;
-    Cpu.pc = 0x100;
-    Cpu.sp = 0xFFFE;
+    Cpu.pc = 0x0;
+    // Cpu.pc = 0x100;
+    // Cpu.sp = 0xFFFE;
 
 
     Cpu.cycle = 0;
