@@ -1,5 +1,5 @@
 import { readByteAtPc, readWordAtPc, readByte, writeByte } from '../readWriteOperations';
-import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setAF, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag, setIme, unsetIme } from './state';
+import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setAF, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag, setIme, unsetIme, getNegativeFlag, getHalfCarryFlag } from './state';
 import { getLowNibble, getHighByte, getLowByte, combineBytes, getBitValue, setBitValue } from '../helpers';
 import { handleCBOpcode } from './callbackOpcode';
 
@@ -66,10 +66,9 @@ function handle0xOpcode(opcode: u8): i32 {
         }
         case 0x8: {
             // "LD (nn), SP"
-            const lowN = readByteAtPc();
-            writeByte(lowN, getLowByte(Cpu.sp));
-            const highN = readByteAtPc();
-            writeByte(highN, getHighByte(Cpu.sp));
+            const nn = readWordAtPc();
+            writeByte(nn, getLowByte(Cpu.sp));
+            writeByte(nn + 1, getHighByte(Cpu.sp));
             return 20;
         }
         case 0x9: {
@@ -343,9 +342,25 @@ function handle2xOpcode(opcode: u8): i32 {
         }
         case 0x7: {
             // "DAA"
-
+            const carryFlag = getCarryFlag();
+            const halfCarryFlag = getHalfCarryFlag();
+            const negativeFlag = getNegativeFlag();
+            let value = Cpu.A;
+            let correction = 0;
+            if (halfCarryFlag || (!negativeFlag && (value & 0xf) > 9)) {
+                correction |= 0x6;
+            }
+            if (carryFlag || (!negativeFlag && value > 0x99)) {
+                correction |= 0x60;
+                setCarryFlag(1);
+            }
+            if (negativeFlag)
+                value = value - <u8>correction;
+            else
+                value = value + <u8>correction;
+            setZeroFlag(value == 0 ? 1 : 0);
             setHalfCarryFlag(0);
-            // OPCODE_TBD
+            Cpu.A = value & 0xff;
             return 4;
         }
         case 0x8: {
@@ -510,12 +525,12 @@ function handle3xOpcode(opcode: u8): i32 {
         case 0x9: {
             // "ADD HL, SP"
             const hl = getHL();
-            const result = hl + Cpu.sp;
-            const halfCarry: bool = ((getLowNibble(Cpu.L) + getLowByte(Cpu.sp)) & 0x10) > 0 ? 1 : 0;
+            const result: u32 = <u32>hl + <u32>Cpu.sp;
+            const halfCarry: bool = (((hl & 0xFFF) + (Cpu.sp & 0xFFF)) & 0x1000) > 0 ? 1 : 0;
             setCarryFlag(result > 0xFFFF ? 1 : 0);
             setNegativeFlag(0);
             setHalfCarryFlag(halfCarry);
-            setHL(result & 0xFFFF);
+            setHL(<u16>(result & 0xFFFF));
             // syncCycle(4)
             return 8;
         }
@@ -1763,13 +1778,13 @@ function handleCxOpcode(opcode: u8): i32 {
         case 0x6: {
             // "ADD A, n"
             const n = readByteAtPc();
-            const result = Cpu.A + n;
+            const result: u16 = <u16>Cpu.A + <u16>n;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
             setNegativeFlag(0);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            Cpu.A = result & 0xFF;
+            Cpu.A = <u8>(result & 0xFF);
             return 8;
         }
         case 0x7: {
@@ -1846,15 +1861,15 @@ function handleCxOpcode(opcode: u8): i32 {
         }
         case 0xE: {
             // "ADC A, n"
-            const carry = <u8>getCarryFlag();
+            const carry: u16 = <u16>getCarryFlag();
             const n = readByteAtPc();
-            const result = Cpu.A + n + carry;
+            const result: u16 = <u16>Cpu.A + <u16>n + carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(n) + carry) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
             setNegativeFlag(0);
             setHalfCarryFlag(halfCarry);
             setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
-            Cpu.A = result & 0xFF;
+            Cpu.A = <u8>(result & 0xFF);
             return 8;
         }
         case 0xF: {
@@ -2005,11 +2020,12 @@ function handleDxOpcode(opcode: u8): i32 {
             const carry = <u8>getCarryFlag();
             const n = readByteAtPc();
             const result = Cpu.A - n - carry;
-            const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(n) - carry) & 0x10) > 0 ? 1 : 0;
-            setCarryFlag((n > Cpu.A) ? 1 : 0);
+            const halfCarry = (Cpu.A ^ n ^ result) & 0x10;
+            const overflowedResult = <u16>Cpu.A - <u16>n - <u16>getCarryFlag();
+            setHalfCarryFlag(halfCarry != 0);
+            setCarryFlag((overflowedResult & 0x100) > 0);
+            setZeroFlag((result == 0));
             setNegativeFlag(1);
-            setHalfCarryFlag(halfCarry);
-            setZeroFlag((result & 0xFF) > 0 ? 0 : 1);
             Cpu.A = result & 0xFF;
             return 8;
         }
@@ -2084,14 +2100,22 @@ function handleExOpcode(opcode: u8): i32 {
         case 0x8: {
             // "ADD SP, n"
             const n = <i8>readByteAtPc();
-            const result = Cpu.sp + n;
-            const lowSp = getLowByte(Cpu.sp);
-            const halfCarry: bool = ((getLowNibble(lowSp) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
-            setHalfCarryFlag(halfCarry);
-            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            const result: u32 = <u32>Cpu.sp + n;
+            if (n >= 0) {
+                const carry = ((Cpu.sp & 0xFF) + n) > 0xFF;
+                const halfCarry = ((Cpu.sp & 0xF) + (n & 0xF)) > 0xF;
+                setCarryFlag(carry);
+                setHalfCarryFlag(halfCarry);
+            }
+            else {
+                const carry = (result & 0xFF) <= (Cpu.sp & 0xFF)
+                const halfCarry = (result & 0xF) <= (Cpu.sp & 0xF)
+                setCarryFlag(carry);
+                setHalfCarryFlag(halfCarry);
+            }
             setZeroFlag(0);
             setNegativeFlag(0);
-            Cpu.sp = result & 0xFFFF;
+            Cpu.sp = <u16>(result & 0xFFFF);
             return 16;
         }
         case 0x9: {
@@ -2190,17 +2214,24 @@ function handleFxOpcode(opcode: u8): i32 {
         }
         case 0x8: {
             // "LD HL, SP + n"
-            // not sure about this instruction
             const n = <i8>readByteAtPc();
-            const result = Cpu.sp + n;
-            const lowSp = getLowByte(Cpu.sp);
-            const halfCarry: bool = ((getLowNibble(lowSp) - getLowNibble(n)) & 0x10) > 0 ? 1 : 0;
-            setHalfCarryFlag(halfCarry);
-            setCarryFlag(result > 0xFFFF ? 1 : 0);
+            const result: u32 = <u32>Cpu.sp + n;
+            if (n >= 0) {
+                const carry = ((Cpu.sp & 0xFF) + n) > 0xFF;
+                const halfCarry = ((Cpu.sp & 0xF) + (n & 0xF)) > 0xF;
+                setCarryFlag(carry);
+                setHalfCarryFlag(halfCarry);
+            }
+            else {
+                const carry = (result & 0xFF) <= (Cpu.sp & 0xFF)
+                const halfCarry = (result & 0xF) <= (Cpu.sp & 0xF)
+                setCarryFlag(carry);
+                setHalfCarryFlag(halfCarry);
+            }
             setZeroFlag(0);
             setNegativeFlag(0);
+            setHL(<u16>(result & 0xFFFF))
             // syncCycle(4)
-            setHL(result);
             return 12;
         }
         case 0x9: {
