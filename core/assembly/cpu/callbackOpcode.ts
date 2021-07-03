@@ -1,4 +1,4 @@
-import { readByte, writeByte } from '../readWriteOperations';
+import { readByte, writeByte } from '../memory';
 import { Cpu, getHL, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getCarryFlag, setCarryFlag } from './state';
 import { getLowNibble, getBitValue, setBitValue, getHighNibble, combineNibbles } from '../helpers';
 

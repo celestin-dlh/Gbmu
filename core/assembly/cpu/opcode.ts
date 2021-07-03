@@ -1,4 +1,4 @@
-import { readByteAtPc, readWordAtPc, readByte, writeByte } from '../readWriteOperations';
+import { readByteAtPc, readWordAtPc, readByte, writeByte } from '../memory';
 import { Cpu, getBC, setBC, getDE, setDE, getHL, setHL, setAF, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag, setIme, unsetIme, getNegativeFlag, getHalfCarryFlag } from './state';
 import { getLowNibble, getHighByte, getLowByte, combineBytes, getBitValue, setBitValue } from '../helpers';
 import { handleCBOpcode } from './callbackOpcode';

@@ -1,6 +1,6 @@
 import { Cpu } from './cpu/state';
 import { fetchExecuteOpcode } from './cpu/opcode';
-import { readByteAtPc } from './readWriteOperations';
+import { readByteAtPc } from './memory';
 import { interruptHandling } from './interrupts';
 import { syncCycle } from './syncCycle';
 

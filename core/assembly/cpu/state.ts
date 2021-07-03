@@ -11,34 +11,34 @@ import {
   IE_SIZE
 } from '../constants';
 import { combineBytes, getHighByte, getLowByte } from '../helpers';
-import { writeMemoryMap } from '../readWriteOperations';
+import { writeMemoryMap } from '../memory';
 
 
 export class Cpu {
 
-  static A: u8 = 0;
-  static B: u8 = 0;
-  static C: u8 = 0;
-  static D: u8 = 0;
-  static E: u8 = 0;
-  static H: u8 = 0;
-  static L: u8 = 0;
-  static F: u8 = 0;
-  // static A: u8 = 0x01;
-  // static B: u8 = 0x0;
-  // static C: u8 = 0x13;
+  // static A: u8 = 0;
+  // static B: u8 = 0;
+  // static C: u8 = 0;
   // static D: u8 = 0;
-  // static E: u8 = 0xD8;
-  // static H: u8 = 0x01;
-  // static L: u8 = 0x4D;
-  // static F: u8 = 0xB0;
+  // static E: u8 = 0;
+  // static H: u8 = 0;
+  // static L: u8 = 0;
+  // static F: u8 = 0;
+  static A: u8 = 0x01;
+  static B: u8 = 0x0;
+  static C: u8 = 0x13;
+  static D: u8 = 0;
+  static E: u8 = 0xD8;
+  static H: u8 = 0x01;
+  static L: u8 = 0x4D;
+  static F: u8 = 0xB0;
 
-  static pc: u16 = 0x0;
-  // static pc: u16 = 0x100;
-  // static sp: u16 = 0xFFFE;
-  static sp: u16 = 0;
+  static pc: u16 = 0x100;
+  static sp: u16 = 0xFFFE;
+  // static pc: u16 = 0x0;
+  // static sp: u16 = 0;
 
-  static cycle: i32 = 0;
+  static cycle: u64 = 0;
 
   // memory of the gameboy split in multiples array
   static rom: Uint8Array = new Uint8Array(ROM_SIZE).fill(0);

@@ -1,7 +1,7 @@
-import { Cpu, unsetIme } from './cpu/state';
-import { combineBytes, getBitValue, getHighByte, getLowByte, setBitValue } from './helpers';
-import { readMemoryMap, writeByte, writeMemoryMap } from './readWriteOperations';
-import { syncCycle } from './syncCycle';
+import { Cpu, unsetIme } from '../cpu/state';
+import { combineBytes, getBitValue, getHighByte, getLowByte, setBitValue } from '../helpers';
+import { readMemoryMap, writeByte, writeMemoryMap } from '../memory';
+import { syncCycle } from '../syncCycle';
 
 function interruptServiceRoutine(vector: u8): void {
     // wait 2 machine cycles

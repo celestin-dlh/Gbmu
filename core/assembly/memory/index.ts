@@ -1,4 +1,4 @@
-import { Cpu } from './cpu/state';
+import { Cpu } from '../cpu/state';
 import {
     ROM_START,
     ROM_END,
@@ -20,9 +20,9 @@ import {
     HIGH_RAM_END,
     IE_START,
     IE_END
-} from './constants';
-import { combineBytes } from './helpers';
-import { syncCycle } from './syncCycle';
+} from '../constants';
+import { combineBytes } from '../helpers';
+import { syncCycle } from '../syncCycle';
 
 declare function consoleLog(message: string): void;
 

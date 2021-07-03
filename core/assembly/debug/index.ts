@@ -1,5 +1,5 @@
 import { Cpu, getBC, getDE, getHL } from '../cpu/state';
-import { readMemoryMap } from '../readWriteOperations';
+import { readMemoryMap } from '../memory';
 
 export function getRegisters(): u16[] {
     const registersArray = new Array<u16>(7).fill(0);
