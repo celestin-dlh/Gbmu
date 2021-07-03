@@ -59,6 +59,11 @@ export default function OtherRegisters({ data }) {
                     <td>FFFF</td>
                     <td>{formatHexNumber(data[8], 2)}</td>
                 </tr>
+                <tr>
+                    <th>IME</th>
+                    <td></td>
+                    <td>{formatHexNumber(data[9], 1)}</td>
+                </tr>
             </table>
         </div>
     )

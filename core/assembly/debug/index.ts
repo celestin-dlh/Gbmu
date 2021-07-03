@@ -28,6 +28,7 @@ export function getOtherRegister(): u8[] {
     otherRegistersArray[6] = readMemoryMap(0xFF07); // TAC
     otherRegistersArray[7] = readMemoryMap(0xFF0F); // IF
     otherRegistersArray[8] = readMemoryMap(0xFFFF); // IE
+    otherRegistersArray[9] = <u8>Cpu.IME; // IME
     return otherRegistersArray;
 }
 

@@ -52,30 +52,34 @@ export class Cpu {
   static highRam: Uint8Array = new Uint8Array(HIGH_RAM_SIZE).fill(0);
   static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
 
-  static ime: bool = false;
+
+  static isHalted: bool = false;
+  static IME: bool = false;
 
   static reset(): void {
-    // Cpu.A = 0x01;
-    // Cpu.B = 0x0;
-    // Cpu.C = 0x13;
-    // Cpu.D = 0;
-    // Cpu.E = 0xD8;
-    // Cpu.H = 0x01;
-    // Cpu.L = 0x4D;
-    // Cpu.F = 0xB0;
-    Cpu.A = 0x0;
+    Cpu.A = 0x01;
     Cpu.B = 0x0;
-    Cpu.C = 0x0;
-    Cpu.D = 0x0;
-    Cpu.E = 0x0;
-    Cpu.H = 0x0;
-    Cpu.L = 0x0;
-    Cpu.F = 0x0;
+    Cpu.C = 0x13;
+    Cpu.D = 0;
+    Cpu.E = 0xD8;
+    Cpu.H = 0x01;
+    Cpu.L = 0x4D;
+    Cpu.F = 0xB0;
+    
+    Cpu.pc = 0x100;
+    Cpu.sp = 0xFFFE;
+    
+    // Cpu.A = 0x0;
+    // Cpu.B = 0x0;
+    // Cpu.C = 0x0;
+    // Cpu.D = 0x0;
+    // Cpu.E = 0x0;
+    // Cpu.H = 0x0;
+    // Cpu.L = 0x0;
+    // Cpu.F = 0x0;
 
-    Cpu.pc = 0x0;
-    // Cpu.pc = 0x100;
-    // Cpu.sp = 0xFFFE;
-
+    // Cpu.pc = 0x0;
+    // Cpu.sp = 0x0;
 
     Cpu.cycle = 0;
 
@@ -90,8 +94,9 @@ export class Cpu {
     Cpu.highRam = new Uint8Array(HIGH_RAM_SIZE).fill(0);
     Cpu.IE = new Uint8Array(IE_SIZE).fill(0);
   
-    Cpu.ime = false;
-    // setDefaultValue();
+    Cpu.IME = false;
+    Cpu.isHalted = false;
+    setDefaultValue();
   }
 }
 
@@ -131,11 +136,11 @@ function setDefaultValue(): void {
 }
 
 export function setIme(): void {
-  Cpu.ime = true;
+  Cpu.IME = true;
 }
 
 export function unsetIme(): void {
-  Cpu.ime = false;
+  Cpu.IME = false;
 }
 
 export function setZeroFlag(value: bool): void {
@@ -189,11 +194,6 @@ export function setCarryFlag(value: bool): void {
 export function getCarryFlag(): bool {
   return ((Cpu.F & 0x10) > 0) ? 1 : 0; 
 }
-
-
-// export function checkHalfCarryFlag(): bool {
-  
-// }
 
 export function getBC(): u16 {
   return combineBytes(Cpu.B, Cpu.C);

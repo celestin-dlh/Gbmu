@@ -902,11 +902,8 @@ function handle7xOpcode(opcode: u8): i32 {
             return 8;
         }
         case 0x6: {
-
-            // TBD
             // "HALT"
-            // TBD
-
+            Cpu.isHalted = true;
             return 4;
         }
         case 0x7: {
@@ -1983,12 +1980,12 @@ function handleDxOpcode(opcode: u8): i32 {
         }
         case 0x9: {
             // "RETI"
+            setIme();
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
             syncCycle(4)
             Cpu.pc = combineBytes(highByte, lowByte);
-            setIme();
             return 16;
         }
         case 0xA: {
@@ -2282,8 +2279,7 @@ function handleFxOpcode(opcode: u8): i32 {
 // Example: if opcode = 0x15
 // firstNibble = 0x1
 // secondNibble = 0x5
-export function fetchExecuteOpcode(): i32 {
-    const opcode: u8 = readByteAtPc();
+export function fetchExecuteOpcode(opcode: u8): i32 {
     const firstNibble: u8 = opcode >> 4;
     const secondNibble: u8 = opcode & 0xF;
 

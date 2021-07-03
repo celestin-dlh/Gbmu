@@ -25,7 +25,6 @@ import { combineBytes } from './helpers';
 import { syncCycle } from './syncCycle';
 
 declare function consoleLog(message: string): void;
-declare function consoleNum(num: i32): void;
 
 export function writeByte(address: u16, byte: u8): void {
     syncCycle(4);

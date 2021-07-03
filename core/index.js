@@ -8,15 +8,9 @@ const imports = {
         consoleLog: message => {
             console.log(message);
         },
-        consoleNum: message => {
-            console.log(message);
-        },
     },
     readWriteOperations: {
         consoleLog: message => {
-            console.log(message);
-        },
-        consoleNum: message => {
             console.log(message);
         },
     }

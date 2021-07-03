@@ -1,5 +1,8 @@
 import { Cpu } from './cpu/state';
 import { fetchExecuteOpcode } from './cpu/opcode';
+import { readByteAtPc } from './readWriteOperations';
+import { interruptHandling } from './interrupts';
+import { syncCycle } from './syncCycle';
 
 const dmgBootRom = [
   0x31, 0xfe, 0xff, 0xaf, 0x21, 0xff, 0x9f, 0x32, 0xcb, 0x7c, 0x20, 0xfb, 0x21, 0x26, 0xff, 0x0e,
@@ -22,18 +25,31 @@ const dmgBootRom = [
 
 declare function consoleLog(message: string): void;
 
+function fetchOpcode(): u8 {
+  return readByteAtPc();
+}
+
 export function step(stepTimes: i32): void {
   for (let index = 0; index < stepTimes; index++) {
-    fetchExecuteOpcode();
+    if (Cpu.isHalted) {
+      syncCycle(4);
+    } else {
+      const opcode = fetchOpcode();
+      fetchExecuteOpcode(opcode);
+    }
+    interruptHandling();
   }
 }
 
 const CYCLE_PER_FRAME = 69905;
+const CPU_SPEED = 4194304;
 
 export function runFrame(): void {
   let cycle = 0;
   while (cycle < CYCLE_PER_FRAME) {
-    cycle += fetchExecuteOpcode();
+    const opcode = fetchOpcode();
+    cycle += fetchExecuteOpcode(opcode);
+    interruptHandling();
   }
 }
 
@@ -41,10 +57,22 @@ export function runOneSecond(): void {
   for (let index = 0; index < 60; index++) {
     let cycle = 0;
     while (cycle < CYCLE_PER_FRAME) {
-      cycle += fetchExecuteOpcode();
+      const opcode = fetchOpcode();
+      cycle += fetchExecuteOpcode(opcode);
+      interruptHandling();
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
 
 export function reset(): void {
   Cpu.reset();
@@ -58,17 +86,17 @@ function loadDmgBootRom(): void {
 }
 
 export function loadRom(buffer: Uint8Array): void {
-  // for (let index = 0; index < buffer.length; index++) {
-  //   if (index >= 0x8000) {
-  //     trace("Rom array has a limit of 0x8000 byte");
-  //     break;
-  //   }
-  //   Cpu.rom[index] = buffer[index];
-  // }
-  // const subArray = buffer.subarray(0, 0x100);
-  loadDmgBootRom();
-  Cpu.ioRegisters[0x06] = 0x22;
-  Cpu.ioRegisters[0x07] = 0b101;
+  for (let index = 0; index < buffer.length; index++) {
+    if (index >= 0x8000) {
+      trace("Rom array has a limit of 0x8000 byte");
+      break;
+    }
+    Cpu.rom[index] = buffer[index];
+  }
+  const subArray = buffer.subarray(0, 0x100);
+  // loadDmgBootRom();
+  // Cpu.ioRegisters[0x06] = 0x22;
+  // Cpu.ioRegisters[0x07] = 0b101;
   consoleLog("Rom loaded");
 }
 

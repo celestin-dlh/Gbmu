@@ -1,10 +1,10 @@
 import { IO_REGISTERS_START } from "./constants";
 import { Cpu } from "./cpu/state";
+import { setBitValue } from "./helpers";
 import { readMemoryMap } from "./readWriteOperations";
 
 function getInputClockSpeed(): i32 {
     const tac = readMemoryMap(0xFF07) & 0b11;
-
     if (tac == 0)
         return 1024;
     else if (tac == 1)
@@ -21,9 +21,6 @@ function timerCounterEnable(): bool {
 // DIV
 function incrementDiv(): void {
     const div: u8 = Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] + 1;
-    if (div == 0) {
-        // trace("handle interupt");
-    }
     Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] = div;
 }
 
@@ -33,7 +30,8 @@ function incrementTima(): void {
     if (tima == 0) {
         const tma = readMemoryMap(0xFF06);
         Cpu.ioRegisters[0xFF05 - IO_REGISTERS_START] = tma;
-        // trace("handle interupt");
+        const interruptFlag = setBitValue(readMemoryMap(0xFF0F), 2, 1);
+        Cpu.ioRegisters[0xFF0F - IO_REGISTERS_START] = interruptFlag;
     } else
         Cpu.ioRegisters[0xFF05 - IO_REGISTERS_START] = tima;
 }
