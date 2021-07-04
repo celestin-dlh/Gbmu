@@ -23,12 +23,13 @@ import {
 } from '../constants';
 import { combineBytes } from '../helpers';
 import { syncCycle } from '../syncCycle';
+import { resetDiv } from '../timers';
 
 declare function consoleLog(message: string): void;
 
 export function writeByte(address: u16, byte: u8): void {
-    syncCycle(4);
     writeMemoryMap(address, byte);
+    syncCycle(4);
 }
 
 export function writeMemoryMap(address: u16, byte: u8): void {
@@ -58,8 +59,9 @@ export function writeMemoryMap(address: u16, byte: u8): void {
 
         // DIV Timer
         if (address === 0xFF04) {
-            Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] = 0;
-        }
+            resetDiv();
+            return;
+        } 
 
         // blarggs test - serial output
         if (address === 0xFF02 && byte === 0x81) {

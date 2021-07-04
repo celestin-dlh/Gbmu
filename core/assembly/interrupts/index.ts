@@ -1,7 +1,26 @@
+import { IO_REGISTERS_START } from '../constants';
 import { Cpu, unsetIme } from '../cpu/state';
 import { combineBytes, getBitValue, getHighByte, getLowByte, setBitValue } from '../helpers';
 import { readMemoryMap, writeByte, writeMemoryMap } from '../memory';
 import { syncCycle } from '../syncCycle';
+
+export enum Interrupt {
+    VBlank = 0,
+    LCD_STAT,
+    Timer,
+    Serial,
+    Joypad,
+}
+
+export function setInterrupt(InterruptType: Interrupt): void {
+    const interruptFlag = setBitValue(readMemoryMap(0xFF0F), <u8>InterruptType, 1);
+    Cpu.ioRegisters[0xFF0F - IO_REGISTERS_START] = interruptFlag;
+}
+
+export function resetInterrupt(InterruptType: Interrupt): void {
+    const interruptFlag = setBitValue(readMemoryMap(0xFF0F), <u8>InterruptType, 0);
+    Cpu.ioRegisters[0xFF0F - IO_REGISTERS_START] = interruptFlag;
+}
 
 function interruptServiceRoutine(vector: u8): void {
     // wait 2 machine cycles

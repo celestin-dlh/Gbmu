@@ -86,6 +86,7 @@ function loadDmgBootRom(): void {
 }
 
 export function loadRom(buffer: Uint8Array): void {
+  reset();
   for (let index = 0; index < buffer.length; index++) {
     if (index >= 0x8000) {
       trace("Rom array has a limit of 0x8000 byte");
@@ -93,7 +94,7 @@ export function loadRom(buffer: Uint8Array): void {
     }
     Cpu.rom[index] = buffer[index];
   }
-  const subArray = buffer.subarray(0, 0x100);
+  // const subArray = buffer.subarray(0, 0x100);
   // loadDmgBootRom();
   // Cpu.ioRegisters[0x06] = 0x22;
   // Cpu.ioRegisters[0x07] = 0b101;

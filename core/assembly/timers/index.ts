@@ -1,65 +1,71 @@
 import { IO_REGISTERS_START } from "../constants";
 import { Cpu } from "../cpu/state";
-import { setBitValue } from "../helpers";
-import { readMemoryMap } from "../memory";
+import { getBitValue, getHighByte, getLowByte, setBitValue } from "../helpers";
+import { Interrupt, setInterrupt } from "../interrupts";
+import { readMemoryMap, writeMemoryMap } from "../memory";
 
-function getInputClockSpeed(): u16 {
+class Timer {
+    static internalDiv: u16 = 0;
+    static lastAnd: bool = false;
+    static timaHasOverflowed: bool = false;
+}
+
+function getDivBit(): bool {
     const tac = readMemoryMap(0xFF07) & 0b11;
-    if (tac == 0)
-        return 1024;
-    else if (tac == 1)
-        return 16;
-    else if (tac == 2)
-        return 64;
-    return 256;
+    const lowByte = getLowByte(Timer.internalDiv);
+    const highByte = getHighByte(Timer.internalDiv);
+
+    if (tac == 0b00)
+        return getBitValue(highByte, 1);
+    else if (tac == 0b01)
+        return getBitValue(lowByte, 3);
+    else if (tac == 0b10)
+        return getBitValue(lowByte, 5);
+    return getBitValue(lowByte, 7);
 }
 
 function timerCounterEnable(): bool {
-    return (readMemoryMap(0xFF07) & 0b100) > 0;
-}
-
-// DIV
-function incrementDiv(): void {
-    const div: u8 = Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] + 1;
-    Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] = div;
+    return getBitValue(readMemoryMap(0xFF07), 2);
 }
 
 // TIMA
 function incrementTima(): void {
-    const tima: u8 = Cpu.ioRegisters[0xFF05 - IO_REGISTERS_START] + 1;
-    if (tima == 0) {
-        const tma = readMemoryMap(0xFF06);
-        Cpu.ioRegisters[0xFF05 - IO_REGISTERS_START] = tma;
-        const interruptFlag = setBitValue(readMemoryMap(0xFF0F), 2, 1);
-        Cpu.ioRegisters[0xFF0F - IO_REGISTERS_START] = interruptFlag;
-    } else
-        Cpu.ioRegisters[0xFF05 - IO_REGISTERS_START] = tima;
+    const tima: u8 = readMemoryMap(0xFF05) + 1;
+    if (tima == 0)
+        Timer.timaHasOverflowed = true;
+    writeMemoryMap(0xFF05, tima);
 }
 
-class Timer {
-    static currentDivCycle: u16 = 0;
-    static currentTimaCycle: u16 = 0;
+export function setTima(value: u8): void {
+    writeMemoryMap(0xFF05, value);
+}
+
+export function resetDiv(): void {
+    Timer.internalDiv = 0;
+    Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] = 0;
+}
+
+function setDiv(value: u8): void {
+    Cpu.ioRegisters[0xFF04 - IO_REGISTERS_START] = value;
 }
 
 export function syncTimers(cycle: u8): void {
-    let newCurrentDivCycle = Timer.currentDivCycle + cycle;
+    // DIV
+    Timer.internalDiv += cycle;
+    setDiv(getHighByte(Timer.internalDiv));
 
-    if (newCurrentDivCycle >= 256) {
-        Timer.currentDivCycle = newCurrentDivCycle - 256;
-        incrementDiv();
-    } 
-    else
-        Timer.currentDivCycle = newCurrentDivCycle;
-
-    if (timerCounterEnable()) {
-        const tacSpeed = getInputClockSpeed();
-        let newCurrentTimaCycle = Timer.currentTimaCycle + cycle;
-
-        // trace("timaCycle", 1, timaCycle);
-        if (newCurrentTimaCycle >= tacSpeed) {
-            Timer.currentTimaCycle = newCurrentTimaCycle - tacSpeed;
-            incrementTima();
-        } else 
-            Timer.currentTimaCycle = newCurrentTimaCycle;
+    // TIMA
+    if (Timer.timaHasOverflowed) {
+        setInterrupt(Interrupt.Timer);
+        const tma = readMemoryMap(0xFF06);
+        setTima(tma);
+        Timer.timaHasOverflowed = false;
+        // return;
     }
+
+    const currentAnd = <u8>timerCounterEnable() & <u8>getDivBit();
+    if (Timer.lastAnd && currentAnd == 0) {
+        incrementTima()
+    }
+    Timer.lastAnd = <bool>currentAnd;
 }

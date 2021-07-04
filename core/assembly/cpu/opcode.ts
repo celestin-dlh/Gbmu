@@ -14,7 +14,7 @@ function handle0xOpcode(opcode: u8): i32 {
             // "LD BC, nn"
             Cpu.C = readByteAtPc();
             Cpu.B = readByteAtPc();
-            return 12;
+            return 4;
         }
         case 0x2: {
             // "LD (BC), A"
@@ -1980,12 +1980,12 @@ function handleDxOpcode(opcode: u8): i32 {
         }
         case 0x9: {
             // "RETI"
-            setIme();
             const lowByte = readByte(Cpu.sp);
             const highByte = readByte(Cpu.sp + 1);
             Cpu.sp += 2;
             syncCycle(4)
             Cpu.pc = combineBytes(highByte, lowByte);
+            setIme();
             return 16;
         }
         case 0xA: {
@@ -2113,6 +2113,8 @@ function handleExOpcode(opcode: u8): i32 {
             }
             setZeroFlag(0);
             setNegativeFlag(0);
+            syncCycle(4);
+            syncCycle(4);
             Cpu.sp = <u16>(result & 0xFFFF);
             return 16;
         }
