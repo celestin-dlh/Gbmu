@@ -3,14 +3,10 @@ import { readMemoryMap } from '../memory';
 
 export function getRegisters(): u16[] {
     const registersArray = new Array<u16>(7).fill(0);
-    const bc = getBC();
-    const de = getDE();
-    const hl = getHL();
-
     registersArray[0] = Cpu.pc;
-    registersArray[1] = bc;
-    registersArray[2] = de;
-    registersArray[3] = hl;
+    registersArray[1] = getBC();
+    registersArray[2] = getDE();
+    registersArray[3] = getHL();
     registersArray[4] = Cpu.sp;
     registersArray[5] = Cpu.A;
     registersArray[6] = Cpu.F;
@@ -30,6 +26,27 @@ export function getOtherRegister(): u8[] {
     otherRegistersArray[8] = readMemoryMap(0xFFFF); // IE
     otherRegistersArray[9] = <u8>Cpu.IME; // IME
     return otherRegistersArray;
+}
+
+export function getVideoRegisters(): u8[] {
+    const videoRegistersArray = new Array<u8>(15).fill(0);
+    videoRegistersArray[0] = readMemoryMap(0xFF40); // LCDC
+    videoRegistersArray[1] = readMemoryMap(0xFF41); // STAT
+    videoRegistersArray[2] = readMemoryMap(0xFF42); // SCY
+    videoRegistersArray[3] = readMemoryMap(0xFF43); // SCX
+    videoRegistersArray[4] = readMemoryMap(0xFF44); // LY
+    videoRegistersArray[5] = readMemoryMap(0xFF45); // LYC
+    videoRegistersArray[6] = readMemoryMap(0xFF46); // DMA
+    videoRegistersArray[7] = readMemoryMap(0xFF47); // BGP
+    videoRegistersArray[8] = readMemoryMap(0xFF48); // OBP0
+    videoRegistersArray[9] = readMemoryMap(0xFF49); // OBP1
+    videoRegistersArray[10] = readMemoryMap(0xFF4A); // WY
+    videoRegistersArray[11] = readMemoryMap(0xFF4B); // WX
+    videoRegistersArray[12] = readMemoryMap(0xFF68); // BCPS
+    videoRegistersArray[13] = readMemoryMap(0xFF69); // BCPD
+    videoRegistersArray[14] = readMemoryMap(0xFF6A); // OCPS
+    videoRegistersArray[15] = readMemoryMap(0xFF6B); // OCPD
+    return videoRegistersArray;
 }
 
 // Disassembler functions

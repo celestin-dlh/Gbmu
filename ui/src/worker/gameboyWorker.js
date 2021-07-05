@@ -43,6 +43,10 @@ const gameboyWorker = {
         return this.exports.getOtherRegister();
     },
 
+    getVideoRegisters() {
+        return this.exports.getVideoRegisters();
+    },
+
     async step(stepTimes) {
         this.exports.step(stepTimes);
     },
@@ -66,12 +70,14 @@ const gameboyWorker = {
         const disassembler = this.getDisassembler();
         const registers = this.getRegisters();
         const otherRegisters = this.getOtherRegister();
+        const videoRegisters = this.getVideoRegisters();
 
         await cb({
             memory,
             disassembler,
             registers,
-            otherRegisters
+            otherRegisters,
+            videoRegisters
         })
     }
 };

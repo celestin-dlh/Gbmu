@@ -2,8 +2,8 @@ main.debug {
     display: grid;
     grid-template-areas: 
         "screen controls controls controls ."
-        "screen registers disassembler other_registers ."
-        "memory memory memory other_registers .";
+        "screen registers disassembler other_registers video_registers"
+        "memory memory memory other_registers video_registers";
     grid-template-columns: 200px 120px auto 200px 200px;
     grid-template-rows: 100px 300px auto;
     column-gap: 10px;
@@ -93,6 +93,11 @@ h3 {
 /* other_registers */
 .other_registers {
     grid-area: other_registers;
+}
+
+/* video_registers */
+.video_registers {
+    grid-area: video_registers;
 }
 
 /* memory */

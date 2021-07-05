@@ -6,13 +6,15 @@ import Memory from './component/Memory';
 import Registers from './component/Registers';
 import Controls from './component/Controls';
 import OtherRegisters from './component/OtherRegisters';
+import VideoRegisters from './component/VideoRegisters';
 
 function DebugMode({ workerApi, uiState }) {
     const [debugState, setDebugState] = useState({
         memory: [],
         disassembler: [],
         registers: [],
-        otherRegisters: []
+        otherRegisters: [],
+        videoRegisters: []
     })
     const [memoryAddress, setMemoryAddress] = useState(0x100);
 
@@ -55,6 +57,7 @@ function DebugMode({ workerApi, uiState }) {
 
             <Registers data={debugState.registers} />
             <OtherRegisters data={debugState.otherRegisters} />
+            <VideoRegisters data={debugState.videoRegisters} />
         </main>
     )
 };

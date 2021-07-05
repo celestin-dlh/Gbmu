@@ -101,4 +101,4 @@ export function loadRom(buffer: Uint8Array): void {
   consoleLog("Rom loaded");
 }
 
-export { getRegisters, getOtherRegister, getDisassembler, getMemory } from './debug/index';
+export { getRegisters, getOtherRegister, getVideoRegisters, getDisassembler, getMemory } from './debug/index';
