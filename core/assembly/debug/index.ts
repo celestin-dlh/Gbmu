@@ -1,4 +1,5 @@
 import { Cpu, getBC, getDE, getHL } from '../cpu/state';
+import { getBitValue } from '../helpers';
 import { readMemoryMap } from '../memory';
 
 export function getRegisters(): u16[] {
@@ -363,4 +364,59 @@ export function getMemory(startAddress: u16): u8[][] {
         memory.push(row);
     }
     return memory;
+}
+
+function getIndex(x: u16, y: u16): u16 {
+    return (y * 256) + x;
+}
+
+export const background = new Uint8Array(256 * 256).fill(0);
+
+function getTileData(tileStartIndex: u16, xStart: u16, yStart: u16): void {
+    // trace("X and Y", 2, xStart, yStart);
+    for (let y: u8 = 0; y < 8; y++) {
+        for (let x: u8 = 0; x < 8; x++) {
+            const lowByte = readMemoryMap(tileStartIndex + <u16>(y * 2));
+            const highByte = readMemoryMap(tileStartIndex + <u16>((y * 2) + 1));
+            const highBit = (highByte << x) & 0x80;
+            const lowBit = (lowByte << x) & 0x80;
+            // const element = array[x];
+            background[getIndex(xStart + x, yStart + y)] = (highBit << 1 | lowBit);
+            
+        }
+        // const highBit = ((highByte >> x) & 1);
+        // const lowBit = ((lowByte >> x) & 1);
+    //     for (let x: u8 = 0; x < 8; x++) {
+    //         background[getIndex(xStart + x, yStart + y)] = (highBit << 1) | lowBit;
+    //     }
+    }
+}
+
+
+export function getBackground(): Uint8Array {
+    const LCDC = readMemoryMap(0xFF40);
+    const bgMemoryTileMap: u16 = getBitValue(LCDC, 3) ? 0x9C00 : 0x9800;
+    const tileDataArea = getBitValue(LCDC, 4) ? 0x8000 : 0x8800;
+
+    if (tileDataArea == 0x8000) {
+        
+        for (let index: u16 = 0; index < 1024; index++) {
+            const mapIndex = bgMemoryTileMap + index;
+            const valueAtIndex = readMemoryMap(mapIndex);
+            const tileStartIndex = (valueAtIndex * 16) + <u16>0x8000;
+            // trace("New tile number: \n", 1, index);
+
+            getTileData(tileStartIndex, (index % 32) * 8, (index / 32) * 8);
+
+
+            // trace("mapIndex", 2, tileStartIndex, valueAtIndex);
+        }
+        
+    } else {
+        // tdb the 8800 addressing method
+    }
+
+
+
+    return background;
 }

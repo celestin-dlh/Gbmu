@@ -62,37 +62,37 @@ export default function VideoRegisters({ data }) {
                 <tr>
                     <th>OBP1</th>
                     <td>FF49</td>
-                    <td>{formatHexNumber(data[9], 1)}</td>
+                    <td>{formatHexNumber(data[9], 2)}</td>
                 </tr>
                 <tr>
                     <th>WY</th>
                     <td>FF4A</td>
-                    <td>{formatHexNumber(data[10], 1)}</td>
+                    <td>{formatHexNumber(data[10], 2)}</td>
                 </tr>
                 <tr>
                     <th>WX</th>
                     <td>FF4B</td>
-                    <td>{formatHexNumber(data[11], 1)}</td>
+                    <td>{formatHexNumber(data[11], 2)}</td>
                 </tr>
                 <tr>
                     <th>BCPS</th>
                     <td>FF68</td>
-                    <td>{formatHexNumber(data[12], 1)}</td>
+                    <td>{formatHexNumber(data[12], 2)}</td>
                 </tr>
                 <tr>
                     <th>BCPD</th>
                     <td>FF69</td>
-                    <td>{formatHexNumber(data[13], 1)}</td>
+                    <td>{formatHexNumber(data[13], 2)}</td>
                 </tr>
                 <tr>
                     <th>OCPS</th>
                     <td>FF6A</td>
-                    <td>{formatHexNumber(data[14], 1)}</td>
+                    <td>{formatHexNumber(data[14], 2)}</td>
                 </tr>
                 <tr>
                     <th>OCPD</th>
                     <td>FF6B</td>
-                    <td>{formatHexNumber(data[15], 1)}</td>
+                    <td>{formatHexNumber(data[15], 2)}</td>
                 </tr>
             </table>
         </div>

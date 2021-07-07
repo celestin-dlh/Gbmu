@@ -122,9 +122,9 @@ export function readMemoryMap(address: u16): u8 {
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
         // temp because we dont have ppu yet
-        if (address == 0xFF44) {
-            return 0x90;
-        }
+        // if (address == 0xFF44) {
+        //     return 0x90;
+        // }
         return Cpu.ioRegisters[address - IO_REGISTERS_START];
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {

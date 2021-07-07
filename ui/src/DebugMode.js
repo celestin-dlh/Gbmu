@@ -7,6 +7,7 @@ import Registers from './component/Registers';
 import Controls from './component/Controls';
 import OtherRegisters from './component/OtherRegisters';
 import VideoRegisters from './component/VideoRegisters';
+import Canvas from './component/Canvas';
 
 function DebugMode({ workerApi, uiState }) {
     const [debugState, setDebugState] = useState({
@@ -42,8 +43,10 @@ function DebugMode({ workerApi, uiState }) {
         workerApi.getDebug(memoryAddress, Comlink.proxy(setDebugState));
     }
 
+
     return (
         <main class="debug">
+            <Canvas workerApi={workerApi} />
 
             <Controls executeStep={executeStep} executeFrame={executeFrame} executeOneSecond={executeOneSecond} reset={reset} />
 

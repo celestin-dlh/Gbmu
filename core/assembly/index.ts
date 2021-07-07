@@ -3,6 +3,7 @@ import { fetchExecuteOpcode } from './cpu/opcode';
 import { readByteAtPc } from './memory';
 import { interruptHandling } from './interrupts';
 import { syncCycle } from './syncCycle';
+import { Timer } from './timers';
 
 const dmgBootRom = [
   0x31, 0xfe, 0xff, 0xaf, 0x21, 0xff, 0x9f, 0x32, 0xcb, 0x7c, 0x20, 0xfb, 0x21, 0x26, 0xff, 0x0e,
@@ -76,7 +77,8 @@ export function runOneSecond(): void {
 
 export function reset(): void {
   Cpu.reset();
-  consoleLog("Reset");
+  Timer.reset();
+  trace("Reset");
 }
 
 function loadDmgBootRom(): void {
@@ -94,11 +96,9 @@ export function loadRom(buffer: Uint8Array): void {
     }
     Cpu.rom[index] = buffer[index];
   }
-  // const subArray = buffer.subarray(0, 0x100);
-  // loadDmgBootRom();
-  // Cpu.ioRegisters[0x06] = 0x22;
-  // Cpu.ioRegisters[0x07] = 0b101;
-  consoleLog("Rom loaded");
+  const subArray = buffer.subarray(0, 0x100);
+  loadDmgBootRom();
+  trace("Rom loaded");
 }
 
-export { getRegisters, getOtherRegister, getVideoRegisters, getDisassembler, getMemory } from './debug/index';
+export { getRegisters, getOtherRegister, getVideoRegisters, getDisassembler, getMemory, getBackground, background } from './debug/index';

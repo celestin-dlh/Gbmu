@@ -4,10 +4,16 @@ import { getBitValue, getHighByte, getLowByte, setBitValue } from "../helpers";
 import { Interrupt, setInterrupt } from "../interrupts";
 import { readMemoryMap, writeMemoryMap } from "../memory";
 
-class Timer {
+export class Timer {
     static internalDiv: u16 = 0;
     static lastAnd: bool = false;
     static timaHasOverflowed: bool = false;
+
+    static reset(): void {
+        Timer.internalDiv = 0;
+        Timer.lastAnd = false;
+        Timer.timaHasOverflowed = false;
+    }
 }
 
 function getDivBit(): bool {

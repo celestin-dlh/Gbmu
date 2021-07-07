@@ -1,10 +1,10 @@
 main.debug {
     display: grid;
     grid-template-areas: 
-        "screen controls controls controls ."
-        "screen registers disassembler other_registers video_registers"
+        "canvas controls controls controls ."
+        "canvas registers disassembler other_registers video_registers"
         "memory memory memory other_registers video_registers";
-    grid-template-columns: 200px 120px auto 200px 200px;
+    grid-template-columns: 300px 120px auto 200px 200px;
     grid-template-rows: 100px 300px auto;
     column-gap: 10px;
     row-gap: 10px;

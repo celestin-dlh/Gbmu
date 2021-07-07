@@ -1,12 +1,15 @@
 .canvas_container {
-    grid-area: screen;
+    grid-area: canvas;
     display: flex;
     justify-content: center;
     align-items: center;
+    display: flex;
+    flex-direction: column;
+    image-rendering: pixelated;
 }
 
 canvas {
     border: 1px solid white;
-    width: 320px;
-    height: 288px;
+    /* width: 320px;
+    height: 288px; */
 }

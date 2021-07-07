@@ -57,29 +57,29 @@ export class Cpu {
   static IME: bool = false;
 
   static reset(): void {
-    Cpu.A = 0x01;
-    Cpu.B = 0x0;
-    Cpu.C = 0x13;
-    Cpu.D = 0;
-    Cpu.E = 0xD8;
-    Cpu.H = 0x01;
-    Cpu.L = 0x4D;
-    Cpu.F = 0xB0;
-    
-    Cpu.pc = 0x100;
-    Cpu.sp = 0xFFFE;
-    
-    // Cpu.A = 0x0;
+    // Cpu.A = 0x01;
     // Cpu.B = 0x0;
-    // Cpu.C = 0x0;
-    // Cpu.D = 0x0;
-    // Cpu.E = 0x0;
-    // Cpu.H = 0x0;
-    // Cpu.L = 0x0;
-    // Cpu.F = 0x0;
+    // Cpu.C = 0x13;
+    // Cpu.D = 0;
+    // Cpu.E = 0xD8;
+    // Cpu.H = 0x01;
+    // Cpu.L = 0x4D;
+    // Cpu.F = 0xB0;
+    
+    // Cpu.pc = 0x100;
+    // Cpu.sp = 0xFFFE;
+    
+    Cpu.A = 0x0;
+    Cpu.B = 0x0;
+    Cpu.C = 0x0;
+    Cpu.D = 0x0;
+    Cpu.E = 0x0;
+    Cpu.H = 0x0;
+    Cpu.L = 0x0;
+    Cpu.F = 0x0;
 
-    // Cpu.pc = 0x0;
-    // Cpu.sp = 0x0;
+    Cpu.pc = 0x0;
+    Cpu.sp = 0x0;
 
     Cpu.cycle = 0;
 
@@ -96,7 +96,7 @@ export class Cpu {
   
     Cpu.IME = false;
     Cpu.isHalted = false;
-    setDefaultValue();
+    // setDefaultValue();
   }
 }
 

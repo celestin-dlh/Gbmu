@@ -25,7 +25,6 @@ function Controls({ executeStep, executeFrame, executeOneSecond, reset }) {
         setExecSinceStart(0);
     }
 
-
     useEffect(() => {
         window.addEventListener('keydown', (ev) => {
             if (ev.key === 's') {
