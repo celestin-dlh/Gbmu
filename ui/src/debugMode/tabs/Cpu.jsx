@@ -1,11 +1,7 @@
 import { h } from 'preact'; 
-import { TabPanel } from 'react-tabs';
 
-export function Cpu() {
+export default function Cpu() {
     return (
-        <div>
-        CPU
-
-        </div>
+        <div>CPU</div>
     )
 }

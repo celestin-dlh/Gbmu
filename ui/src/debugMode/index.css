@@ -27,28 +27,6 @@
     padding: 10px;
 }
 
-ul {
-    list-style: none;
-    margin-top: 0px;
-    padding: 0px;
-    border-bottom: 1px solid black;
-}
-
-li {
-    padding: 6px 12px;
-    font-size: 18px;
-    display: inline-block;
-    border: 1px solid transparent;
-    border-bottom: none;
-    bottom: -1px;
-}
-
-li.selected {
-    background-color: white;
-    border-color: black;
-
-}
-
-.react-tabs__tab-panel {
+.main__tabs {
     flex-grow: 1;
 }
