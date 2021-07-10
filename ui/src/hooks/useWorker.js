@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useEffect, useMemo } from 'preact/hooks';
 import * as Comlink from 'comlink';
 

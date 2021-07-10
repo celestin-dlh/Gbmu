@@ -1,0 +1,19 @@
+.header {
+    height: 25px;
+    display: flex;
+    background-color: #F0F0F0;
+}
+
+.header__button {
+    border: none;
+    cursor: pointer;
+    background-color: #F0F0F0;
+}
+
+.header__button:hover {
+    background-color: #E8E8E8;
+}
+
+.header__button:active {
+    background-color: white;
+}

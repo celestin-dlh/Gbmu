@@ -1,0 +1,54 @@
+.main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+}
+
+.main__controls {
+    flex-grow: 1;
+    min-width: 200px;
+    max-width: 300px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas {
+    image-rendering: pixelated;
+    border: 1px solid black;
+}
+
+.main__debug {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    min-width: 600px;
+    padding: 10px;
+}
+
+ul {
+    list-style: none;
+    margin-top: 0px;
+    padding: 0px;
+    border-bottom: 1px solid black;
+}
+
+li {
+    padding: 6px 12px;
+    font-size: 18px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-bottom: none;
+    bottom: -1px;
+}
+
+li.selected {
+    background-color: white;
+    border-color: black;
+
+}
+
+.react-tabs__tab-panel {
+    flex-grow: 1;
+}

@@ -1,25 +1,20 @@
 import { h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
-import * as Comlink from 'comlink';
+import { useEffect } from 'preact/hooks';
 import useWorker from './hooks/useWorker';
-import DebugMode from './DebugMode';
-import ClassicMode from './ClassicMode';
-import Header from './component/Header';
+import { useUiState } from './utils/UiContext';
+import * as Comlink from 'comlink';
+import DebugMode from './debugMode';
+import ClassicMode from './classicMode';
 
 function App() {
   const { workerApi } = useWorker();
-  const [uiState, setUiState] = useState({
-    wasmLoaded: false,
-    romLoaded: false,
-    debugMode: true,
-  });
+  const { uiState, setUiState } = useUiState();
 
   useEffect(() => {
     (async () => {
-      console.log('Init wasm in webWorker');
       if (workerApi) {
         await workerApi.loadWasm(Comlink.proxy(console.log));
-        setUiState({ ...uiState, wasmLoaded: true });
+        setUiState(uiState => ({ ...uiState, wasmLoaded: true }));
       }
     })();
   }, []);
@@ -30,15 +25,10 @@ function App() {
     </div>
   }
 
-  return (
-    <div class="app">
-      <Header workerApi={workerApi} uiState={uiState} setUiState={setUiState} />
-      {uiState.debugMode ? 
-        <DebugMode workerApi={workerApi} uiState={uiState} /> :
-        <ClassicMode />
-      }
-    </div>
-  );
+  if (uiState.mode === 'debug')
+    return <DebugMode />
+  else  
+    return <ClassicMode />
 };
 
 export default App;

@@ -1,8 +1,11 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0px;
     padding: 0px;
     font-family: 'Roboto', sans-serif;
-    color: white;
 }
 
 .app {
@@ -10,13 +13,4 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-main {
-    flex-grow: 1;
-    background-color: #121212;
-}
-
-.hidden {
-    display: none;
 }

@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-    entry: './ui/src/index.jsx',
+    entry: './ui/src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js'
