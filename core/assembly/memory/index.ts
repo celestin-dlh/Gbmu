@@ -1,140 +1,76 @@
-import { Cpu } from '../cpu/state';
 import {
-    ROM_START,
-    ROM_END,
-    VIDEO_RAM_START,
-    VIDEO_RAM_END,
-    EXTERNAL_RAM_START,
-    EXTERNAL_RAM_END,
-    WORK_RAM_START,
-    WORK_RAM_END,
-    ECHO_RAM_START,
-    ECHO_RAM_END,
-    OAM_START,
-    OAM_END,
-    UNUSED_MEMORY_START,
-    UNUSED_MEMORY_END,
-    IO_REGISTERS_START,
-    IO_REGISTERS_END,
-    HIGH_RAM_START,
-    HIGH_RAM_END,
-    IE_START,
-    IE_END
+    ROM_SIZE,
+    VIDEO_RAM_SIZE,
+    EXTERNAL_RAM_SIZE,
+    WORK_RAM_SIZE,
+    ECHO_RAM_SIZE,
+    OAM_SIZE,
+    UNUSED_MEMORY_SIZE,
+    IO_REGISTERS_SIZE,
+    HIGH_RAM_SIZE,
+    IE_SIZE
 } from '../constants';
-import { combineBytes } from '../helpers';
-import { syncCycle } from '../syncCycle';
-import { resetDiv } from '../timers';
+import { writeByte } from './readWriteOperation';
 
-declare function consoleLog(message: string): void;
+export class Memory {
+    static rom: Uint8Array = new Uint8Array(ROM_SIZE).fill(0);
+    static videoRam: Uint8Array = new Uint8Array(VIDEO_RAM_SIZE).fill(0);
+    static externalRam: Uint8Array = new Uint8Array(EXTERNAL_RAM_SIZE).fill(0);
+    static workRam: Uint8Array = new Uint8Array(WORK_RAM_SIZE).fill(0);
+    static echoRam: Uint8Array = new Uint8Array(ECHO_RAM_SIZE).fill(0);
+    static oam: Uint8Array = new Uint8Array(OAM_SIZE).fill(0);
+    static unusedMemory: Uint8Array = new Uint8Array(UNUSED_MEMORY_SIZE).fill(0);
+    static ioRegisters: Uint8Array = new Uint8Array(IO_REGISTERS_SIZE).fill(0);
+    static highRam: Uint8Array = new Uint8Array(HIGH_RAM_SIZE).fill(0);
+    static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
 
-export function writeByte(address: u16, byte: u8): void {
-    writeMemoryMap(address, byte);
-    syncCycle(4);
-}
-
-export function writeMemoryMap(address: u16, byte: u8): void {
-    if (address >= ROM_START && address <= ROM_END) {
-        new Error("ROM IS READ ONLY");
-    } 
-    else if (address >= VIDEO_RAM_START && address <= VIDEO_RAM_END) {
-        Cpu.videoRam[address - VIDEO_RAM_START] = byte;
-    } 
-    else if (address >= EXTERNAL_RAM_START && address <= EXTERNAL_RAM_END) {
-        Cpu.externalRam[address - EXTERNAL_RAM_START] = byte;
-    } 
-    else if (address >= WORK_RAM_START && address <= WORK_RAM_END) {
-        Cpu.workRam[address - WORK_RAM_START] = byte;
-    } 
-    else if (address >= ECHO_RAM_START && address <= ECHO_RAM_END) {
-        new Error("Nintendo says use of this area is prohibited.");
-    } 
-    else if (address >= OAM_START && address <= OAM_END) {
-        Cpu.oam[address - OAM_START] = byte;
-    } 
-    else if (address >= UNUSED_MEMORY_START && address <= UNUSED_MEMORY_END) {
-        new Error("Nintendo says use of this area is prohibited.");
-    } 
-    else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
-        Cpu.ioRegisters[address - IO_REGISTERS_START] = byte;
-
-        // DIV Timer
-        if (address === 0xFF04) {
-            resetDiv();
-            return;
-        } 
-
-        // blarggs test - serial output
-        if (address === 0xFF02 && byte === 0x81) {
-            const char = String.fromCharCode(Cpu.ioRegisters[0xFF01 - IO_REGISTERS_START]);
-            consoleLog(char);
-            Cpu.ioRegisters[0xFF02 - IO_REGISTERS_START] = 0;
-        }
-    } 
-    else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
-        Cpu.highRam[address - HIGH_RAM_START] = byte;
-    } 
-    else if (address >= IE_START && address <= IE_END) {
-        Cpu.IE[address - IE_START] = byte;
-    }
-    else abort("Error: This should be unreachable");
-}
-
-export function readByteAtPc(): u8 {
-    const byte = readMemoryMap(Cpu.pc);
-    Cpu.pc += 1;
-    syncCycle(4);
-    return byte;
-} 
-
-export function readByte(address: u16): u8 {
-    const byte = readMemoryMap(address);
-    syncCycle(4);
-    return byte;
-}
-  
-export function readWordAtPc(): u16 {
-    const lowByte = readByteAtPc();
-    const highByte = readByteAtPc();
-    return combineBytes(highByte, lowByte);
-}
-
-export function readMemoryMap(address: u16): u8 {
-    if (address >= ROM_START && address <= ROM_END) {
-        return Cpu.rom[address];
-    } 
-    else if (address >= VIDEO_RAM_START && address <= VIDEO_RAM_END) {
-        return Cpu.videoRam[address - VIDEO_RAM_START];
-    } 
-    else if (address >= EXTERNAL_RAM_START && address <= EXTERNAL_RAM_END) {
-        return Cpu.externalRam[address - EXTERNAL_RAM_START];
-    } 
-    else if (address >= WORK_RAM_START && address <= WORK_RAM_END) {
-        return Cpu.workRam[address - WORK_RAM_START];
-    } 
-    else if (address >= ECHO_RAM_START && address <= ECHO_RAM_END) {
-        return Cpu.echoRam[address - ECHO_RAM_START];
-    } 
-    else if (address >= OAM_START && address <= OAM_END) {
-        return Cpu.oam[address - OAM_START];
-    } 
-    else if (address >= UNUSED_MEMORY_START && address <= UNUSED_MEMORY_END) {
-        return Cpu.unusedMemory[address - UNUSED_MEMORY_START];
-    } 
-    else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
-        // temp because we dont have ppu yet
-        // if (address == 0xFF44) {
-        //     return 0x90;
-        // }
-        return Cpu.ioRegisters[address - IO_REGISTERS_START];
-    } 
-    else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
-        return Cpu.highRam[address - HIGH_RAM_START];
-    } 
-    else if (address >= IE_START && address <= IE_END) {
-        return Cpu.IE[address - IE_START];
-    } 
-    else {
-        abort("Error: This should be unreachable");
-        return 0;
+    static reset(): void {
+        Memory.rom = new Uint8Array(ROM_SIZE).fill(0);
+        Memory.videoRam = new Uint8Array(VIDEO_RAM_SIZE).fill(0);
+        Memory.externalRam = new Uint8Array(EXTERNAL_RAM_SIZE).fill(0);
+        Memory.workRam = new Uint8Array(WORK_RAM_SIZE).fill(0);
+        Memory.echoRam = new Uint8Array(ECHO_RAM_SIZE).fill(0);
+        Memory.oam = new Uint8Array(OAM_SIZE).fill(0);
+        Memory.unusedMemory = new Uint8Array(UNUSED_MEMORY_SIZE).fill(0);
+        Memory.ioRegisters = new Uint8Array(IO_REGISTERS_SIZE).fill(0);
+        Memory.highRam = new Uint8Array(HIGH_RAM_SIZE).fill(0);
+        Memory.IE = new Uint8Array(IE_SIZE).fill(0);
     }
 }
+
+export function setDefaultValue(): void {
+    writeByte(0xFF05, 0x0);
+    writeByte(0xFF06, 0x0);
+    writeByte(0xFF07, 0x0);
+    writeByte(0xFF10, 0x80);
+    writeByte(0xFF11, 0xBF);
+    writeByte(0xFF12, 0xF3);
+    writeByte(0xFF14, 0xBF);
+    writeByte(0xFF16, 0x3F);
+    writeByte(0xFF17, 0x00);
+    writeByte(0xFF19, 0xBF);
+    writeByte(0xFF1A, 0x7F);
+    writeByte(0xFF1B, 0xFF);
+    writeByte(0xFF1C, 0x9F);
+    writeByte(0xFF1E, 0xBF);
+    writeByte(0xFF20, 0xFF);
+    writeByte(0xFF21, 0x00);
+    writeByte(0xFF22, 0x00);
+    writeByte(0xFF23, 0xBF);
+    writeByte(0xFF24, 0x77);
+    writeByte(0xFF25, 0xF3);
+    writeByte(0xFF26, 0xF1);
+    writeByte(0xFF40, 0x91);
+    writeByte(0xFF42, 0x00);
+    writeByte(0xFF43, 0x00);
+
+    writeByte(0xFF45, 0x00);
+    writeByte(0xFF47, 0xFC);
+    writeByte(0xFF48, 0xFF);
+    writeByte(0xFF49, 0xFF);
+    writeByte(0xFF4A, 0x00);
+    writeByte(0xFF4B, 0x00);
+    writeByte(0xFFFF, 0x00);
+}
+
+export { readByte, readByteSync, readByteAtPc, readWordAtPc, writeByte, writeByteSync } from './readWriteOperation';

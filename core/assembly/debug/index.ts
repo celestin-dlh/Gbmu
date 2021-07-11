@@ -1,13 +1,14 @@
-import { Cpu, getBC, getDE, getHL } from '../cpu/state';
-import { getBitValue } from '../helpers';
-import { readMemoryMap } from '../memory';
+import { Cpu } from '../cpu';
+import { getBitValue } from '../helpers/bitOperations';
+import { Interrupt } from '../interrupts';
+import { readByte } from '../memory';
 
 export function getRegisters(): u16[] {
     const registersArray = new Array<u16>(7).fill(0);
     registersArray[0] = Cpu.pc;
-    registersArray[1] = getBC();
-    registersArray[2] = getDE();
-    registersArray[3] = getHL();
+    registersArray[1] = Cpu.getBC();
+    registersArray[2] = Cpu.getDE();
+    registersArray[3] = Cpu.getHL();
     registersArray[4] = Cpu.sp;
     registersArray[5] = Cpu.A;
     registersArray[6] = Cpu.F;
@@ -16,37 +17,37 @@ export function getRegisters(): u16[] {
 
 export function getOtherRegister(): u8[] {
     const otherRegistersArray = new Array<u8>(9).fill(0);
-    otherRegistersArray[0] = readMemoryMap(0xFF00); // P1
-    otherRegistersArray[1] = readMemoryMap(0xFF01); // SB
-    otherRegistersArray[2] = readMemoryMap(0xFF02); // SC
-    otherRegistersArray[3] = readMemoryMap(0xFF04); // DIV
-    otherRegistersArray[4] = readMemoryMap(0xFF05); // TIMA
-    otherRegistersArray[5] = readMemoryMap(0xFF06); // TMA
-    otherRegistersArray[6] = readMemoryMap(0xFF07); // TAC
-    otherRegistersArray[7] = readMemoryMap(0xFF0F); // IF
-    otherRegistersArray[8] = readMemoryMap(0xFFFF); // IE
-    otherRegistersArray[9] = <u8>Cpu.IME; // IME
+    otherRegistersArray[0] = readByte(0xFF00); // P1
+    otherRegistersArray[1] = readByte(0xFF01); // SB
+    otherRegistersArray[2] = readByte(0xFF02); // SC
+    otherRegistersArray[3] = readByte(0xFF04); // DIV
+    otherRegistersArray[4] = readByte(0xFF05); // TIMA
+    otherRegistersArray[5] = readByte(0xFF06); // TMA
+    otherRegistersArray[6] = readByte(0xFF07); // TAC
+    otherRegistersArray[7] = readByte(0xFF0F); // IF
+    otherRegistersArray[8] = readByte(0xFFFF); // IE
+    otherRegistersArray[9] = <u8>Interrupt.IME; // IME
     return otherRegistersArray;
 }
 
 export function getVideoRegisters(): u8[] {
     const videoRegistersArray = new Array<u8>(15).fill(0);
-    videoRegistersArray[0] = readMemoryMap(0xFF40); // LCDC
-    videoRegistersArray[1] = readMemoryMap(0xFF41); // STAT
-    videoRegistersArray[2] = readMemoryMap(0xFF42); // SCY
-    videoRegistersArray[3] = readMemoryMap(0xFF43); // SCX
-    videoRegistersArray[4] = readMemoryMap(0xFF44); // LY
-    videoRegistersArray[5] = readMemoryMap(0xFF45); // LYC
-    videoRegistersArray[6] = readMemoryMap(0xFF46); // DMA
-    videoRegistersArray[7] = readMemoryMap(0xFF47); // BGP
-    videoRegistersArray[8] = readMemoryMap(0xFF48); // OBP0
-    videoRegistersArray[9] = readMemoryMap(0xFF49); // OBP1
-    videoRegistersArray[10] = readMemoryMap(0xFF4A); // WY
-    videoRegistersArray[11] = readMemoryMap(0xFF4B); // WX
-    videoRegistersArray[12] = readMemoryMap(0xFF68); // BCPS
-    videoRegistersArray[13] = readMemoryMap(0xFF69); // BCPD
-    videoRegistersArray[14] = readMemoryMap(0xFF6A); // OCPS
-    videoRegistersArray[15] = readMemoryMap(0xFF6B); // OCPD
+    videoRegistersArray[0] = readByte(0xFF40); // LCDC
+    videoRegistersArray[1] = readByte(0xFF41); // STAT
+    videoRegistersArray[2] = readByte(0xFF42); // SCY
+    videoRegistersArray[3] = readByte(0xFF43); // SCX
+    videoRegistersArray[4] = readByte(0xFF44); // LY
+    videoRegistersArray[5] = readByte(0xFF45); // LYC
+    videoRegistersArray[6] = readByte(0xFF46); // DMA
+    videoRegistersArray[7] = readByte(0xFF47); // BGP
+    videoRegistersArray[8] = readByte(0xFF48); // OBP0
+    videoRegistersArray[9] = readByte(0xFF49); // OBP1
+    videoRegistersArray[10] = readByte(0xFF4A); // WY
+    videoRegistersArray[11] = readByte(0xFF4B); // WX
+    videoRegistersArray[12] = readByte(0xFF68); // BCPS
+    videoRegistersArray[13] = readByte(0xFF69); // BCPD
+    videoRegistersArray[14] = readByte(0xFF6A); // OCPS
+    videoRegistersArray[15] = readByte(0xFF6B); // OCPD
     return videoRegistersArray;
 }
 
@@ -327,7 +328,7 @@ function getInstructionData(byteToGet: i32, programCounter: u16): Array<u16> {
     const instructionData = new Array<u16>();
     instructionData.push(programCounter);
     for (let index = 0; index < byteToGet; index++) {
-        const byte = readMemoryMap(<u16>index + programCounter);
+        const byte = readByte(<u16>index + programCounter);
         instructionData.push(byte);
     }
     return instructionData;
@@ -338,7 +339,7 @@ export function getDisassembler(): u16[][]  {
     const instructionArray = new Array<u16[]>();
     
     for (let instructionCount = 0; instructionCount < 6; instructionCount++) {
-        const opcode = readMemoryMap(programCounter);
+        const opcode = readByte(programCounter);
         const instructionLength = getInstructionLength(opcode);
         const instructionData = getInstructionData(instructionLength, programCounter);
         instructionArray.push(instructionData);
@@ -352,7 +353,7 @@ function getMemoryRow(address: u16): u8[] {
     const row = new Array<u8>(0);
     for (let index = 0; index < 16; index++) {
         const addr = address + <u16>index;
-        row.push(readMemoryMap(addr));
+        row.push(readByte(addr));
     }
     return row;
 }
@@ -375,8 +376,8 @@ export const background = new Uint8Array(256 * 256).fill(0);
 function getTileData(tileStartIndex: u16, xStart: u16, yStart: u16): void {
     for (let y: u8 = 0; y < 8; y++) {
         for (let x: u8 = 0; x < 8; x++) {
-            const lowByte = readMemoryMap(tileStartIndex + <u16>(y * 2));
-            const highByte = readMemoryMap(tileStartIndex + <u16>((y * 2) + 1));
+            const lowByte = readByte(tileStartIndex + <u16>(y * 2));
+            const highByte = readByte(tileStartIndex + <u16>((y * 2) + 1));
             const highBit = (highByte << x) & 0x80;
             const lowBit = (lowByte << x) & 0x80;
             background[getIndex(xStart + x, yStart + y)] = (highBit << 1 | lowBit);
@@ -386,7 +387,7 @@ function getTileData(tileStartIndex: u16, xStart: u16, yStart: u16): void {
 
 
 export function getBackground(): Uint8Array {
-    const LCDC = readMemoryMap(0xFF40);
+    const LCDC = readByte(0xFF40);
     const bgMemoryTileMap: u16 = getBitValue(LCDC, 3) ? 0x9C00 : 0x9800;
     const tileDataArea = getBitValue(LCDC, 4) ? 0x8000 : 0x8800;
 
@@ -394,7 +395,7 @@ export function getBackground(): Uint8Array {
         
         for (let index: u16 = 0; index < 1024; index++) {
             const mapIndex = bgMemoryTileMap + index;
-            const valueAtIndex = <u16>readMemoryMap(mapIndex);
+            const valueAtIndex = <u16>readByte(mapIndex);
             const tileStartIndex: u16 = valueAtIndex * 16 + <u16>0x8000;
             getTileData(tileStartIndex, (index % 32) * 8, (index / 32) * 8);
         }

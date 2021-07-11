@@ -4,16 +4,7 @@ import * as AsBind from 'as-bind';
 
 const wasm = fetch(wasmBuild);
 const imports = {
-    index: {
-        consoleLog: message => {
-            console.log(message);
-        },
-    },
-    readWriteOperations: {
-        consoleLog: message => {
-            console.log(message);
-        },
-    }
+
 };
 
 const loadWasmModule = async () => {
