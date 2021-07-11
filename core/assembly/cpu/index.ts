@@ -1,27 +1,27 @@
 import { combineBytes, getHighByte, getLowByte } from '../helpers/bitOperations';
 
 export class Cpu {
-  // static A: u8 = 0;
-  // static B: u8 = 0;
-  // static C: u8 = 0;
-  // static D: u8 = 0;
-  // static E: u8 = 0;
-  // static H: u8 = 0;
-  // static L: u8 = 0;
-  // static F: u8 = 0;
-  // static pc: u16 = 0x0;
-  // static sp: u16 = 0;
-
-  static A: u8 = 0x01;
-  static B: u8 = 0x0;
-  static C: u8 = 0x13;
+  static A: u8 = 0;
+  static B: u8 = 0;
+  static C: u8 = 0;
   static D: u8 = 0;
-  static E: u8 = 0xD8;
-  static H: u8 = 0x01;
-  static L: u8 = 0x4D;
-  static F: u8 = 0xB0;
-  static pc: u16 = 0x100;
-  static sp: u16 = 0xFFFE;
+  static E: u8 = 0;
+  static H: u8 = 0;
+  static L: u8 = 0;
+  static F: u8 = 0;
+  static pc: u16 = 0x0;
+  static sp: u16 = 0;
+
+  // static A: u8 = 0x01;
+  // static B: u8 = 0x0;
+  // static C: u8 = 0x13;
+  // static D: u8 = 0;
+  // static E: u8 = 0xD8;
+  // static H: u8 = 0x01;
+  // static L: u8 = 0x4D;
+  // static F: u8 = 0xB0;
+  // static pc: u16 = 0x100;
+  // static sp: u16 = 0xFFFE;
 
   static isHalted: bool = false;
 

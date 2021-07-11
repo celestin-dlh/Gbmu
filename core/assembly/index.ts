@@ -56,6 +56,15 @@ function loadDmgBootRom(): void {
   }
 }
 
+
+function reset(): void {
+  Cpu.reset();
+  Interrupt.reset();
+  Memory.reset();
+  Timer.reset();
+  Ppu.reset();
+}
+
 export function loadRom(buffer: Uint8Array): void {
   reset();
   for (let index = 0; index < buffer.length; index++) {
@@ -74,14 +83,6 @@ export function loadRom(buffer: Uint8Array): void {
 
 
 
-export function reset(): void {
-  Cpu.reset();
-  Interrupt.reset();
-  Memory.reset();
-  Timer.reset();
-  Ppu.reset();
-  trace("Reset");
-}
 
 // debug
 export { getDisassembler, getCpuRegisters } from './cpu';

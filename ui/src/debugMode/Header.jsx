@@ -1,10 +1,10 @@
 import { h } from 'preact';
-import {useEffect} from 'preact/hooks';
 import { useUiState } from '../utils/UiContext';
+import * as Comlink from 'comlink';
 import './header.css';
 
-function Header({ workerApi }) {
-    const { uiState, setUiState, changeMode, changeTheme } = useUiState();
+function Header({ workerApi, setState }) {
+    const { uiState, changeMode, changeTheme } = useUiState();
 
     const handleLoadRom = (ev) => {
         const fileReader = new FileReader();
@@ -16,26 +16,19 @@ function Header({ workerApi }) {
                 if (ev.target && ev.target.result) {
                     const result = ev.target.result;
                     const buffer = new Uint8Array(result);
-                    loadRom(buffer);
-
-                    // to force rerender of the app when reload a new rom
-                    const state = {...uiState}
-                    setUiState({ ...state, romLoaded: true })
+                    workerApi.loadRom(buffer);
+                    workerApi.getDebugValue(0, Comlink.proxy(setState));
                 }
             };
         }
     }
 
-    const { theme } = uiState;
-
     return (
         <header class="header">
-            <button 
-                class="header__button"
-                // onClick={handleLoadRom}
-            >
+            <label class="header__button" htmlFor="load_rom">
                 Load Rom
-            </button>
+                <input id="load_rom" type="file" style={{ display: 'none' }} onChange={handleLoadRom} />
+            </label>
             <button
                 onClick={changeMode}
                 class="header__button"
@@ -46,7 +39,7 @@ function Header({ workerApi }) {
                 class="header__button"
                 onClick={changeTheme}
             >
-                {theme === 'light' ? "Dark" : "Light"} Mode
+                {uiState.theme === 'light' ? "Dark Mode" : "Light Mode"}
             </button>
         </header>
     )

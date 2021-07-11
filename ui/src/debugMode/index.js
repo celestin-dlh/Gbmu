@@ -18,7 +18,10 @@ function DebugMode({ workerApi }) {
 
     return (
         <div class="app">
-            <Header />
+            <Header 
+                workerApi={workerApi} 
+                setState={setState} 
+            />
             <main class="main">
                 <Controls workerApi={workerApi} setState={setState} />
                 <Tabs className="main__debug">
