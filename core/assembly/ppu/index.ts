@@ -12,6 +12,7 @@ export class Ppu {
     }
 }
 
+
 // function pixelFetcher(): void {
 //     // const mapIndex 
 //     // const tile =     
@@ -63,3 +64,5 @@ export class Ppu {
     
 // }
 
+
+export { getBackground, getVideoRegisters } from './debug';

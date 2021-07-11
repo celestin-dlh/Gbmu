@@ -7,6 +7,7 @@ import Cpu from './tabPanel/Cpu';
 import Memory from './tabPanel/Memory';
 import 'react-tabs/style/react-tabs.css';
 import './index.css';
+import Graphics from './tabPanel/Graphics';
 
 function DebugMode({ workerApi }) {
 
@@ -14,6 +15,8 @@ function DebugMode({ workerApi }) {
         memory: [],
         disassembler: [],
         cpuRegisters: [],
+        background: [],
+        videoRegisters: []
     });
 
     return (
@@ -43,6 +46,12 @@ function DebugMode({ workerApi }) {
                             workerApi={workerApi} 
                             setState={setState}
                             memory={state.memory} 
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <Graphics 
+                            videoRegisters={state.videoRegisters}
+                            background={state.background}
                         />
                     </TabPanel>
                 </Tabs>

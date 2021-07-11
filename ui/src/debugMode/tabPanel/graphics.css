@@ -1,0 +1,42 @@
+.graphics__container {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.graphics__canvas {
+    border: 1px solid var(--border-color);
+    width: 100%;
+
+}
+
+.graphics__canvas--tile-data {
+    height: 192px;
+}
+
+
+.videoRegisters {
+    min-width: 200px;
+    width: 30%;
+}
+
+.videoRegisters__table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.videoRegisters__table tr, .videoRegisters__table td {
+    border: 1px solid var(--border-color);
+}
+
+.videoRegisters__table th {
+    padding: 10px 0px;
+    font-size: 18px;
+}
+
+.videoRegisters__table td {
+    padding: 4px 4px;
+}

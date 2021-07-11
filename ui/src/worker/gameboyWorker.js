@@ -67,13 +67,17 @@ const gameboyWorker = {
             await cb({
                 memory: memory,
                 disassembler: this.exports.getDisassembler(),
-                cpuRegisters: this.exports.getCpuRegisters()
+                cpuRegisters: this.exports.getCpuRegisters(),
+                background: this.exports.getBackground(),
+                videoRegisters: this.exports.getVideoRegisters(),
             });
         else
             return ({
                 memory: memory,
                 disassembler: this.exports.getDisassembler(),
-                cpuRegisters: this.exports.getCpuRegisters()
+                cpuRegisters: this.exports.getCpuRegisters(),
+                background: this.exports.getBackground(),
+                videoRegisters: this.exports.getVideoRegisters(),
             });
     }
 };

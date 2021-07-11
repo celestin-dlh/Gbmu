@@ -6,7 +6,6 @@ import './cpu.css';
 function Disassembler({ data }) {
     return (
         <div class="disassembler">
-            <h3 class="disassembler__header">Disassembler</h3>
             <table class="disassembler__table">
                 <tr>
                     <th class="disassembler__address">Address</th>
@@ -30,7 +29,6 @@ function CpuRegisters({ registers }) {
         return;
     return (
         <div class="cpuRegisters">
-            <h3 class="cpuRegisters__header">Registers</h3>
             <table class="cpuRegisters__table">
                 <tr>
                     <th></th>

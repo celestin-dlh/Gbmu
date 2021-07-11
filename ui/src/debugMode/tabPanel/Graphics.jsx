@@ -1,0 +1,125 @@
+import { h } from 'preact';
+import { formatHexNumber } from '../../utils/format';
+import './graphics.css';
+
+function VideoRegisters({ registers }) {
+    if (!registers || registers.length <= 0) 
+        return;
+    return (
+        <div class="videoRegisters">
+            <table class="videoRegisters__table">
+                <tr>
+                    <th></th>
+                    <th>Address</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>LCDC</td>
+                    <td>FF40</td>
+                    <td>{formatHexNumber(registers[0], 2)}</td>
+                </tr>
+                <tr>
+                    <td>STAT</td>
+                    <td>FF41</td>
+                    <td>{formatHexNumber(registers[1], 2)}</td>
+                </tr>
+                <tr>
+                    <td>SCY</td>
+                    <td>FF42</td>
+                    <td>{formatHexNumber(registers[2], 2)}</td>
+                </tr>
+                <tr>
+                    <td>SCX</td>
+                    <td>FF43</td>
+                    <td>{formatHexNumber(registers[3], 2)}</td>
+                </tr>
+                <tr>
+                    <td>LY</td>
+                    <td>FF44</td>
+                    <td>{formatHexNumber(registers[4], 2)}</td>
+                </tr>
+                <tr>
+                    <td>LYC</td>
+                    <td>FF45</td>
+                    <td>{formatHexNumber(registers[5], 2)}</td>
+                </tr>
+                <tr>
+                    <td>DMA</td>
+                    <td>FF46</td>
+                    <td>{formatHexNumber(registers[6], 2)}</td>
+                </tr>
+                <tr>
+                    <td>BGP</td>
+                    <td>FF47</td>
+                    <td>{formatHexNumber(registers[7], 2)}</td>
+                </tr>
+                <tr>
+                    <td>OBP0</td>
+                    <td>FF48</td>
+                    <td>{formatHexNumber(registers[8], 2)}</td>
+                </tr>
+                <tr>
+                    <td>OBP1</td>
+                    <td>FF49</td>
+                    <td>{formatHexNumber(registers[9], 2)}</td>
+                </tr>
+                <tr>
+                    <td>WY</td>
+                    <td>FF4A</td>
+                    <td>{formatHexNumber(registers[10], 2)}</td>
+                </tr>
+                <tr>
+                    <td>WX</td>
+                    <td>FF4B</td>
+                    <td>{formatHexNumber(registers[11], 2)}</td>
+                </tr>
+                <tr>
+                    <td>BCPS</td>
+                    <td>FF68</td>
+                    <td>{formatHexNumber(registers[12], 2)}</td>
+                </tr>
+                <tr>
+                    <td>BCPD</td>
+                    <td>FF69</td>
+                    <td>{formatHexNumber(registers[13], 2)}</td>
+                </tr>
+                <tr>
+                    <td>OCPS</td>
+                    <td>FF6A</td>
+                    <td>{formatHexNumber(registers[14], 2)}</td>
+                </tr>
+                <tr>
+                    <td>OCPD</td>
+                    <td>FF6B</td>
+                    <td>{formatHexNumber(registers[15], 2)}</td>
+                </tr>
+            </table>
+        </div>
+    )
+}
+
+export default function Graphics({ videoRegisters, background }) {
+
+    return (
+        <div class="graphics__container">
+            <canvas 
+                class="graphics__canvas"
+                width={256}
+                height={256}
+            />
+            <canvas 
+                class="graphics__canvas"
+                width={256}
+                height={256}
+            />
+            <canvas 
+                class="graphics__canvas graphics__canvas--tile-data"
+                width={256}
+                height={192}
+            />
+            <VideoRegisters registers={videoRegisters} />
+
+        </div>
+    )
+}
+
