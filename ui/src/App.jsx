@@ -26,7 +26,7 @@ function App() {
   }
 
   if (uiState.mode === 'debug')
-    return <DebugMode />
+    return <DebugMode workerApi={workerApi} />
   else  
     return <ClassicMode />
 };

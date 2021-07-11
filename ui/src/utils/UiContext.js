@@ -1,7 +1,7 @@
 import { h, createContext } from 'preact';
 import { useState, useEffect, useContext } from 'preact/hooks';
 
-const MIN_WIDTH_FOR_DEBUG = 600;
+const MIN_WIDTH_FOR_DEBUG = 400;
 const UiContext = createContext(null);
 
 export const UiProvider = ({ children }) => {

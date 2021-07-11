@@ -2,7 +2,6 @@ import * as Comlink from 'comlink';
 import loadWasmModule from '../../../core/index';
 
 const gameboyWorker = {
-    isInit: null,
     exports: null,
     romBuffer: null,
     canvasContext: null,
@@ -75,8 +74,13 @@ const gameboyWorker = {
         return imageData;
     },
 
-    async step(stepTimes) {
-        this.exports.step(stepTimes);
+    async step(stepNumber, cb) {
+        this.exports.step(stepNumber);
+        const debug = this.getDebug();
+
+        cb({
+            debug,
+        });
     },
 
     async runFrame() {
@@ -87,10 +91,19 @@ const gameboyWorker = {
         this.exports.runOneSecond();
     },
 
-    async reset() {
-        this.exports.reset();
-        if (this.romBuffer && this.romBuffer.length> 0)
-            this.exports.loadRom(this.romBuffer);
+    // async reset() {
+    //     this.exports.reset();
+    //     if (this.romBuffer && this.romBuffer.length > 0)
+    //         this.exports.loadRom(this.romBuffer);
+    // },
+
+    async reset(cb) {
+        await cb({
+            debug: {
+                disassembler: 'lot of thhings'
+            },
+            canvas: [1,2,1,31,4,1]
+        });
     },
 
     async getDebug(memoryAddress, cb) {

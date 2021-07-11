@@ -2,21 +2,6 @@
     flex-grow: 1;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap-reverse;
-}
-
-.main__controls {
-    flex-grow: 1;
-    min-width: 200px;
-    max-width: 300px;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
-.canvas {
-    image-rendering: pixelated;
-    border: 1px solid black;
 }
 
 .main__debug {
@@ -27,6 +12,16 @@
     padding: 10px;
 }
 
-.main__tabs {
+.react-tabs__tab--selected {
+    border-radius: 0px 0px 0px 0px;
+    border-color: black;
+}
+
+.react-tabs__tab-list {
+    border-color: black;
+}
+
+.react-tabs__tab-panel--selected {
     flex-grow: 1;
+    background-color: grey;
 }

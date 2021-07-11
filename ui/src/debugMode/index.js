@@ -1,19 +1,30 @@
-import { h, Fragment } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { h } from 'preact';
+import { useState } from 'preact/hooks';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Header from './Header';
-import Cpu from './tabs/Cpu';
-import './index.css';
+import Controls from './Controls';
+import Cpu from './tabPanel/Cpu';
 import 'react-tabs/style/react-tabs.css';
+import './index.css';
 
-function DebugMode() {
+function DebugMode({ workerApi }) {
+
+    const [state, setState] = useState({
+        disassembler: [],
+        cpuRegister: [],
+        memory: [],
+        videoRegister: [],
+        background: [],
+    })
+
+    console.log('render')
+
+
     return (
         <div class="app">
             <Header />
             <main class="main">
-                <div class="main__controls">
-                    <canvas class="canvas" width={160} height={144} />
-                </div>
+                <Controls workerApi={workerApi} setState={setState} />
                 <Tabs className="main__debug">
                     <TabList>
                         <Tab>CPU</Tab>
@@ -22,11 +33,8 @@ function DebugMode() {
                         <Tab>Timers / Interrupts</Tab>
                     </TabList>
 
-                    <TabPanel className="main__tabs">
-                        <Cpu />
-                    </TabPanel>
                     <TabPanel>
-                        <h2>Any content 2</h2>
+                        <Cpu />
                     </TabPanel>
                 </Tabs>
             </main>
