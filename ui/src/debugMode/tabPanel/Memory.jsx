@@ -1,10 +1,15 @@
 import { h } from 'preact';
-import { formatHexNumber } from '../utils/format';
+import { useState, useEffect } from 'preact/hooks';
+import { formatHexNumber } from '../../utils/format';
+import * as Comlink from 'comlink';
 
 const regexp = /[0-9A-Fa-f]{1,4}/g;
 
-export function Memory({ data, setMemoryAddress, memoryAddress }) {
-    // Not really clean code but working ...
+export default function Memory({ workerApi, setState, memory }) {
+    if (!memory || memory.length <= 0)
+        return;
+
+    const [memoryAddress, setMemoryAddress] = useState(0);
     const handleSubmit = (ev) => {
         ev.preventDefault();
         const { value } = ev.target[0];
@@ -23,11 +28,24 @@ export function Memory({ data, setMemoryAddress, memoryAddress }) {
         else setMemoryAddress(0);
     }
 
+    useEffect(() => {
+        const setMemory = (memory) => {
+            setState(state => ({ ...state, memory }))
+        }
+
+        const getMemory = async () => {
+            workerApi.getMemory(memoryAddress, Comlink.proxy(setMemory));
+        }
+        getMemory();
+    }, [memoryAddress])
+
     return (
-        <div class="memory">
+        <div class="memory__container">
             <div class="memory__header">
                 <h3>Memory</h3>
-                <form onSubmit={handleSubmit}>
+                <form 
+                    onSubmit={handleSubmit}
+                >
                     <input 
                         class="memory__input" 
                         type='text'
@@ -56,7 +74,7 @@ export function Memory({ data, setMemoryAddress, memoryAddress }) {
                     <th>xE</th> 
                     <th>xF</th> 
                 </tr>
-                {data.map((row, index) => (
+                {memory.map((row, index) => (
                     <tr key={`memory_table_row${index}`}>
                         <th>{formatHexNumber(memoryAddress + index * 16)}:</th>
                         {row.map((byte) => (

@@ -4,21 +4,17 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Header from './Header';
 import Controls from './Controls';
 import Cpu from './tabPanel/Cpu';
+import Memory from './tabPanel/Memory';
 import 'react-tabs/style/react-tabs.css';
 import './index.css';
 
 function DebugMode({ workerApi }) {
 
     const [state, setState] = useState({
-        disassembler: [],
-        cpuRegister: [],
         memory: [],
-        videoRegister: [],
-        background: [],
-    })
-
-    console.log('render')
-
+        disassembler: [],
+        cpuRegisters: [],
+    });
 
     return (
         <div class="app">
@@ -34,7 +30,17 @@ function DebugMode({ workerApi }) {
                     </TabList>
 
                     <TabPanel>
-                        <Cpu />
+                        <Cpu 
+                            disassembler={state.disassembler} 
+                            cpuRegisters={state.cpuRegisters}
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <Memory 
+                            workerApi={workerApi} 
+                            setState={setState}
+                            memory={state.memory} 
+                        />
                     </TabPanel>
                 </Tabs>
             </main>

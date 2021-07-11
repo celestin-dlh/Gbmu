@@ -1,9 +1,10 @@
 import { h } from 'preact';
+import {useEffect} from 'preact/hooks';
 import { useUiState } from '../utils/UiContext';
 import './header.css';
 
 function Header({ workerApi }) {
-    const { uiState, setUiState, changeMode } = useUiState();
+    const { uiState, setUiState, changeMode, changeTheme } = useUiState();
 
     const handleLoadRom = (ev) => {
         const fileReader = new FileReader();
@@ -25,6 +26,8 @@ function Header({ workerApi }) {
         }
     }
 
+    const { theme } = uiState;
+
     return (
         <header class="header">
             <button 
@@ -38,6 +41,12 @@ function Header({ workerApi }) {
                 class="header__button"
             >
                 Classic Mode
+            </button>
+            <button
+                class="header__button"
+                onClick={changeTheme}
+            >
+                {theme === 'light' ? "Dark" : "Light"} Mode
             </button>
         </header>
     )

@@ -98,3 +98,8 @@ export {
 export {
   executeOpcode
 } from './opcode';
+
+export {
+  getCpuRegisters,
+  getDisassembler
+} from './debug';

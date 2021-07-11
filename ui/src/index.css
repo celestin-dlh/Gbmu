@@ -18,14 +18,17 @@ body {
 :root {
     --background-color: #FFFFFF;
     --text-color: #000000;
+    --border-color: #000000;
 }
 
 html[data-theme='light'] {
     --background-color: #FFFFFF;
     --text-color: #000000;
+    --border-color: #000000;
 }
 
 html[data-theme='dark'] {
     --background-color: #000000;
     --text-color: #FFFFFF;
+    --border-color: #FFFFFF;
 }

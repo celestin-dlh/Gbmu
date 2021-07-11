@@ -19,40 +19,6 @@ const gameboyWorker = {
         await cb("Rom loaded succesfully");
     },
 
-    async getMemory(memoryAddress = 0) {
-        let memoryTable;
-        if (memoryAddress >= 0xFF70) 
-            memoryTable = this.exports.getMemory(0xFF70);
-        else if (memoryAddress <= 0)
-            memoryTable = this.exports.getMemory(0);
-        else
-            memoryTable = this.exports.getMemory(memoryAddress);
-        return memoryTable;
-    },
-
-    getDisassembler() {
-        return this.exports.getDisassembler();
-    },
-    
-    getRegisters() {
-        return this.exports.getRegisters();
-    },
-
-    getOtherRegister() {
-        return this.exports.getOtherRegister();
-    },
-
-    getVideoRegisters() {
-        return this.exports.getVideoRegisters();
-    },
-
-    getBackground() {
-        const backgroundBuffer = this.exports.getBackground();
-        const imageData = this.createImageData(backgroundBuffer);
-        console.log(imageData);
-        return imageData;
-    },
-
     createImageData(videoMemory) {
         const buffer = new Uint8ClampedArray(65536 * 4);
         let index = 0;
@@ -76,49 +42,29 @@ const gameboyWorker = {
 
     async step(stepNumber, cb) {
         this.exports.step(stepNumber);
-        const debug = this.getDebug();
-
-        cb({
-            debug,
-        });
+        const debugValues = await this.getDebugValue();
+        await cb(debugValues);
     },
-
-    async runFrame() {
-        this.exports.runFrame();
-    },
-
-    async runOneSecond() {
-        this.exports.runOneSecond();
-    },
-
-    // async reset() {
-    //     this.exports.reset();
-    //     if (this.romBuffer && this.romBuffer.length > 0)
-    //         this.exports.loadRom(this.romBuffer);
-    // },
 
     async reset(cb) {
-        await cb({
-            debug: {
-                disassembler: 'lot of thhings'
-            },
-            canvas: [1,2,1,31,4,1]
-        });
+        this.exports.reset();
+        const debugValues = await this.getDebugValue();
+        await cb(debugValues);
     },
 
-    async getDebug(memoryAddress, cb) {
-        const memory = await this.getMemory(memoryAddress);
-        const disassembler = this.getDisassembler();
-        const registers = this.getRegisters();
-        const otherRegisters = this.getOtherRegister();
-        const videoRegisters = this.getVideoRegisters();
+    async getMemory(memoryAddress = 0, cb) {
+        if (cb)
+            await cb(this.exports.getMemory(memoryAddress));
+        else
+            return this.exports.getMemory(memoryAddress);
+    },
 
-        await cb({
-            memory,
-            disassembler,
-            registers,
-            otherRegisters,
-            videoRegisters
+    async getDebugValue(memoryAddress = 0) {
+        const memory = await this.getMemory(memoryAddress);
+        return ({
+            memory: memory,
+            disassembler: this.exports.getDisassembler(),
+            cpuRegisters: this.exports.getCpuRegisters()
         })
     }
 };

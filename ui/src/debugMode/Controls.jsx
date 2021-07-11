@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact';
-import { useRef, useReducer } from 'preact/hooks';
+import { useRef, useReducer, useEffect } from 'preact/hooks';
 import * as Comlink from 'comlink';
 import './controls.css';
 
@@ -22,20 +22,21 @@ function Controls({ workerApi, setState }) {
         }
     }
 
+    useEffect(() => {
+        reset();
+    }, []);
+
     const handleStep = (ev) => {
         const stepNumber = parseInt(ev.target.value);
         dispatch({ type: 'set', newStepNumber: isNaN(stepNumber) ? 1 : stepNumber });
     }
 
     const handleWorkerReturn = (value) => {
-        const { debug, error } = value;
-        if (error)
-            return console.error(error);
-        setState(debug);
+        setState(value);
     }
 
     const reset = async () => await workerApi.reset(Comlink.proxy(handleWorkerReturn));
-    const step = async (stepNumber) => await workerApi.step(Comlink.proxy(handleWorkerReturn));
+    const step = async (stepNumber) => await workerApi.step(stepNumber, Comlink.proxy(handleWorkerReturn));
     const runFrame = async () => await workerApi.runFrame(Comlink.proxy(handleWorkerReturn));
     const runOneSecond = async () => await workerApi.runOneSecond(Comlink.proxy(handleWorkerReturn));
 

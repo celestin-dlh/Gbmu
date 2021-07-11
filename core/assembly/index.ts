@@ -11,8 +11,8 @@ function fetchOpcode(): u8 {
   return readByteAtPc();
 }
 
-export function step(stepTimes: i32): void {
-  for (let index = 0; index < stepTimes; index++) {
+export function step(stepNumber: i32): void {
+  for (let index = 0; index < stepNumber; index++) {
     if (Cpu.isHalted) {
       syncCycle(4);
     } else {
@@ -50,18 +50,6 @@ export function runOneSecond(): void {
 
 
 
-
-
-
-export function reset(): void {
-  Cpu.reset();
-  Interrupt.reset();
-  Memory.reset();
-  Timer.reset();
-  Ppu.reset();
-  trace("Reset");
-}
-
 function loadDmgBootRom(): void {
   for(let index = 0; index < dmgBootRom.length; index++) {
     Memory.rom[index] = dmgBootRom[index];
@@ -81,3 +69,20 @@ export function loadRom(buffer: Uint8Array): void {
   loadDmgBootRom();
   trace("Rom loaded");
 }
+
+
+
+
+
+export function reset(): void {
+  Cpu.reset();
+  Interrupt.reset();
+  Memory.reset();
+  Timer.reset();
+  Ppu.reset();
+  trace("Reset");
+}
+
+// debug
+export { getDisassembler, getCpuRegisters } from './cpu';
+export { getMemory } from './memory';

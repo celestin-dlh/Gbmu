@@ -74,3 +74,4 @@ export function setDefaultValue(): void {
 }
 
 export { readByte, readByteSync, readByteAtPc, readWordAtPc, writeByte, writeByteSync } from './readWriteOperation';
+export { getMemory } from './debug';

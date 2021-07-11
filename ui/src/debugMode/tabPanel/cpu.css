@@ -1,0 +1,69 @@
+.cpu__container {
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.disassembler {
+    width: 65%;
+    min-width: 450px;
+}
+
+.disassembler__header {
+    text-align: center;
+}
+
+.disassembler__table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border-color);
+}
+
+.disassembler__table tr, .disassembler__table td, .disassembler__table th {
+    border: 1px solid var(--border-color);
+}
+
+.disassembler__table th {
+    padding: 10px 0px;
+    font-size: 18px;
+}
+
+.disassembler__table td {
+    padding: 4px 4px;
+}
+
+.disassembler__address {
+    width: 20%;
+}
+
+
+
+.cpuRegisters {
+    min-width: 200px;
+    width: 30%;
+}
+
+.cpuRegisters__header {
+    text-align: center;
+}
+
+.cpuRegisters__table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.cpuRegisters__table tr, .cpuRegisters__table td {
+    border: 1px solid var(--border-color);
+}
+
+.cpuRegisters__table th {
+    padding: 10px 0px;
+    font-size: 18px;
+}
+
+.cpuRegisters__table td {
+    padding: 4px 4px;
+}
