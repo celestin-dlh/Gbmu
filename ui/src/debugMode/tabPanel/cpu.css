@@ -1,35 +1,21 @@
-.cpu__container {
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
 .disassembler {
-    width: 65%;
-    min-width: 450px;
-}
-
-.disassembler__header {
-    text-align: center;
-}
-
-.disassembler__table {
-    width: 100%;
+    width: 450px;
+    height: 300px;
     border-collapse: collapse;
     border: 1px solid var(--border-color);
+    margin-right: 20px;
 }
 
-.disassembler__table tr, .disassembler__table td, .disassembler__table th {
+.disassembler tr, .disassembler td, .disassembler th {
     border: 1px solid var(--border-color);
 }
 
-.disassembler__table th {
+.disassembler th {
     padding: 10px 0px;
     font-size: 18px;
 }
 
-.disassembler__table td {
+.disassembler td {
     padding: 4px 4px;
 }
 
@@ -37,33 +23,23 @@
     width: 20%;
 }
 
-
-
 .cpuRegisters {
-    min-width: 200px;
-    width: 30%;
-}
-
-.cpuRegisters__header {
-    text-align: center;
-}
-
-.cpuRegisters__table {
-    width: 100%;
+    width: 200px;
+    height: 300px;
     border-collapse: collapse;
     border: 1px solid var(--border-color);
     text-align: center;
 }
 
-.cpuRegisters__table tr, .cpuRegisters__table td {
+.cpuRegisters tr, .cpuRegisters td {
     border: 1px solid var(--border-color);
 }
 
-.cpuRegisters__table th {
+.cpuRegisters th {
     padding: 10px 0px;
     font-size: 18px;
 }
 
-.cpuRegisters__table td {
+.cpuRegisters td {
     padding: 4px 4px;
 }

@@ -9,8 +9,7 @@
 .main__debug {
     display: flex;
     flex-direction: column;
-    flex-grow: 3;
-    min-width: 600px;
+    flex-grow: 1;
     padding: 10px;
 }
 
@@ -27,4 +26,6 @@
 
 .react-tabs__tab-panel--selected {
     flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
 }

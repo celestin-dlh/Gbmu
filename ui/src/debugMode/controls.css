@@ -1,7 +1,6 @@
 .controls__container {
-    flex-grow: 1;
-    max-width: 300px;
-    min-width: 150px;
+    width: 200px;
+    min-width: 200px;
     padding: 10px;
     display: flex;
     flex-direction: column;

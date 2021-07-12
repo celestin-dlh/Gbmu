@@ -1,42 +1,33 @@
-.graphics__container {
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-
-}
-
-.graphics__canvas {
-    border: 1px solid var(--border-color);
-    width: 100%;
-
-}
-
-.graphics__canvas--tile-data {
-    height: 192px;
-}
-
-
 .videoRegisters {
-    min-width: 200px;
     width: 30%;
-}
-
-.videoRegisters__table {
-    width: 100%;
+    min-width: 200px;
+    max-width: 250px;
     border-collapse: collapse;
     border: 1px solid var(--border-color);
     text-align: center;
 }
 
-.videoRegisters__table tr, .videoRegisters__table td {
+.videoRegisters tr, .videoRegisters td {
     border: 1px solid var(--border-color);
 }
 
-.videoRegisters__table th {
+.videoRegisters th {
     padding: 10px 0px;
     font-size: 18px;
 }
 
-.videoRegisters__table td {
+.videoRegisters td {
     padding: 4px 4px;
+}
+
+.graphics__sub-table {
+    flex-grow: 1;
+    margin-top: -1px;
+    margin-left: 10px;
+}
+
+.graphics__canvas {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid var(--border-color);
 }
