@@ -1,6 +1,10 @@
-export const ROM_SIZE: u16 = 0x8000; // 32768
-export const ROM_START: u16 = 0x0000;
-export const ROM_END: u16 = 0x7FFF;
+export const ROM_SIZE: u16 = 0x4000; // 16384
+
+export const ROM_0_START: u16 = 0x0000;
+export const ROM_0_END: u16 = 0x3FFF;
+
+export const ROM_1_START: u16 = 0x4000;
+export const ROM_1_END: u16 = 0x7FFF;
 
 export const VIDEO_RAM_SIZE: u16 = 0x2000; // 8192
 export const VIDEO_RAM_START: u16 = 0x8000;

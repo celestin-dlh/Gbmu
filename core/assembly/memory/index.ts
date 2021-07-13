@@ -13,7 +13,8 @@ import {
 import { writeByte } from './readWriteOperation';
 
 export class Memory {
-    static rom: Uint8Array = new Uint8Array(ROM_SIZE).fill(0);
+    static rom0: Uint8Array = new Uint8Array(ROM_SIZE).fill(0);
+    static rom1: Uint8Array = new Uint8Array(ROM_SIZE).fill(0);
     static videoRam: Uint8Array = new Uint8Array(VIDEO_RAM_SIZE).fill(0);
     static externalRam: Uint8Array = new Uint8Array(EXTERNAL_RAM_SIZE).fill(0);
     static workRam: Uint8Array = new Uint8Array(WORK_RAM_SIZE).fill(0);
@@ -24,8 +25,14 @@ export class Memory {
     static highRam: Uint8Array = new Uint8Array(HIGH_RAM_SIZE).fill(0);
     static IE: Uint8Array = new Uint8Array(IE_SIZE).fill(0);
 
+    static romBuffer: Uint8Array;
+
+    // MBC
+    static romBankNumber: u8 = 1;
+
     static reset(): void {
-        Memory.rom = new Uint8Array(ROM_SIZE).fill(0);
+        Memory.rom0 = new Uint8Array(ROM_SIZE).fill(0);
+        Memory.rom1 = new Uint8Array(ROM_SIZE).fill(0);
         Memory.videoRam = new Uint8Array(VIDEO_RAM_SIZE).fill(0);
         Memory.externalRam = new Uint8Array(EXTERNAL_RAM_SIZE).fill(0);
         Memory.workRam = new Uint8Array(WORK_RAM_SIZE).fill(0);
@@ -35,6 +42,8 @@ export class Memory {
         Memory.ioRegisters = new Uint8Array(IO_REGISTERS_SIZE).fill(0);
         Memory.highRam = new Uint8Array(HIGH_RAM_SIZE).fill(0);
         Memory.IE = new Uint8Array(IE_SIZE).fill(0);
+
+        Memory.romBankNumber = 1;
     }
 }
 
@@ -73,5 +82,5 @@ export function setDefaultValue(): void {
     writeByte(0xFFFF, 0x00);
 }
 
-export { readByte, readByteSync, readByteAtPc, readWordAtPc, writeByte, writeByteSync } from './readWriteOperation';
+export { readByte, readByteSync, readByteAtPc, readWordAtPc, writeByte, writeByteSync, unSafeWriteByte } from './readWriteOperation';
 export { getMemory } from './debug';

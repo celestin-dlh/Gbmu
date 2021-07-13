@@ -3,7 +3,7 @@ import { dmgBootRom } from './constants';
 import { syncCycle } from './syncCycle';
 import { Cpu } from './cpu';
 import { Interrupt, interruptHandling } from './interrupts';
-import { Memory, readByteAtPc } from './memory';
+import { Memory, readByteAtPc, unSafeWriteByte } from './memory';
 import { Ppu } from './ppu';
 import { Timer } from './timers';
 
@@ -52,7 +52,7 @@ export function runOneSecond(): void {
 
 function loadDmgBootRom(): void {
   for(let index = 0; index < dmgBootRom.length; index++) {
-    Memory.rom[index] = dmgBootRom[index];
+    unSafeWriteByte(<u16>index, dmgBootRom[index]);
   }
 }
 
@@ -67,12 +67,14 @@ export function reset(): void {
 
 export function loadRom(buffer: Uint8Array): void {
   reset();
+
+  Memory.romBuffer = buffer;
   for (let index = 0; index < buffer.length; index++) {
     if (index >= 0x8000) {
       trace("Rom array has a limit of 0x8000 byte");
       break;
     }
-    Memory.rom[index] = buffer[index];
+    unSafeWriteByte(<u16>index, buffer[index]);
   }
   // const subArray = buffer.subarray(0, 0x100);
   // loadDmgBootRom();

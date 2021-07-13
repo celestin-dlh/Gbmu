@@ -147,7 +147,7 @@ function handle1xOpcode(opcode: u8): i32 {
     switch (opcode) {
         case 0x0: {
             // "STOP"
-            abort("STOP CRASH IN GAMEBOY CLASSIC");
+            // abort("STOP CRASH IN GAMEBOY CLASSIC");
             // WEIRD_INSTRUCTION ONLY USE IN GBC
             Cpu.pc += 1;
             return 4;
