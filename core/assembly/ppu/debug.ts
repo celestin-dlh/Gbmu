@@ -26,14 +26,14 @@ function getIndex(x: u16, y: u16): u16 {
     return (y * 256) + x;
 }
 
-function getTileData(tileStartIndex: u16, background: u8[], xStart: u16, yStart: u16): void {
+function getTileData(tileStartIndex: u16, array: u8[], xStart: u16, yStart: u16): void {
     for (let y: u8 = 0; y < 8; y++) {
         for (let x: u8 = 0; x < 8; x++) {
             const lowByte = readByte(tileStartIndex + <u16>(y * 2));
             const highByte = readByte(tileStartIndex + <u16>((y * 2) + 1));
             const highBit = (highByte << x) & 0x80;
             const lowBit = (lowByte << x) & 0x80;
-            background[getIndex(xStart + x, yStart + y)] = (highBit << 1 | lowBit);
+            array[getIndex(xStart + x, yStart + y)] = (highBit << 1 | lowBit);
         }
     }
 }
@@ -64,4 +64,18 @@ export function getBackground(): u8[] {
 
 
     return background;
+}
+
+export function getWholeTileData(): u8[] {
+    const tileData = new Array<u8>(256 * 192).fill(0);
+    
+    for (let index: u16 = 0; index < 384; index++) {
+        const tileStartIndex: u16 = index * 16 + <u16>0x8000;
+    
+        const xStart = (index % 16) * 8;
+        const yStart = (index / 24) * 8;
+    
+        getTileData(tileStartIndex, tileData, xStart, yStart);
+    }
+    return tileData;
 }

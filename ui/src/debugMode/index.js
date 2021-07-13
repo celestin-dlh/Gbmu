@@ -19,6 +19,7 @@ function DebugMode({ workerApi }) {
         disassembler: [],
         cpuRegisters: [],
         background: [],
+        tileData: [],
         videoRegisters: [],
         timersRegisters: [],
         interruptsRegisters: [],
@@ -106,6 +107,7 @@ function DebugMode({ workerApi }) {
                         <Graphics 
                             videoRegisters={state.videoRegisters}
                             background={state.background}
+                            tileData={state.tileData}
                         />
                     </TabPanel>
                     <TabPanel>

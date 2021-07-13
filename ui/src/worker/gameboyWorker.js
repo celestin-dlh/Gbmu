@@ -55,6 +55,7 @@ const gameboyWorker = {
         await cb({
             background: this.exports.getBackground(),
             videoRegisters: this.exports.getVideoRegisters(),
+            tileData: this.exports.getWholeTileData(),
         })
     },
 

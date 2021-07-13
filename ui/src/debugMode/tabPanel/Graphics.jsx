@@ -99,22 +99,31 @@ function VideoRegisters({ registers }) {
     )
 }
 
-export default function Graphics({ videoRegisters, background }) {
+export default function Graphics({ videoRegisters, background, tileData }) {
     const backgroundRef = useRef();
     const backgroundContextRef = useRef();
+    const tileDataRef = useRef();
+    const tileDataContextRef = useRef();
     
     useEffect(() => {
         if (backgroundRef && backgroundRef.current) {
             backgroundContextRef.current = backgroundRef.current.getContext('2d');
         }
+        if (tileDataRef && tileDataRef.current) {
+            tileDataContextRef.current = tileDataRef.current.getContext('2d');
+        }
     }, []);
 
     useEffect(() => {
-        if (backgroundContextRef && backgroundContextRef.current) {
+        if (backgroundContextRef && backgroundContextRef.current && background) {
             const imageData = createImageData(background, 256, 256);
             backgroundContextRef.current.putImageData(imageData, 0, 0);
         }
-    }, [background]);
+        if (tileDataContextRef && tileDataContextRef.current && tileData) {
+            const imageData = createImageData(tileData, 256, 192);
+            tileDataContextRef.current.putImageData(imageData, 0, 0);
+        }
+    }, [background, tileData]);
 
     return (
         <Fragment>
@@ -136,6 +145,7 @@ export default function Graphics({ videoRegisters, background }) {
                 <TabPanel>
                     <canvas 
                         class="graphics__canvas"
+                        ref={tileDataRef}
                         width={256}
                         height={192}
                     />

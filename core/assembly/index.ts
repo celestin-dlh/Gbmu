@@ -74,8 +74,8 @@ export function loadRom(buffer: Uint8Array): void {
     }
     Memory.rom[index] = buffer[index];
   }
-  const subArray = buffer.subarray(0, 0x100);
-  loadDmgBootRom();
+  // const subArray = buffer.subarray(0, 0x100);
+  // loadDmgBootRom();
   trace("Rom loaded");
 }
 
@@ -87,6 +87,6 @@ export function loadRom(buffer: Uint8Array): void {
 // debug
 export { getDisassembler, getCpuRegisters } from './cpu';
 export { getMemory } from './memory';
-export { getBackground, getVideoRegisters } from './ppu';
+export { getBackground, getVideoRegisters, getWholeTileData } from './ppu';
 export { getTimersRegisters } from './timers';
 export { getInterruptsRegisters } from './interrupts';

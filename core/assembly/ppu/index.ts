@@ -65,4 +65,4 @@ export class Ppu {
 // }
 
 
-export { getBackground, getVideoRegisters } from './debug';
+export { getBackground, getVideoRegisters, getWholeTileData } from './debug';

@@ -61,13 +61,6 @@ export function writeByte(address: u16, byte: u8): void {
             resetDiv();
             return;
         } 
-
-        // blarggs test - serial output
-        if (address === 0xFF02 && byte === 0x81) {
-            const char = String.fromCharCode(Memory.ioRegisters[0xFF01 - IO_REGISTERS_START]);
-            trace(char);
-            Memory.ioRegisters[0xFF02 - IO_REGISTERS_START] = 0;
-        }
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
         Memory.highRam[address - HIGH_RAM_START] = byte;
