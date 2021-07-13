@@ -46,11 +46,11 @@ function InterruptsRegisters({ registers }) {
             </tr>
             <tr>
                 <td>IE</td>
-                <td>{formatHexNumber(registers[1], 2)}</td>
+                <td>{registers[1].toString(2).padStart(5, '0')}</td>
             </tr>
             <tr>
                 <td>IF</td>
-                <td>{formatHexNumber(registers[2], 2)}</td>
+                <td>{registers[2].toString(2).padStart(5, '0')}</td>
             </tr>
         </table>
     )
