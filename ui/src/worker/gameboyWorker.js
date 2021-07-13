@@ -1,29 +1,6 @@
 import * as Comlink from 'comlink';
 import loadWasmModule from '../../../core/index';
 
-
-// createImageData(videoMemory) {
-//     const buffer = new Uint8ClampedArray(65536 * 4);
-//     let index = 0;
-//     videoMemory.forEach((elem) => {
-//       if (elem === 0) {
-//         buffer[index] = 0;
-//         buffer[index + 1] = 0;
-//         buffer[index + 2] = 0;
-//       } else {
-//         buffer[index] = 255;
-//         buffer[index + 1] = 255;
-//         buffer[index + 2] = 255;
-//       }
-//       buffer[index + 3] = 255;
-//       index += 4;
-//     });
-   
-//     const imageData = new ImageData(buffer, 256, 256);
-//     return imageData;
-// },
-
-
 const gameboyWorker = {
     exports: null,
     romBuffer: null,
@@ -41,24 +18,44 @@ const gameboyWorker = {
         this.exports.loadRom(romBuffer);
     },
 
-    async step(stepNumber, cb) {
+    async step(stepNumber) {
         this.exports.step(stepNumber);
-        const debugValues = await this.getDebugValue();
-        await cb(debugValues);
     },
 
-    async reset(cb) {
+    async runFrame() {
+        this.exports.runFrame();
+    },
+
+    async runOneSecond() {
+        this.exports.runOneSecond();
+    },
+
+    async reset() {
         if (this.romBuffer && this.romBuffer.length > 0)
             this.exports.loadRom(this.romBuffer);
-        const debugValues = await this.getDebugValue();
-        await cb(debugValues);
+        else 
+            this.exports.reset();
     },
 
     async getMemory(memoryAddress = 0, cb) {
         if (cb)
-            await cb(this.exports.getMemory(memoryAddress));
+            await cb({ memory: this.exports.getMemory(memoryAddress) });
         else
             return this.exports.getMemory(memoryAddress);
+    },
+
+    async getCpuDebug(cb) {
+        await cb({
+            disassembler: this.exports.getDisassembler(),
+            cpuRegisters: this.exports.getCpuRegisters(),
+        })
+    },
+
+    async getVideoDebug(cb) {
+        await cb({
+            background: this.exports.getBackground(),
+            videoRegisters: this.exports.getVideoRegisters(),
+        })
     },
 
     async getDebugValue(memoryAddress = 0, cb) {

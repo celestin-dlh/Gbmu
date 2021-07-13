@@ -57,7 +57,7 @@ function loadDmgBootRom(): void {
 }
 
 
-function reset(): void {
+export function reset(): void {
   Cpu.reset();
   Interrupt.reset();
   Memory.reset();

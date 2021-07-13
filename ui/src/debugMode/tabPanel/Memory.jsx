@@ -1,16 +1,13 @@
 import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
 import { formatHexNumber } from '../../utils/format';
-import * as Comlink from 'comlink';
 import './memory.css';
 
 const regexp = /[0-9A-Fa-f]{1,4}/g;
 
-export default function Memory({ workerApi, setState, memory }) {
+export default function Memory({ memory, memoryAddress, setMemoryAddress }) {
     if (!memory || memory.length <= 0)
         return;
 
-    const [memoryAddress, setMemoryAddress] = useState(0);
     const handleSubmit = (ev) => {
         ev.preventDefault();
         const { value } = ev.target[0];
@@ -28,17 +25,6 @@ export default function Memory({ workerApi, setState, memory }) {
         }
         else setMemoryAddress(0);
     }
-
-    useEffect(() => {
-        const setMemory = (memory) => {
-            setState(state => ({ ...state, memory }))
-        }
-
-        const getMemory = async () => {
-            workerApi.getMemory(memoryAddress, Comlink.proxy(setMemory));
-        }
-        getMemory();
-    }, [memoryAddress])
 
     return (
         <div class="memory">

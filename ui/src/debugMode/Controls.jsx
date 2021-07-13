@@ -1,11 +1,11 @@
-import { h, Fragment } from 'preact';
-import { useState, useReducer, useEffect } from 'preact/hooks';
-import * as Comlink from 'comlink';
+import { h } from 'preact';
+import { useState, useReducer } from 'preact/hooks';
 import './controls.css';
 
-function Controls({ workerApi, setState }) {
+function Controls({ reset, step, runFrame, runOneSecond }) {
     const [stepNumber, dispatch] = useReducer(reducer, 10);
     const [stepRunned, setStepRunned] = useState(0);
+
     function reducer(state, action) {
         switch (action.type) {
             case 'increment': {
@@ -22,29 +22,20 @@ function Controls({ workerApi, setState }) {
         }
     }
 
-    useEffect(() => {
-        reset();
-    }, []);
-
-    const handleStepInput = (ev) => {
+    const handleChange = (ev) => {
         const stepNumber = parseInt(ev.target.value);
         dispatch({ type: 'set', newStepNumber: isNaN(stepNumber) ? 1 : stepNumber });
     }
 
-    const handleWorkerReturn = (value) => {
-        setState(value);
-    }
-
-    const reset = async () => {
-        await workerApi.reset(Comlink.proxy(handleWorkerReturn));
-        setStepRunned(0);
-    }
-    const handleStep = async (stepNumber) => {
-        await workerApi.step(stepNumber, Comlink.proxy(handleWorkerReturn));
+    const handleStep = (stepNumber) => {
+        step(stepNumber);
         setStepRunned(current => current + stepNumber);
     }
-    const runFrame = async () => await workerApi.runFrame(Comlink.proxy(handleWorkerReturn));
-    const runOneSecond = async () => await workerApi.runOneSecond(Comlink.proxy(handleWorkerReturn));
+
+    const handleReset = () => {
+        reset();
+        setStepRunned(0);
+    }
 
     return (
         <div class="controls__container">
@@ -54,13 +45,13 @@ function Controls({ workerApi, setState }) {
                 height={144}
             />
             <h3 className="controls__step-number">Step: {stepRunned}</h3>
-            <button onClick={() => reset()} class="controls__button">Reset</button>
+            <button onClick={() => handleReset()} class="controls__button">Reset</button>
             <button onClick={() => handleStep(1)} class="controls__button">Step</button>
             <button onClick={() => handleStep(stepNumber)} class="controls__button">Step {stepNumber}</button>
             <div class="step">
-                <input class="step__input" type="text" value={stepNumber} onChange={handleStepInput} />
-                <button class="controls__button step__button" onClick={() => dispatch({ type: 'decrement' })}>-</button>
-                <button class="controls__button step__button" onClick={() => dispatch({ type: 'increment' })}>+</button>
+                <input type="text" value={stepNumber} onChange={handleChange} class="step__input" />
+                <button onClick={() => dispatch({ type: 'decrement' })} class="controls__button step__button">-</button>
+                <button onClick={() => dispatch({ type: 'increment' })} class="controls__button step__button">+</button>
             </div>
             <button onClick={() => runFrame()} class="controls__button">Run a Frame</button>
             <button onClick={() => runOneSecond()} class="controls__button">Run one second</button>
