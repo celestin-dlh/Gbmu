@@ -9,7 +9,7 @@ import Graphics from './tabPanel/Graphics';
 import * as Comlink from 'comlink';
 import 'react-tabs/style/react-tabs.css';
 import './index.css';
-
+import TimersInterrupts from './tabPanel/TimersInterrupts';
 
 function DebugMode({ workerApi }) {
     const [tabIndex, setTabIndex] = useState(0);
@@ -19,7 +19,9 @@ function DebugMode({ workerApi }) {
         disassembler: [],
         cpuRegisters: [],
         background: [],
-        videoRegisters: []
+        videoRegisters: [],
+        timersRegisters: [],
+        interruptsRegisters: [],
     });
 
     const handleWorkerReturn = (state) => {
@@ -33,6 +35,8 @@ function DebugMode({ workerApi }) {
             await workerApi.getMemory(memoryAddress, Comlink.proxy(handleWorkerReturn));
         else if (tabIndex === 2)
             await workerApi.getVideoDebug(Comlink.proxy(handleWorkerReturn));
+        else if (tabIndex === 3)
+            await workerApi.getTimersInterruptsDebug(Comlink.proxy(handleWorkerReturn));
     }
 
     useEffect(() => {
@@ -102,6 +106,12 @@ function DebugMode({ workerApi }) {
                         <Graphics 
                             videoRegisters={state.videoRegisters}
                             background={state.background}
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <TimersInterrupts 
+                            timersRegisters={state.timersRegisters}
+                            interruptsRegisters={state.interruptsRegisters}
                         />
                     </TabPanel>
                 </Tabs>

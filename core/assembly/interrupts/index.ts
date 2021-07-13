@@ -82,3 +82,5 @@ export function interruptHandling(): void {
         Cpu.isHalted = false;
 }
   
+
+export { getInterruptsRegisters } from './debug';

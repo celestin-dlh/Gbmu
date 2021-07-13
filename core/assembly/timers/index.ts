@@ -74,3 +74,5 @@ export function syncTimers(cycle: u8): void {
     }
     Timer.lastAnd = <bool>currentAnd;
 }
+
+export { getTimersRegisters } from './debug';

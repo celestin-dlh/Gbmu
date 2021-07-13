@@ -58,6 +58,13 @@ const gameboyWorker = {
         })
     },
 
+    async getTimersInterruptsDebug(cb) {
+        await cb({
+            timersRegisters: this.exports.getTimersRegisters(),
+            interruptsRegisters: this.exports.getInterruptsRegisters(),
+        })
+    },
+
     async getDebugValue(memoryAddress = 0, cb) {
         const memory = await this.getMemory(memoryAddress);
         if (cb) 

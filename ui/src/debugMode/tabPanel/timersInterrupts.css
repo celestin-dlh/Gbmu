@@ -1,0 +1,26 @@
+.timersRegisters {
+    width: 200px;
+    border-collapse: collapse;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    align-self: flex-start;
+}
+
+.timersRegisters:first-child {
+    margin-right: 20px;
+}
+
+.timersRegisters tr, .timersRegisters td {
+    height: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.timersRegisters th {
+    height: 20px;
+    padding: 10px 0px;
+    font-size: 18px;
+}
+
+.timersRegisters td {
+    padding: 4px 4px;
+}

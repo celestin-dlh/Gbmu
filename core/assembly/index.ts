@@ -88,3 +88,5 @@ export function loadRom(buffer: Uint8Array): void {
 export { getDisassembler, getCpuRegisters } from './cpu';
 export { getMemory } from './memory';
 export { getBackground, getVideoRegisters } from './ppu';
+export { getTimersRegisters } from './timers';
+export { getInterruptsRegisters } from './interrupts';
