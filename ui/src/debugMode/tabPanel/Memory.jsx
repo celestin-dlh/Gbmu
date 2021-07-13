@@ -2,6 +2,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { formatHexNumber } from '../../utils/format';
 import * as Comlink from 'comlink';
+import './memory.css';
 
 const regexp = /[0-9A-Fa-f]{1,4}/g;
 
@@ -40,20 +41,18 @@ export default function Memory({ workerApi, setState, memory }) {
     }, [memoryAddress])
 
     return (
-        <div class="memory__container">
-            <div class="memory__header">
-                <h3>Memory</h3>
-                <form 
-                    onSubmit={handleSubmit}
-                >
-                    <input 
-                        class="memory__input" 
-                        type='text'
-                        value={formatHexNumber(memoryAddress)} 
-                        maxLength={4}
-                    />
-                </form>
-            </div>
+        <div class="memory">
+            <form  
+                class="memory__form"
+                onSubmit={handleSubmit}
+            >
+                <input 
+                    class="memory__input" 
+                    type='text'
+                    value={formatHexNumber(memoryAddress)} 
+                    maxLength={4}
+                />
+            </form>
             <table class="memory__table">
                 <tr class="memory__table__header">
                     <th>Addr</th>

@@ -29,6 +29,12 @@
     background-color: white;
 }
 
+.controls__step-number {
+    margin: 0px;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
 .step {
     height: 25px;
     margin: 3px 0px;

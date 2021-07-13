@@ -100,7 +100,6 @@ function VideoRegisters({ registers }) {
 }
 
 export default function Graphics({ videoRegisters, background }) {
-
     const backgroundRef = useRef();
     const backgroundContextRef = useRef();
     
@@ -117,11 +116,10 @@ export default function Graphics({ videoRegisters, background }) {
         }
     }, [background]);
 
-
     return (
         <Fragment>
             <VideoRegisters registers={videoRegisters} />
-            <Tabs className="graphics__sub-table">
+            <Tabs forceRenderTabPanel className="graphics__sub-table">
                 <TabList>
                     <Tab>Background</Tab>
                     <Tab>Tile Data</Tab>
@@ -138,7 +136,6 @@ export default function Graphics({ videoRegisters, background }) {
                 <TabPanel>
                     <canvas 
                         class="graphics__canvas"
-                        // ref={backgroundRef}
                         width={256}
                         height={192}
                     />

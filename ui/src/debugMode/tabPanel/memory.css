@@ -1,6 +1,25 @@
-.memory__container {
+.memory {
     height: 100%;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-direction: column;
+}
+
+.memory__form {
+    margin-bottom: 10px;
+}
+
+.memory__input {
+    height: 25px;
+    border: 1px solid var(--border-color);
+}
+
+.memory__table {
+    text-align: center;
+    border-collapse: collapse;
+    border: 1px solid var(--border-color);
+}
+
+.memory__table tr th {
+    border: 1px solid var(--border-color);
+    padding: 6px 6px;
 }

@@ -22,6 +22,7 @@
 
 .react-tabs__tab-list {
     border-color: var(--border-color);
+    margin-top: -1px;
 }
 
 .react-tabs__tab-panel--selected {

@@ -2,9 +2,13 @@
     width: 30%;
     min-width: 200px;
     max-width: 250px;
+    height: 600px;
     border-collapse: collapse;
     border: 1px solid var(--border-color);
     text-align: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+
 }
 
 .videoRegisters tr, .videoRegisters td {
@@ -22,11 +26,10 @@
 
 .graphics__sub-table {
     flex-grow: 1;
-    margin-top: -1px;
-    margin-left: 10px;
 }
 
 .graphics__canvas {
+    image-rendering: pixelated;
     width: 100%;
     max-width: 600px;
     border: 1px solid var(--border-color);
