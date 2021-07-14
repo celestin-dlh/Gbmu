@@ -1,4 +1,4 @@
-import { readByte, writeByte } from '../memory';
+import { readByteSync, writeByteSync } from '../memory';
 import { Cpu, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getCarryFlag, setCarryFlag } from '.';
 import { getLowNibble, getBitValue, setBitValue, getHighNibble, combineNibbles } from '../helpers/bitOperations';
 
@@ -73,11 +73,11 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x6: {
             // "RLC (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const eighthBit = getBitValue(value, 7);
             let shiftedValue = value << 1;
             shiftedValue = setBitValue(shiftedValue, 0, eighthBit);
-            writeByte(hl, shiftedValue);
+            writeByteSync(hl, shiftedValue);
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setZeroFlag(shiftedValue > 0 ? 0 : 1);
@@ -164,11 +164,11 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xE: {
             // "RRC (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const firstBit = getBitValue(value, 0);
             let shiftedValue = value >> 1;
             shiftedValue = setBitValue(shiftedValue, 7, firstBit);
-            writeByte(hl, shiftedValue);
+            writeByteSync(hl, shiftedValue);
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setZeroFlag(shiftedValue > 0 ? 0 : 1);
@@ -256,11 +256,11 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x16: {
             // "RL (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const eighthBit = getBitValue(value, 7);
             let shiftedValue = value << 1;
             shiftedValue = setBitValue(shiftedValue, 0, getCarryFlag());
-            writeByte(hl, shiftedValue);
+            writeByteSync(hl, shiftedValue);
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setZeroFlag(shiftedValue > 0 ? 0 : 1);
@@ -347,11 +347,11 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x1E: {
             // "RR (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const firstBit = getBitValue(value, 0);
             let shiftedValue = value >> 1;
             shiftedValue = setBitValue(shiftedValue, 7, getCarryFlag());
-            writeByte(hl, shiftedValue);
+            writeByteSync(hl, shiftedValue);
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setZeroFlag(shiftedValue > 0 ? 0 : 1);
@@ -438,14 +438,14 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x26: {
             // "SLA (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const eighthBit = getBitValue(value, 7);
             const result = value << 1;
             setHalfCarryFlag(0);
             setNegativeFlag(0);
             setZeroFlag(result > 0 ? 0 : 1);
             setCarryFlag(eighthBit);
-            writeByte(hl, result);
+            writeByteSync(hl, result);
             return 16;
         }
         case 0x27: {
@@ -540,7 +540,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x2E: {
             // "SRA (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const eighthBit = getBitValue(value, 7);
             const firstBit = getBitValue(value, 0);
             let result = value >> 1;
@@ -549,7 +549,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             setNegativeFlag(0);
             setZeroFlag(result > 0 ? 0 : 1);
             setCarryFlag(firstBit);
-            writeByte(hl, result);
+            writeByteSync(hl, result);
             return 16;
         }
         case 0x2F: {
@@ -640,7 +640,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x36: {
             // "SWAP (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const lowNibble = getLowNibble(value);
             const highNibble = getHighNibble(value);
             const swapped = combineNibbles(lowNibble, highNibble);
@@ -648,7 +648,7 @@ export function handleCBOpcode(opcode: u8): i32 {
             setHalfCarryFlag(0);
             setCarryFlag(0);
             setZeroFlag(swapped > 0 ? 0 : 1);
-            writeByte(hl, swapped);
+            writeByteSync(hl, swapped);
             return 16;
         }
         case 0x37: {
@@ -732,14 +732,14 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x3E: {
             // "SRL (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const firstBit = getBitValue(value, 0);
             const result = value >> 1;
             setNegativeFlag(0);
             setHalfCarryFlag(0);
             setZeroFlag(result > 0 ? 0 : 1);
             setCarryFlag(firstBit);
-            writeByte(hl, result);
+            writeByteSync(hl, result);
             return 16;
         }
         case 0x3F: {
@@ -804,7 +804,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x46: {
             // "BIT 0, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 0);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -870,7 +870,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x4E: {
             // "BIT 1, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 1);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -936,7 +936,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x56: {
             // "BIT 2, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 2);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1002,7 +1002,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x5E: {
             // "BIT 3, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 3);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1068,7 +1068,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x66: {
             // "BIT 4, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 4);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1134,7 +1134,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x6E: {
             // "BIT 5, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 5);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1200,7 +1200,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x76: {
             // "BIT 6, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 6);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1266,7 +1266,7 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x7E: {
             // "BIT 7, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const bit = getBitValue(value, 7);
             setHalfCarryFlag(1);
             setNegativeFlag(0);
@@ -1314,8 +1314,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x86: {
             // "RES 0, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 0, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 0, 0));
             return 16;
         }
         case 0x87: {
@@ -1356,8 +1356,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x8E: {
             // "RES 1, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 1, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 1, 0));
             return 16;
         }
         case 0x8F: {
@@ -1398,8 +1398,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x96: {
             // "RES 2, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 2, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 2, 0));
             return 16;
         }
         case 0x97: {
@@ -1440,8 +1440,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0x9E: {
             // "RES 3, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 3, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 3, 0));
             return 16;
         }
         case 0x9F: {
@@ -1482,8 +1482,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xA6: {
             // "RES 4, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 4, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 4, 0));
             return 16;
         }
         case 0xA7: {
@@ -1524,8 +1524,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xAE: {
             // "RES 5, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 5, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 5, 0));
             return 16;
         }
         case 0xAF: {
@@ -1566,8 +1566,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xB6: {
             // "RES 6, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 6, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 6, 0));
             return 16;
         }
         case 0xB7: {
@@ -1608,8 +1608,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xBE: {
             // "RES 7, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 7, 0));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 7, 0));
             return 16;
         }
         case 0xBF: {
@@ -1650,8 +1650,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xC6: {
             // "SET 0, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 0, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 0, 1));
             return 16;
         }
         case 0xC7: {
@@ -1692,8 +1692,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xCE: {
             // "SET 1, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 1, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 1, 1));
             return 16;
         }
         case 0xCF: {
@@ -1734,8 +1734,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xD6: {
             // "SET 2, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 2, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 2, 1));
             return 16;
         }
         case 0xD7: {
@@ -1776,8 +1776,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xDE: {
             // "SET 3, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 3, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 3, 1));
             return 16;
         }
         case 0xDF: {
@@ -1818,8 +1818,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xE6: {
             // "SET 4, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 4, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 4, 1));
             return 16;
         }
         case 0xE7: {
@@ -1860,8 +1860,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xEE: {
             // "SET 5, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 5, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 5, 1));
             return 16;
         }
         case 0xEF: {
@@ -1902,8 +1902,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xF6: {
             // "SET 6, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 6, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 6, 1));
             return 16;
         }
         case 0xF7: {
@@ -1944,8 +1944,8 @@ export function handleCBOpcode(opcode: u8): i32 {
         case 0xFE: {
             // "SET 7, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
-            writeByte(hl, setBitValue(value, 7, 1));
+            const value = readByteSync(hl);
+            writeByteSync(hl, setBitValue(value, 7, 1));
             return 16;
         }
         case 0xFF: {

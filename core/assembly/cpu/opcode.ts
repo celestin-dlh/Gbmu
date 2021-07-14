@@ -1,5 +1,5 @@
 import { Cpu, setZeroFlag, setHalfCarryFlag, setNegativeFlag, getZeroFlag, getCarryFlag, setCarryFlag, getNegativeFlag, getHalfCarryFlag } from '.';
-import { readByteAtPc, readWordAtPc, readByte, writeByte } from '../memory';
+import { readByteAtPc, readWordAtPc, readByte, readByteSync, writeByteSync } from '../memory';
 import { getLowNibble, getHighByte, getLowByte, combineBytes, getBitValue, setBitValue } from '../helpers/bitOperations';
 import { handleCBOpcode } from './callbackOpcode';
 import { syncCycle } from '../syncCycle';
@@ -20,14 +20,14 @@ function handle0xOpcode(opcode: u8): i32 {
         case 0x2: {
             // "LD (BC), A"
             const bcAddress = Cpu.getBC();
-            writeByte(bcAddress, Cpu.A);
+            writeByteSync(bcAddress, Cpu.A);
             return 8;
         }
         case 0x3: {
             // "INC BC"
             const value = ((Cpu.getBC() + 1) & 0xFFFF); 
             Cpu.setBC(value);
-            syncCycle(4)
+            syncCycle(4);
             return 8;
         }
         case 0x4: {
@@ -69,8 +69,8 @@ function handle0xOpcode(opcode: u8): i32 {
         case 0x8: {
             // "LD (nn), SP"
             const nn = readWordAtPc();
-            writeByte(nn, getLowByte(Cpu.sp));
-            writeByte(nn + 1, getHighByte(Cpu.sp));
+            writeByteSync(nn, getLowByte(Cpu.sp));
+            writeByteSync(nn + 1, getHighByte(Cpu.sp));
             return 20;
         }
         case 0x9: {
@@ -89,7 +89,7 @@ function handle0xOpcode(opcode: u8): i32 {
         case 0xA: {
             // "LD A, (BC)"
             const bcAddress = Cpu.getBC();
-            Cpu.A = readByte(bcAddress);
+            Cpu.A = readByteSync(bcAddress);
             return 8;
         }
         case 0xB: {
@@ -161,7 +161,7 @@ function handle1xOpcode(opcode: u8): i32 {
         case 0x2: {
             // "LD (DE), A"
             const deAddress = Cpu.getDE();
-            writeByte(deAddress, Cpu.A);
+            writeByteSync(deAddress, Cpu.A);
             return 8;
         }
         case 0x3: {
@@ -230,7 +230,7 @@ function handle1xOpcode(opcode: u8): i32 {
         case 0xA: {
             // "LD A, (DE)"
             const deAddress = Cpu.getDE();
-            Cpu.A = readByte(deAddress);
+            Cpu.A = readByteSync(deAddress);
             return 8;
         }
         case 0xB: {
@@ -305,7 +305,7 @@ function handle2xOpcode(opcode: u8): i32 {
         case 0x2: {
             // "LD (HL+), A"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.A);
+            writeByteSync(hl, Cpu.A);
             const hlInc = ((hl + 1) & 0xFFFF);
             Cpu.setHL(hlInc);
             return 8;
@@ -391,7 +391,7 @@ function handle2xOpcode(opcode: u8): i32 {
         case 0xA: {
             // "LD A, (HL+)"
             const hl = Cpu.getHL();
-            Cpu.A = readByte(hl);
+            Cpu.A = readByteSync(hl);
             const hlInc = ((hl + 1) & 0xFFFF);
             Cpu.setHL(hlInc);
             return 8;
@@ -463,7 +463,7 @@ function handle3xOpcode(opcode: u8): i32 {
         case 0x2: {
             // "LD (HL-), A"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.A);
+            writeByteSync(hl, Cpu.A);
             const hlDec = ((hl - 1) & 0xFFFF);
             Cpu.setHL(hlDec);
             return 8;
@@ -478,32 +478,32 @@ function handle3xOpcode(opcode: u8): i32 {
         case 0x4: {
             // "INC (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const valueInc = ((value + 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(value) + 1) & 0x10) > 0 ? 1 : 0;
             setNegativeFlag(0);
             setZeroFlag(valueInc > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);
-            writeByte(hl, valueInc);
+            writeByteSync(hl, valueInc);
             return 12;
         }
         case 0x5: {
             // "DEC (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const valueDec = ((value - 1) & 0xFF);
             const halfCarry: bool = ((getLowNibble(value) - 1) & 0x10) > 0 ? 1 : 0;
             setNegativeFlag(1);
             setZeroFlag(valueDec > 0 ? 0 : 1);
             setHalfCarryFlag(halfCarry);
-            writeByte(hl, valueDec);
+            writeByteSync(hl, valueDec);
             return 12;
         }
         case 0x6: {
             // "LD (HL), n"
             const n = readByteAtPc();
             const hlAddress = Cpu.getHL();
-            writeByte(hlAddress, n);
+            writeByteSync(hlAddress, n);
             return 12;
         }
         case 0x7: {
@@ -539,7 +539,7 @@ function handle3xOpcode(opcode: u8): i32 {
         case 0xA: {
             // "LD A, (HL-)"
             const hl = Cpu.getHL();
-            Cpu.A = readByte(hl);
+            Cpu.A = readByteSync(hl);
             const hlDec = ((hl - 1) & 0xFFFF);
             Cpu.setHL(hlDec);
             return 8;
@@ -626,7 +626,7 @@ function handle4xOpcode(opcode: u8): i32 {
         case 0x6: {
             // "LD B, (HL)"
             const hl = Cpu.getHL();
-            Cpu.B = readByte(hl);
+            Cpu.B = readByteSync(hl);
             return 8;
         }
         case 0x7: {
@@ -667,7 +667,7 @@ function handle4xOpcode(opcode: u8): i32 {
         case 0xE: {
             // "LD C, (HL)"
             const hl = Cpu.getHL();
-            Cpu.C = readByte(hl);
+            Cpu.C = readByteSync(hl);
             return 8;
         }
         case 0xF: {
@@ -717,7 +717,7 @@ function handle5xOpcode(opcode: u8): i32 {
         case 0x6: {
             // "LD D, (HL)"
             const hl = Cpu.getHL();
-            Cpu.D = readByte(hl);
+            Cpu.D = readByteSync(hl);
             return 8;
         }
         case 0x7: {
@@ -758,7 +758,7 @@ function handle5xOpcode(opcode: u8): i32 {
         case 0xE: {
             // "LD E, (HL)"
             const hl = Cpu.getHL();
-            Cpu.E = readByte(hl);
+            Cpu.E = readByteSync(hl);
             return 8;
         }
         case 0xF: {
@@ -808,7 +808,7 @@ function handle6xOpcode(opcode: u8): i32 {
         case 0x6: {
             // "LD H, (HL)"
             const hl = Cpu.getHL();
-            Cpu.H = readByte(hl);
+            Cpu.H = readByteSync(hl);
             return 8;
         }
         case 0x7: {
@@ -849,7 +849,7 @@ function handle6xOpcode(opcode: u8): i32 {
         case 0xE: {
             // "LD L, (HL)"
             const hl = Cpu.getHL();
-            Cpu.L = readByte(hl);
+            Cpu.L = readByteSync(hl);
             return 8;
         }
         case 0xF: {
@@ -869,37 +869,37 @@ function handle7xOpcode(opcode: u8): i32 {
         case 0x0: {
             // "LD (HL), B"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.B);
+            writeByteSync(hl, Cpu.B);
             return 8;
         }
         case 0x1: {
             // "LD (HL), C"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.C);
+            writeByteSync(hl, Cpu.C);
             return 8;
         }
         case 0x2: {
             // "LD (HL), D"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.D);
+            writeByteSync(hl, Cpu.D);
             return 8;
         }
         case 0x3: {
             // "LD (HL), E"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.E);
+            writeByteSync(hl, Cpu.E);
             return 8;
         }
         case 0x4: {
             // "LD (HL), H"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.H);
+            writeByteSync(hl, Cpu.H);
             return 8;
         }
         case 0x5: {
             // "LD (HL), L"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.L);
+            writeByteSync(hl, Cpu.L);
             return 8;
         }
         case 0x6: {
@@ -910,7 +910,7 @@ function handle7xOpcode(opcode: u8): i32 {
         case 0x7: {
             // "LD (HL), A"
             const hl = Cpu.getHL();
-            writeByte(hl, Cpu.A);
+            writeByteSync(hl, Cpu.A);
             return 8;
         }
         case 0x8: {
@@ -946,7 +946,7 @@ function handle7xOpcode(opcode: u8): i32 {
         case 0xE: {
             // "LD A, (HL)"
             const hl = Cpu.getHL();
-            Cpu.A = readByte(hl);
+            Cpu.A = readByteSync(hl);
             return 8;
         }
         case 0xF: {
@@ -1032,7 +1032,7 @@ function handle8xOpcode(opcode: u8): i32 {
         case 0x6: {
             // "ADD A, (HL)"
             const hl = Cpu.getHL();
-            const hlValue = readByte(hl);
+            const hlValue = readByteSync(hl);
             const result: u16 = <u16>Cpu.A + <u16>hlValue;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(hlValue)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1129,7 +1129,7 @@ function handle8xOpcode(opcode: u8): i32 {
             // "ADC A, (HL)"
             const carry = <u8>getCarryFlag();
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const result = <u16>Cpu.A + <u16>value + <u16>carry;
             const halfCarry: bool = ((getLowNibble(Cpu.A) + getLowNibble(value) + carry) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((result > 0xFF) ? 1 : 0);
@@ -1229,7 +1229,7 @@ function handle9xOpcode(opcode: u8): i32 {
         case 0x6: {
             // "SUB A, (HL)"
             const hl = Cpu.getHL();
-            const hlValue = readByte(hl);
+            const hlValue = readByteSync(hl);
             const result = Cpu.A - hlValue;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(hlValue)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((hlValue > Cpu.A) ? 1 : 0);
@@ -1332,7 +1332,7 @@ function handle9xOpcode(opcode: u8): i32 {
             // "SBC A, (HL)"
             const carry = <u8>getCarryFlag();
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const result = Cpu.A - value - carry;
             const halfCarry = (Cpu.A ^ value ^ result) & 0x10;
             const overflowedResult = <u16>Cpu.A - <u16>value - <u16>getCarryFlag();
@@ -1428,7 +1428,7 @@ function handleAxOpcode(opcode: u8): i32 {
         case 0x6: {
             // "AND A, (HL)"
             const hl = Cpu.getHL();
-            const hlValue = readByte(hl);
+            const hlValue = readByteSync(hl);
             const result = Cpu.A & hlValue;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1510,7 +1510,7 @@ function handleAxOpcode(opcode: u8): i32 {
         case 0xE: {
             // "XOR A, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const result = Cpu.A ^ value;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1601,7 +1601,7 @@ function handleBxOpcode(opcode: u8): i32 {
         case 0x6: {
             // "OR A, (HL)"
             const hl = Cpu.getHL();
-            const hlValue = readByte(hl);
+            const hlValue = readByteSync(hl);
             const result = Cpu.A | hlValue;
             setCarryFlag(0);
             setNegativeFlag(0);
@@ -1683,7 +1683,7 @@ function handleBxOpcode(opcode: u8): i32 {
         case 0xE: {
             // "CP A, (HL)"
             const hl = Cpu.getHL();
-            const value = readByte(hl);
+            const value = readByteSync(hl);
             const result = Cpu.A - value;
             const halfCarry: bool = ((getLowNibble(Cpu.A) - getLowNibble(value)) & 0x10) > 0 ? 1 : 0;
             setCarryFlag((value > Cpu.A) ? 1 : 0);
@@ -1716,8 +1716,8 @@ function handleCxOpcode(opcode: u8): i32 {
             const zeroFlag = getZeroFlag();
             syncCycle(4)
             if (zeroFlag == 0) {
-                const lowByte = readByte(Cpu.sp);
-                const highByte = readByte(Cpu.sp + 1);
+                const lowByte = readByteSync(Cpu.sp);
+                const highByte = readByteSync(Cpu.sp + 1);
                 Cpu.sp += 2;
                 syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
@@ -1727,8 +1727,8 @@ function handleCxOpcode(opcode: u8): i32 {
         }
         case 0x1: {
             // "POP BC"
-            const lowByte = readByte(Cpu.sp);
-            const highByte = readByte(Cpu.sp + 1);
+            const lowByte = readByteSync(Cpu.sp);
+            const highByte = readByteSync(Cpu.sp + 1);
             Cpu.sp += 2;
             Cpu.setBC(combineBytes(highByte, lowByte));
             return 12;
@@ -1758,8 +1758,8 @@ function handleCxOpcode(opcode: u8): i32 {
             const nn = readWordAtPc();
             if (zeroFlag == 0) {
                 syncCycle(4)
-                writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-                writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
                 return 24;
@@ -1769,8 +1769,8 @@ function handleCxOpcode(opcode: u8): i32 {
         case 0x5: {
             // "PUSH BC"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, Cpu.B);
-            writeByte(Cpu.sp - 2, Cpu.C);
+            writeByteSync(Cpu.sp - 1, Cpu.B);
+            writeByteSync(Cpu.sp - 2, Cpu.C);
             Cpu.sp -= 2;
             return 16;
         }
@@ -1789,8 +1789,8 @@ function handleCxOpcode(opcode: u8): i32 {
         case 0x7: {
             // "RST 00h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x0;
             return 16;
@@ -1800,8 +1800,8 @@ function handleCxOpcode(opcode: u8): i32 {
             const zeroFlag = getZeroFlag();
             syncCycle(4)
             if (zeroFlag == 1) {
-                const lowByte = readByte(Cpu.sp);
-                const highByte = readByte(Cpu.sp + 1);
+                const lowByte = readByteSync(Cpu.sp);
+                const highByte = readByteSync(Cpu.sp + 1);
                 Cpu.sp += 2;
                 syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
@@ -1811,8 +1811,8 @@ function handleCxOpcode(opcode: u8): i32 {
         }
         case 0x9: {
             // "RET"
-            const lowByte = readByte(Cpu.sp);
-            const highByte = readByte(Cpu.sp + 1);
+            const lowByte = readByteSync(Cpu.sp);
+            const highByte = readByteSync(Cpu.sp + 1);
             Cpu.sp += 2;
             syncCycle(4)
             Cpu.pc = combineBytes(highByte, lowByte);
@@ -1840,8 +1840,8 @@ function handleCxOpcode(opcode: u8): i32 {
             const nn = readWordAtPc();
             if (zeroFlag == 1) {
                 syncCycle(4)
-                writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-                writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
                 return 24;
@@ -1852,8 +1852,8 @@ function handleCxOpcode(opcode: u8): i32 {
             // "CALL nn"
             const nn = readWordAtPc();
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = nn;
             return 24;
@@ -1874,8 +1874,8 @@ function handleCxOpcode(opcode: u8): i32 {
         case 0xF: {
             // "RST 08h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x08;
             return 16;
@@ -1894,8 +1894,8 @@ function handleDxOpcode(opcode: u8): i32 {
             const carryFlag = getCarryFlag();
             syncCycle(4)
             if (carryFlag == 0) {
-                const lowByte = readByte(Cpu.sp);
-                const highByte = readByte(Cpu.sp + 1);
+                const lowByte = readByteSync(Cpu.sp);
+                const highByte = readByteSync(Cpu.sp + 1);
                 Cpu.sp += 2;
                 syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
@@ -1905,8 +1905,8 @@ function handleDxOpcode(opcode: u8): i32 {
         }
         case 0x1: {
             // "POP DE"
-            const lowByte = readByte(Cpu.sp);
-            const highByte = readByte(Cpu.sp + 1);
+            const lowByte = readByteSync(Cpu.sp);
+            const highByte = readByteSync(Cpu.sp + 1);
             Cpu.sp += 2;
             Cpu.setDE(combineBytes(highByte, lowByte));
             return 12;
@@ -1928,8 +1928,8 @@ function handleDxOpcode(opcode: u8): i32 {
             const nn = readWordAtPc();
             if (carryFlag == 0) {
                 syncCycle(4)
-                writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-                writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
                 return 24;
@@ -1939,8 +1939,8 @@ function handleDxOpcode(opcode: u8): i32 {
         case 0x5: {
             // "PUSH DE"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, Cpu.D);
-            writeByte(Cpu.sp - 2, Cpu.E);
+            writeByteSync(Cpu.sp - 1, Cpu.D);
+            writeByteSync(Cpu.sp - 2, Cpu.E);
             Cpu.sp -= 2;
             return 16;
         }
@@ -1959,8 +1959,8 @@ function handleDxOpcode(opcode: u8): i32 {
         case 0x7: {
             // "RST 10h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x10;
             return 16;
@@ -1970,8 +1970,8 @@ function handleDxOpcode(opcode: u8): i32 {
             const carryFlag = getCarryFlag();
             syncCycle(4)
             if (carryFlag == 1) {
-                const lowByte = readByte(Cpu.sp);
-                const highByte = readByte(Cpu.sp + 1);
+                const lowByte = readByteSync(Cpu.sp);
+                const highByte = readByteSync(Cpu.sp + 1);
                 Cpu.sp += 2;
                 syncCycle(4)
                 Cpu.pc = combineBytes(highByte, lowByte);
@@ -1982,8 +1982,8 @@ function handleDxOpcode(opcode: u8): i32 {
         case 0x9: {
             // "RETI"
             Interrupt.setIme(true);
-            const lowByte = readByte(Cpu.sp);
-            const highByte = readByte(Cpu.sp + 1);
+            const lowByte = readByteSync(Cpu.sp);
+            const highByte = readByteSync(Cpu.sp + 1);
             Cpu.sp += 2;
             syncCycle(4)
             Cpu.pc = combineBytes(highByte, lowByte);
@@ -2006,8 +2006,8 @@ function handleDxOpcode(opcode: u8): i32 {
             const nn = readWordAtPc();
             if (carryFlag == 1) {
                 syncCycle(4)
-                writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-                writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+                writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
                 Cpu.sp -= 2;
                 Cpu.pc = nn;
                 return 24;
@@ -2031,8 +2031,8 @@ function handleDxOpcode(opcode: u8): i32 {
         case 0xF: {
             // "RST 18h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x18;
             return 16;
@@ -2051,13 +2051,13 @@ function handleExOpcode(opcode: u8): i32 {
             // "LD (FF00 + n), A"
             const n = readByteAtPc();
             const address = combineBytes(0xFF, n);
-            writeByte(address, Cpu.A);
+            writeByteSync(address, Cpu.A);
             return 12;
         }
         case 0x1: {
             // "POP HL"
-            const lowByte = readByte(Cpu.sp);
-            const highByte = readByte(Cpu.sp + 1);
+            const lowByte = readByteSync(Cpu.sp);
+            const highByte = readByteSync(Cpu.sp + 1);
             Cpu.sp += 2;
             Cpu.setHL(combineBytes(highByte, lowByte));
             return 12;
@@ -2065,14 +2065,14 @@ function handleExOpcode(opcode: u8): i32 {
         case 0x2: {
             // "LD (FF00 + C), A"
             const address = combineBytes(0xFF, Cpu.C);
-            writeByte(address, Cpu.A);
+            writeByteSync(address, Cpu.A);
             return 8;
         }
         case 0x5: {
             // "PUSH HL"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, Cpu.H);
-            writeByte(Cpu.sp - 2, Cpu.L);
+            writeByteSync(Cpu.sp - 1, Cpu.H);
+            writeByteSync(Cpu.sp - 2, Cpu.L);
             Cpu.sp -= 2;
             return 16;
         }
@@ -2090,8 +2090,8 @@ function handleExOpcode(opcode: u8): i32 {
         case 0x7: {
             // "RST 20h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x20;
             return 16;
@@ -2127,7 +2127,7 @@ function handleExOpcode(opcode: u8): i32 {
         case 0xA: {
             // "LD (nn), A"
             const nn = readWordAtPc();
-            writeByte(nn, Cpu.A);
+            writeByteSync(nn, Cpu.A);
             return 16;
         }
         case 0xE: {
@@ -2144,8 +2144,8 @@ function handleExOpcode(opcode: u8): i32 {
         case 0xF: {
             // "RST 28h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x28;
             return 16;
@@ -2163,13 +2163,13 @@ function handleFxOpcode(opcode: u8): i32 {
             // "LD A, (FF00 + n)"
             const n = readByteAtPc();
             const address = combineBytes(0xFF, n);
-            Cpu.A = readByte(address);
+            Cpu.A = readByteSync(address);
             return 12;
         }
         case 0x1: {
             // "POP AF"
-            const lowByte = readByte(Cpu.sp);
-            const highByte = readByte(Cpu.sp + 1);
+            const lowByte = readByteSync(Cpu.sp);
+            const highByte = readByteSync(Cpu.sp + 1);
             Cpu.sp += 2;
             Cpu.setAF(combineBytes(highByte, lowByte));
             return 12;
@@ -2177,7 +2177,7 @@ function handleFxOpcode(opcode: u8): i32 {
         case 0x2: {
             // "LD A, (FF00 + C)"
             const address = combineBytes(0xFF, Cpu.C);
-            Cpu.A = readByte(address);
+            Cpu.A = readByteSync(address);
             return 8;
         }
         case 0x3: {
@@ -2188,8 +2188,8 @@ function handleFxOpcode(opcode: u8): i32 {
         case 0x5: {
             // "PUSH AF"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, Cpu.A);
-            writeByte(Cpu.sp - 2, Cpu.F);
+            writeByteSync(Cpu.sp - 1, Cpu.A);
+            writeByteSync(Cpu.sp - 2, Cpu.F);
             Cpu.sp -= 2;
             return 16;
         }
@@ -2207,8 +2207,8 @@ function handleFxOpcode(opcode: u8): i32 {
         case 0x7: {
             // "RST 30h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x30;
             return 16;
@@ -2244,7 +2244,7 @@ function handleFxOpcode(opcode: u8): i32 {
         case 0xA: {
             // "LD A, (nn)"
             const nn = readWordAtPc();
-            Cpu.A = readByte(nn);
+            Cpu.A = readByteSync(nn);
             return 16;
         }
         case 0xB: {
@@ -2266,8 +2266,8 @@ function handleFxOpcode(opcode: u8): i32 {
         case 0xF: {
             // "RST 38h"
             syncCycle(4)
-            writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
-            writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 1, getHighByte(Cpu.pc));
+            writeByteSync(Cpu.sp - 2, getLowByte(Cpu.pc));
             Cpu.sp -= 2;
             Cpu.pc = 0x38;
             return 16;
