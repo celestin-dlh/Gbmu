@@ -7,9 +7,9 @@ function Disassembler({ data }) {
     return (
         <table class="disassembler">
             <tr>
-                <th class="disassembler__address">Address</th>
+                <th class="disassembler__header--small">Address</th>
                 <th>Instruction</th> 
-                <th>Data</th>
+                <th class="disassembler__header--small">Data</th>
             </tr>
             {data.map(instruction => (
                 <tr key={`pc_${instruction[0]}`}>

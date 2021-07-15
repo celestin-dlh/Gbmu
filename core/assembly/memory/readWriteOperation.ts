@@ -85,6 +85,43 @@ export function writeByte(address: u16, byte: u8): void {
     else abort("Error: This should be unreachable");
 }
 
+export function unSafeWriteByte(address: u16, byte: u8): void {
+    if (address >= ROM_0_START && address <= ROM_0_END) {
+        Memory.rom0[address] = byte;
+    } 
+    else if (address >= ROM_1_START && address <= ROM_1_END) {
+        Memory.rom1[address - ROM_1_START] = byte;
+    } 
+    else if (address >= VIDEO_RAM_START && address <= VIDEO_RAM_END) {
+        Memory.videoRam[address - VIDEO_RAM_START] = byte;
+    } 
+    else if (address >= EXTERNAL_RAM_START && address <= EXTERNAL_RAM_END) {
+        Memory.externalRam[address - EXTERNAL_RAM_START] = byte;
+    } 
+    else if (address >= WORK_RAM_START && address <= WORK_RAM_END) {
+        Memory.workRam[address - WORK_RAM_START] = byte;
+    } 
+    else if (address >= ECHO_RAM_START && address <= ECHO_RAM_END) {
+        Memory.echoRam[address - ECHO_RAM_START] = byte;
+    } 
+    else if (address >= OAM_START && address <= OAM_END) {
+        Memory.oam[address - OAM_START] = byte;
+    } 
+    else if (address >= UNUSED_MEMORY_START && address <= UNUSED_MEMORY_END) {
+        Memory.unusedMemory[address - UNUSED_MEMORY_START] = byte;
+    } 
+    else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
+        Memory.ioRegisters[address - IO_REGISTERS_START] = byte;
+    } 
+    else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
+        Memory.highRam[address - HIGH_RAM_START] = byte;
+    } 
+    else if (address >= IE_START && address <= IE_END) {
+        Memory.IE[address - IE_START] = byte;
+    }
+    else abort("Error: This should be unreachable");
+}
+
 export function readByteAtPc(): u8 {
     const byte = readByte(Cpu.pc);
     Cpu.pc += 1;
@@ -144,40 +181,3 @@ export function readByte(address: u16): u8 {
     }
 }
 
-
-export function unSafeWriteByte(address: u16, byte: u8): void {
-    if (address >= ROM_0_START && address <= ROM_0_END) {
-        Memory.rom0[address] = byte;
-    } 
-    else if (address >= ROM_1_START && address <= ROM_1_END) {
-        Memory.rom1[address - ROM_1_START] = byte;
-    } 
-    else if (address >= VIDEO_RAM_START && address <= VIDEO_RAM_END) {
-        Memory.videoRam[address - VIDEO_RAM_START] = byte;
-    } 
-    else if (address >= EXTERNAL_RAM_START && address <= EXTERNAL_RAM_END) {
-        Memory.externalRam[address - EXTERNAL_RAM_START] = byte;
-    } 
-    else if (address >= WORK_RAM_START && address <= WORK_RAM_END) {
-        Memory.workRam[address - WORK_RAM_START] = byte;
-    } 
-    else if (address >= ECHO_RAM_START && address <= ECHO_RAM_END) {
-        Memory.echoRam[address - ECHO_RAM_START] = byte;
-    } 
-    else if (address >= OAM_START && address <= OAM_END) {
-        Memory.oam[address - OAM_START] = byte;
-    } 
-    else if (address >= UNUSED_MEMORY_START && address <= UNUSED_MEMORY_END) {
-        Memory.unusedMemory[address - UNUSED_MEMORY_START] = byte;
-    } 
-    else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
-        Memory.ioRegisters[address - IO_REGISTERS_START] = byte;
-    } 
-    else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
-        Memory.highRam[address - HIGH_RAM_START] = byte;
-    } 
-    else if (address >= IE_START && address <= IE_END) {
-        Memory.IE[address - IE_START] = byte;
-    }
-    else abort("Error: This should be unreachable");
-}

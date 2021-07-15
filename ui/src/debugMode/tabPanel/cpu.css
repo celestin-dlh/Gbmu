@@ -19,8 +19,8 @@
     padding: 4px 4px;
 }
 
-.disassembler__address {
-    width: 20%;
+.disassembler__header--small {
+    width: 25%;
 }
 
 .cpuRegisters {
