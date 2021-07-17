@@ -39,9 +39,6 @@ export function startFetcher(mapAddr: u16, tileLine: u8): void {
     Fetcher.mapAddr = mapAddr;
     Fetcher.tileLine = tileLine;
     Fetcher.mode = FetcherMode.ReadTileId;
-
-    trace("New line \n", 1, tileLine);
-
     Fetcher.clearFIFO();
 }
 
@@ -53,24 +50,14 @@ export function tickFetcher(): void {
 
     switch (Fetcher.mode) {
         case FetcherMode.ReadTileId: {
-            const addr = Fetcher.mapAddr + Fetcher.tileIndex;
             Fetcher.tileId = readByte(Fetcher.mapAddr + Fetcher.tileIndex);
-            // trace(`addr: ${addr.toString(16)}`);
-            // trace(`Fetcher.tileLine`, 1, Fetcher.tileLine);
-            trace(`Fetcher.tileId: ${Fetcher.tileId.toString(16)}`);
-
             Fetcher.mode = FetcherMode.ReadTileData0;
             break;
         }
         case FetcherMode.ReadTileData0: {
             const offset: u16 = 0x8000 + (Fetcher.tileId * 16);
-            trace(`Offset: ${offset.toString(16)}`);
             const addr: u16 = offset + (Fetcher.tileLine * 2);
             const byte = readByte(addr);
-
-            // trace(`Current byte: ${byte.toString(16)}`)
-            // trace(`addr: ${addr.toString(16)}`);
-            // trace(`Byte: ${byte.toString(16)}`);
             for (let index: u8 = 0; index < 8; index++) {
                 Fetcher.tileData[index] = <u8>getBitValue(byte, 7 - index);
             }
