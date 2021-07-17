@@ -15,7 +15,7 @@ export class Fetcher {
     static mapAddr: u16 = 0;
     static tileIndex: u8 = 0;
     static tileLine: u8 = 0;
-    static tileId: u8 = 0;
+    static tileId: u16 = 0;
     static tileData: Uint8Array = new Uint8Array(8);
 
     static clearFIFO(): void {
@@ -64,12 +64,13 @@ export function tickFetcher(): void {
         }
         case FetcherMode.ReadTileData0: {
             const offset: u16 = 0x8000 + (Fetcher.tileId * 16);
+            trace(`Offset: ${offset.toString(16)}`);
             const addr: u16 = offset + (Fetcher.tileLine * 2);
             const byte = readByte(addr);
 
             // trace(`Current byte: ${byte.toString(16)}`)
             // trace(`addr: ${addr.toString(16)}`);
-            trace(`Byte: ${byte.toString(16)}`);
+            // trace(`Byte: ${byte.toString(16)}`);
             for (let index: u8 = 0; index < 8; index++) {
                 Fetcher.tileData[index] = <u8>getBitValue(byte, 7 - index);
             }
