@@ -1,8 +1,10 @@
 import { Cpu } from "./cpu";
-// import { syncPPU } from "./ppu";
-import { syncTimers } from "./timers";
+import { tickPpu } from "./ppu";
+import { tickTimers } from "./timers";
 
 export function syncCycle(cycle: u8): void {
-    syncTimers(cycle);
-    // syncPPU(cycle);
+    for (let index: u8 = 0; index < cycle; index++) {
+        tickTimers();
+        tickPpu();
+    }
 }

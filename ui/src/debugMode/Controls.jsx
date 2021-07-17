@@ -1,10 +1,26 @@
 import { h } from 'preact';
-import { useState, useReducer } from 'preact/hooks';
+import { useEffect, useState, useReducer, useRef } from 'preact/hooks';
+import { createImageData } from '../utils/createImageData';
 import './controls.css';
 
-function Controls({ reset, step, runFrame, runOneSecond }) {
+function Controls({ reset, step, runFrame, runOneSecond, screen }) {
+    const canvasRef = useRef();
+    const canvasContextRef = useRef();
     const [stepNumber, dispatch] = useReducer(reducer, 10);
     const [stepRunned, setStepRunned] = useState(0);
+
+    useEffect(() => {
+        if (canvasRef && canvasRef.current) {
+            canvasContextRef.current = canvasRef.current.getContext('2d');
+        }
+    }, []);
+
+    useEffect(() => {
+        if (canvasContextRef && canvasContextRef.current && screen) {
+            const imageData = createImageData(screen, 160, 144);
+            canvasContextRef.current.putImageData(imageData, 0, 0);
+        }
+    }, [screen]);
 
     function reducer(state, action) {
         switch (action.type) {
@@ -40,7 +56,8 @@ function Controls({ reset, step, runFrame, runOneSecond }) {
     return (
         <div class="controls__container">
             <canvas 
-                class="controls__canvas" 
+                class="controls__canvas"
+                ref={canvasRef} 
                 width={160} 
                 height={144}
             />

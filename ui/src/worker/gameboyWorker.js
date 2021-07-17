@@ -39,7 +39,10 @@ const gameboyWorker = {
 
     async getMemory(memoryAddress = 0, cb) {
         if (cb)
-            await cb({ memory: this.exports.getMemory(memoryAddress) });
+            await cb({ 
+                memory: this.exports.getMemory(memoryAddress),
+                screen: this.exports.getScreen()
+            });
         else
             return this.exports.getMemory(memoryAddress);
     },
@@ -48,6 +51,7 @@ const gameboyWorker = {
         await cb({
             disassembler: this.exports.getDisassembler(),
             cpuRegisters: this.exports.getCpuRegisters(),
+            screen: this.exports.getScreen()
         })
     },
 
@@ -56,6 +60,7 @@ const gameboyWorker = {
             background: this.exports.getBackground(),
             videoRegisters: this.exports.getVideoRegisters(),
             tileData: this.exports.getWholeTileData(),
+            screen: this.exports.getScreen()
         })
     },
 
@@ -63,6 +68,7 @@ const gameboyWorker = {
         await cb({
             timersRegisters: this.exports.getTimersRegisters(),
             interruptsRegisters: this.exports.getInterruptsRegisters(),
+            screen: this.exports.getScreen()
         })
     },
 

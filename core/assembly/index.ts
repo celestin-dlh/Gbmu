@@ -52,7 +52,7 @@ export function runOneSecond(): void {
 
 function loadDmgBootRom(): void {
   for(let index = 0; index < dmgBootRom.length; index++) {
-    unSafeWriteByte(<u16>index, dmgBootRom[index]);
+    unSafeWriteByte(<u16>index, <u8>dmgBootRom[index]);
   }
 }
 
@@ -77,11 +77,16 @@ export function loadRom(buffer: Uint8Array): void {
     unSafeWriteByte(<u16>index, buffer[index]);
   }
   // const subArray = buffer.subarray(0, 0x100);
-  // loadDmgBootRom();
+  loadDmgBootRom();
   trace("Rom loaded");
 }
 
 
+export { Ppu } from './ppu';
+
+export function getScreen(): u8[] {
+  return Ppu.screen;
+}
 
 
 

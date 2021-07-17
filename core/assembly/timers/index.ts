@@ -1,7 +1,7 @@
 import { IO_REGISTERS_START } from "../constants";
 import { getBitValue, getHighByte, getLowByte, setBitValue } from "../helpers/bitOperations";
 import { Interrupt, InterruptType, setInterrupt } from "../interrupts";
-import { Memory, readByte, writeByte } from "../memory";
+import { Memory, readByte, unSafeWriteByte, writeByte } from "../memory";
 
 export class Timer {
     static internalDiv: u16 = 0;
@@ -38,11 +38,15 @@ function incrementTima(): void {
     const tima: u8 = readByte(0xFF05) + 1;
     if (tima == 0)
         Timer.timaHasOverflowed = true;
-    writeByte(0xFF05, tima);
+    setTima(tima);
 }
 
-export function setTima(value: u8): void {
-    writeByte(0xFF05, value);
+function setTima(value: u8): void {
+    unSafeWriteByte(0xFF05, value);
+}
+
+function setDiv(value: u8): void {
+    unSafeWriteByte(0xFF04, value);
 }
 
 export function resetDiv(): void {
@@ -50,13 +54,9 @@ export function resetDiv(): void {
     Memory.ioRegisters[0xFF04 - IO_REGISTERS_START] = 0;
 }
 
-function setDiv(value: u8): void {
-    Memory.ioRegisters[0xFF04 - IO_REGISTERS_START] = value;
-}
-
-export function syncTimers(cycle: u8): void {
+export function tickTimers(): void {
     // DIV
-    Timer.internalDiv += cycle;
+    Timer.internalDiv += 1;
     setDiv(getHighByte(Timer.internalDiv));
 
     // TIMA

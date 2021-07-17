@@ -12,30 +12,19 @@ export class Cpu {
   static pc: u16 = 0x0;
   static sp: u16 = 0;
 
-  // static A: u8 = 0x01;
-  // static B: u8 = 0x0;
-  // static C: u8 = 0x13;
-  // static D: u8 = 0;
-  // static E: u8 = 0xD8;
-  // static H: u8 = 0x01;
-  // static L: u8 = 0x4D;
-  // static F: u8 = 0xB0;
-  // static pc: u16 = 0x100;
-  // static sp: u16 = 0xFFFE;
-
   static isHalted: bool = false;
 
   static reset(): void {
-    // Cpu.A = 0x01;
-    // Cpu.B = 0x0;
-    // Cpu.C = 0x13;
-    // Cpu.D = 0;
-    // Cpu.E = 0xD8;
-    // Cpu.H = 0x01;
-    // Cpu.L = 0x4D;
-    // Cpu.F = 0xB0;
-    // Cpu.pc = 0x100;
-    // Cpu.sp = 0xFFFE;
+    Cpu.A = 0x01;
+    Cpu.B = 0x0;
+    Cpu.C = 0x13;
+    Cpu.D = 0;
+    Cpu.E = 0xD8;
+    Cpu.H = 0x01;
+    Cpu.L = 0x4D;
+    Cpu.F = 0xB0;
+    Cpu.pc = 0x100;
+    Cpu.sp = 0xFFFE;
     
     Cpu.A = 0x0;
     Cpu.B = 0x0;

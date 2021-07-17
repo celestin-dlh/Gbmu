@@ -15,6 +15,7 @@ function DebugMode({ workerApi }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [memoryAddress, setMemoryAddress] = useState(0);
     const [state, setState] = useState({
+        screen: [],
         memory: [],
         disassembler: [],
         cpuRegisters: [],
@@ -81,6 +82,7 @@ function DebugMode({ workerApi }) {
                     step={step}
                     runOneSecond={runOneSecond}
                     runFrame={runFrame}
+                    screen={state.screen}
                 />
                <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)} className="main__debug">
                     <TabList>
