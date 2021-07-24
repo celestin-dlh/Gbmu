@@ -55,7 +55,7 @@ export function tickPpu(): void {
                 Ppu.x = 0;
                 const tileMapRowAddr: u16 = 0x9800 + (32 * (((Ppu.LY + SCY) & 0xFF) / 8));
                 // const tileMapRowAddr: u16 = 0x9800 + (((Ppu.LY + SCY) / 8) * 32);
-                trace(`${tileMapRowAddr.toString(16)}`)
+                // trace(`${tileMapRowAddr.toString(16)}`)
                 const tileLine: u8 = (Ppu.LY + SCY) % 8;
                 startFetcher(tileMapRowAddr, tileLine);
             }

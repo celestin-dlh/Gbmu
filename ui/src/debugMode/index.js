@@ -70,6 +70,25 @@ function DebugMode({ workerApi }) {
         getDebugState(tabIndex);
     }
 
+    const transferControlCanvas = async (offscreen) => {
+        await workerApi.initCanvas(Comlink.transfer(offscreen, [offscreen]));
+    }
+
+    const removeCanvasControl = async (canvasId) => {
+        await workerApi.removeCanvasControl(canvasId);
+    }
+
+    const runPlayPause = async () => {
+        const isPlaying = await workerApi.intervalId ? true : false;
+        if (isPlaying) {
+            console.log('pause');
+            await workerApi.pause();
+        } else {
+            console.log('play');
+            await workerApi.play();
+        }
+    }
+
     return (
         <div class="app">
             <Header 
@@ -82,7 +101,8 @@ function DebugMode({ workerApi }) {
                     step={step}
                     runOneSecond={runOneSecond}
                     runFrame={runFrame}
-                    screen={state.screen}
+                    runPlayPause={runPlayPause}
+                    transferControlCanvas={transferControlCanvas}
                 />
                <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)} className="main__debug">
                     <TabList>
@@ -110,6 +130,8 @@ function DebugMode({ workerApi }) {
                             videoRegisters={state.videoRegisters}
                             background={state.background}
                             tileData={state.tileData}
+                            transferControlCanvas={transferControlCanvas}
+                            removeCanvasControl={removeCanvasControl}
                         />
                     </TabPanel>
                     <TabPanel>

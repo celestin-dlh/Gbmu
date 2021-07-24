@@ -15,7 +15,7 @@ function handle0xOpcode(opcode: u8): i32 {
             // "LD BC, nn"
             Cpu.C = readByteAtPc();
             Cpu.B = readByteAtPc();
-            return 4;
+            return 12;
         }
         case 0x2: {
             // "LD (BC), A"

@@ -1,7 +1,6 @@
 import { h, Fragment } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 import { formatHexNumber } from '../../utils/format';
-import { createImageData } from '../../utils/createImageData';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import './graphics.css';
 
@@ -99,31 +98,24 @@ function VideoRegisters({ registers }) {
     )
 }
 
-export default function Graphics({ videoRegisters, background, tileData }) {
+export default function Graphics({ videoRegisters, transferControlCanvas, removeCanvasControl }) {
     const backgroundRef = useRef();
-    const backgroundContextRef = useRef();
     const tileDataRef = useRef();
-    const tileDataContextRef = useRef();
     
     useEffect(() => {
         if (backgroundRef && backgroundRef.current) {
-            backgroundContextRef.current = backgroundRef.current.getContext('2d');
+            const offscreenBackground = backgroundRef.current.transferControlToOffscreen();
+            transferControlCanvas(offscreenBackground);
         }
         if (tileDataRef && tileDataRef.current) {
-            tileDataContextRef.current = tileDataRef.current.getContext('2d');
+            const offscreenTileData = tileDataRef.current.transferControlToOffscreen();
+            transferControlCanvas(offscreenTileData);
+        }
+        return () => {
+            removeCanvasControl('background');
+            removeCanvasControl('tileData');
         }
     }, []);
-
-    useEffect(() => {
-        if (backgroundContextRef && backgroundContextRef.current && background) {
-            const imageData = createImageData(background, 256, 256);
-            backgroundContextRef.current.putImageData(imageData, 0, 0);
-        }
-        if (tileDataContextRef && tileDataContextRef.current && tileData) {
-            const imageData = createImageData(tileData, 256, 192);
-            tileDataContextRef.current.putImageData(imageData, 0, 0);
-        }
-    }, [background, tileData]);
 
     return (
         <Fragment>

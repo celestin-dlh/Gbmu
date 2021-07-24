@@ -3,7 +3,7 @@
     "debug": {
       "binaryFile": "build/untouched.wasm",
       "textFile": "build/untouched.wat",
-      "sourceMap": "f8c1297d4552a7340878f3c8262e2b04.map",
+      "sourceMap": "untouched.wasm.map",
       "debug": true,
       "exportRuntime": true
     },

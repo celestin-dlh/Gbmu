@@ -28,12 +28,21 @@ const CYCLE_PER_FRAME = 69905;
 export function runFrame(): void {
   let cycle = 0;
   while (cycle < CYCLE_PER_FRAME) {
-    const opcode = fetchOpcode();
-    cycle += executeOpcode(opcode);
+    if (Cpu.isHalted) {
+      syncCycle(4);
+      cycle += 4;
+    } else {
+      const opcode = fetchOpcode();
+      cycle += executeOpcode(opcode);
+    }
     interruptHandling();
   }
 }
 
+
+
+
+// dont use this one
 export function runOneSecond(): void {
   let cycle = 0;
   while (cycle < CYCLE_PER_FRAME * 60) {
@@ -77,7 +86,7 @@ export function loadRom(buffer: Uint8Array): void {
     unSafeWriteByte(<u16>index, buffer[index]);
   }
   // const subArray = buffer.subarray(0, 0x100);
-  loadDmgBootRom();
+  // loadDmgBootRom();
   trace("Rom loaded");
 }
 

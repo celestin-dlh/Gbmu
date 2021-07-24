@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const { SourceMapDevToolPlugin } = require('webpack');
 
 const config = {
     entry: './ui/src/index.js',
@@ -27,7 +28,7 @@ const config = {
                 use: ['style-loader', 'css-loader'],
             },
             {
-                test: /\.wasm$/,
+                test: /\.(wasm|wasm.map)/,
                 use: 'file-loader',
             },
         ]
@@ -35,9 +36,9 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './ui/public/index.html'
-        })
+        }),
     ],
-    devtool: 'source-map',
+    // devtool: 'source-map',
     mode: 'development'
 }
 

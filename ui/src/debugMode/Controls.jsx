@@ -1,26 +1,19 @@
 import { h } from 'preact';
 import { useEffect, useState, useReducer, useRef } from 'preact/hooks';
-import { createImageData } from '../utils/createImageData';
 import './controls.css';
 
-function Controls({ reset, step, runFrame, runOneSecond, screen }) {
+function Controls({ reset, step, runFrame, runOneSecond, runPlayPause, transferControlCanvas }) {
     const canvasRef = useRef();
-    const canvasContextRef = useRef();
     const [stepNumber, dispatch] = useReducer(reducer, 10);
     const [stepRunned, setStepRunned] = useState(0);
 
     useEffect(() => {
         if (canvasRef && canvasRef.current) {
-            canvasContextRef.current = canvasRef.current.getContext('2d');
+            const canvas = canvasRef.current;
+            const offscreen = canvas.transferControlToOffscreen();
+            transferControlCanvas(offscreen);
         }
     }, []);
-
-    useEffect(() => {
-        if (canvasContextRef && canvasContextRef.current && screen) {
-            const imageData = createImageData(screen, 160, 144);
-            canvasContextRef.current.putImageData(imageData, 0, 0);
-        }
-    }, [screen]);
 
     function reducer(state, action) {
         switch (action.type) {
@@ -72,6 +65,7 @@ function Controls({ reset, step, runFrame, runOneSecond, screen }) {
             </div>
             <button onClick={() => runFrame()} class="controls__button">Run a Frame</button>
             <button onClick={() => runOneSecond()} class="controls__button">Run one second</button>
+            <button onClick={() => runPlayPause()} class="controls__button">Play / Pause</button>
         </div>
     )
 }
