@@ -77,11 +77,6 @@ const gameboyWorker = {
         this.exports.runFrame();
     },
 
-    async runOneSecond() {
-        this.pause();
-        this.exports.runOneSecond();
-    },
-
     async reset() {
         this.pause();
         if (this.romBuffer && this.romBuffer.length > 0)
@@ -107,13 +102,21 @@ const gameboyWorker = {
             screen: this.exports.getScreen()
         })
     },
-
+    
     async getVideoDebug(cb) {
+        if (this.backgroundContext) {
+            const background = this.exports.getBackground();
+            const imageDataBackground = createImageData(background, 256, 256);
+            this.backgroundContext.putImageData(imageDataBackground, 0, 0);
+        }
+
+        if (this.tileDataContext) {
+            const tileData = this.exports.getWholeTileData();
+            const imageDataTile = createImageData(tileData, 256, 192);
+            this.tileDataContext.putImageData(imageDataTile, 0, 0);
+        }
         await cb({
-            background: this.exports.getBackground(),
             videoRegisters: this.exports.getVideoRegisters(),
-            tileData: this.exports.getWholeTileData(),
-            screen: this.exports.getScreen()
         })
     },
 

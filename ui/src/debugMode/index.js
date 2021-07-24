@@ -15,12 +15,9 @@ function DebugMode({ workerApi }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [memoryAddress, setMemoryAddress] = useState(0);
     const [state, setState] = useState({
-        screen: [],
         memory: [],
         disassembler: [],
         cpuRegisters: [],
-        background: [],
-        tileData: [],
         videoRegisters: [],
         timersRegisters: [],
         interruptsRegisters: [],
@@ -43,15 +40,16 @@ function DebugMode({ workerApi }) {
 
     useEffect(() => {
         getDebugState(tabIndex);
-    }, [tabIndex]);
-
-    useEffect(() => {
-        getDebugState(1);
-    }, [memoryAddress]);
+    }, [tabIndex, memoryAddress]);
 
 
     const reset = async () => {
         await workerApi.reset();
+        getDebugState(tabIndex);
+    }
+
+    const loadRom = async (romBuffer) => {
+        await workerApi.loadRom(romBuffer);
         getDebugState(tabIndex);
     }
 
@@ -65,11 +63,6 @@ function DebugMode({ workerApi }) {
         getDebugState(tabIndex);
     }
     
-    const runOneSecond = async () => {
-        await workerApi.runOneSecond();
-        getDebugState(tabIndex);
-    }
-
     const transferControlCanvas = async (offscreen) => {
         await workerApi.initCanvas(Comlink.transfer(offscreen, [offscreen]));
     }
@@ -92,14 +85,12 @@ function DebugMode({ workerApi }) {
     return (
         <div class="app">
             <Header 
-                workerApi={workerApi} 
-                setState={setState} 
+                loadRom={loadRom}
             />
             <main class="main">
                 <Controls
                     reset={reset}
                     step={step}
-                    runOneSecond={runOneSecond}
                     runFrame={runFrame}
                     runPlayPause={runPlayPause}
                     transferControlCanvas={transferControlCanvas}
@@ -128,8 +119,6 @@ function DebugMode({ workerApi }) {
                     <TabPanel>
                         <Graphics 
                             videoRegisters={state.videoRegisters}
-                            background={state.background}
-                            tileData={state.tileData}
                             transferControlCanvas={transferControlCanvas}
                             removeCanvasControl={removeCanvasControl}
                         />

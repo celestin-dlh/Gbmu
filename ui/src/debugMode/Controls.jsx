@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useEffect, useState, useReducer, useRef } from 'preact/hooks';
 import './controls.css';
 
-function Controls({ reset, step, runFrame, runOneSecond, runPlayPause, transferControlCanvas }) {
+function Controls({ reset, step, runFrame, runPlayPause, transferControlCanvas }) {
     const canvasRef = useRef();
     const [stepNumber, dispatch] = useReducer(reducer, 10);
     const [stepRunned, setStepRunned] = useState(0);
@@ -64,7 +64,6 @@ function Controls({ reset, step, runFrame, runOneSecond, runPlayPause, transferC
                 <button onClick={() => dispatch({ type: 'increment' })} class="controls__button step__button">+</button>
             </div>
             <button onClick={() => runFrame()} class="controls__button">Run a Frame</button>
-            <button onClick={() => runOneSecond()} class="controls__button">Run one second</button>
             <button onClick={() => runPlayPause()} class="controls__button">Play / Pause</button>
         </div>
     )

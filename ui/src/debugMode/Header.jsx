@@ -1,9 +1,8 @@
 import { h } from 'preact';
 import { useUiState } from '../utils/UiContext';
-import * as Comlink from 'comlink';
 import './header.css';
 
-function Header({ workerApi, setState }) {
+function Header({ loadRom }) {
     const { uiState, changeMode, changeTheme } = useUiState();
 
     const handleLoadRom = (ev) => {
@@ -16,8 +15,7 @@ function Header({ workerApi, setState }) {
                 if (ev.target && ev.target.result) {
                     const result = ev.target.result;
                     const buffer = new Uint8Array(result);
-                    workerApi.loadRom(buffer);
-                    workerApi.getDebugValue(0, Comlink.proxy(setState));
+                    loadRom(buffer);
                 }
             };
         }
