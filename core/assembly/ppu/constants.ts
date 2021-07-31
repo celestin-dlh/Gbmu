@@ -1,0 +1,12 @@
+export const LCDC_ADDRESS: u16 = 0xFF40;
+export const STAT_ADDRESS: u16 = 0xFF41;
+export const SCY_ADDRESS: u16 = 0xFF42;
+export const SCX_ADDRESS: u16 = 0xFF43;
+export const LY_ADDRESS: u16 = 0xFF44;
+export const LYC_ADDRESS: u16 = 0xFF45;
+export const DMA_ADDRESS: u16 = 0xFF46;
+export const BGP_ADDRESS: u16 = 0xFF47;
+export const OBP0_ADDRESS: u16 = 0xFF48;
+export const OBP1_ADDRESS: u16 = 0xFF49;
+export const WY_ADDRESS: u16 = 0xFF4A;
+export const WX_ADDRESS: u16 = 0xFF4B;

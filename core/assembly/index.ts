@@ -64,8 +64,7 @@ export function loadRom(buffer: Uint8Array): void {
     }
     unSafeWriteByte(<u16>index, buffer[index]);
   }
-  // const subArray = buffer.subarray(0, 0x100);
-  // loadDmgBootRom();
+  loadDmgBootRom();
   trace("Rom loaded");
 }
 

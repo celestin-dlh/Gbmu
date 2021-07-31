@@ -27,6 +27,7 @@ import { Cpu } from '../cpu';
 import { combineBytes, getHighByte } from '../helpers/bitOperations';
 import { syncCycle } from '../syncCycle';
 import { Timer, DIV_ADDRESS, TIMA_ADDRESS, TAC_ADDRESS, TMA_ADDRESS } from '../timers';
+import { Ppu, LCDC_ADDRESS, STAT_ADDRESS, SCY_ADDRESS, SCX_ADDRESS, LY_ADDRESS, LYC_ADDRESS, DMA_ADDRESS, BGP_ADDRESS, OBP0_ADDRESS, OBP1_ADDRESS, WX_ADDRESS, WY_ADDRESS } from '../ppu';
 import { Memory } from './index';
 
 
@@ -83,6 +84,56 @@ export function writeByte(address: u16, byte: u8): void {
         }
         if (address == TAC_ADDRESS) {
             Timer.TAC = byte;
+            return;
+        }
+
+        // PPU
+        if (address == LCDC_ADDRESS) {
+            Ppu.LCDC = byte;
+            return;
+        }
+        if (address == STAT_ADDRESS) {
+            Ppu.STAT = byte;
+            return;
+        }
+        if (address == SCY_ADDRESS) {
+            Ppu.SCY = byte;
+            return;
+        }
+        if (address == SCX_ADDRESS) {
+            Ppu.SCX = byte;
+            return;
+        }
+        if (address == LY_ADDRESS) {
+            abort("LY is read only");
+            return;
+        }
+        if (address == LYC_ADDRESS) {
+            Ppu.LYC = byte;
+            return;
+        }
+        if (address == DMA_ADDRESS) {
+            Ppu.DMA = byte;
+            return;
+        }
+        if (address == BGP_ADDRESS) {
+            Ppu.BGP = byte;
+            return;
+        }
+        if (address == OBP0_ADDRESS) {
+            Ppu.OBP0 = byte;
+            return;
+        }
+        if (address == OBP1_ADDRESS) {
+            Ppu.OBP1 = byte;
+            return;
+        }
+        if (address == WX_ADDRESS) {
+            Ppu.WX = byte;
+            return;
+        }
+        if (address == WY_ADDRESS) {
+            Ppu.WY = byte;
             return;
         }
         Memory.ioRegisters[address - IO_REGISTERS_START] = byte;
@@ -188,6 +239,32 @@ export function readByte(address: u16): u8 {
             return Timer.TMA;
         if (address == TAC_ADDRESS)
             return Timer.TAC;
+
+        // PPU
+        if (address == LCDC_ADDRESS)
+            return Ppu.LCDC;
+        if (address == STAT_ADDRESS)
+            return Ppu.STAT;
+        if (address == SCY_ADDRESS)
+            return Ppu.SCY;
+        if (address == SCX_ADDRESS)
+            return Ppu.SCX;
+        if (address == LY_ADDRESS)
+            return Ppu.LY;
+        if (address == LYC_ADDRESS)
+            return Ppu.LYC;
+        if (address == DMA_ADDRESS)
+            return Ppu.DMA;
+        if (address == BGP_ADDRESS)
+            return Ppu.BGP;
+        if (address == OBP0_ADDRESS)
+            return Ppu.OBP0;
+        if (address == OBP1_ADDRESS)
+            return Ppu.OBP1;
+        if (address == WX_ADDRESS)
+            return Ppu.WX;
+        if (address == WY_ADDRESS)
+            return Ppu.WY;
 
         return Memory.ioRegisters[address - IO_REGISTERS_START];
     } 
