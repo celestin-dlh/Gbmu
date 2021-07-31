@@ -1,7 +1,6 @@
-import { IO_REGISTERS_START } from '../constants';
 import { Cpu } from '../cpu';
 import { combineBytes, getBitValue, getHighByte, getLowByte, setBitValue } from '../helpers/bitOperations';
-import { Memory, readByte, writeByte } from '../memory';
+import { readByte, writeByte } from '../memory';
 import { syncCycle } from '../syncCycle';
 
 export enum InterruptType {
@@ -26,17 +25,16 @@ export class Interrupt {
 
 export function setInterrupt(InterruptType: InterruptType): void {
     const interruptFlag = setBitValue(readByte(0xFF0F), <u8>InterruptType, 1);
-    Memory.ioRegisters[0xFF0F - IO_REGISTERS_START] = interruptFlag;
+    writeByte(0xFF0F, interruptFlag);
 }
 
 export function resetInterrupt(InterruptType: InterruptType): void {
     const interruptFlag = setBitValue(readByte(0xFF0F), <u8>InterruptType, 0);
-    Memory.ioRegisters[0xFF0F - IO_REGISTERS_START] = interruptFlag;
+    writeByte(0xFF0F, interruptFlag);
 }
 
 function interruptServiceRoutine(vector: u8): void {
-    syncCycle(4);
-    syncCycle(4);
+    syncCycle(8);
     writeByte(Cpu.sp - 1, getHighByte(Cpu.pc));
     writeByte(Cpu.sp - 2, getLowByte(Cpu.pc));
     Cpu.sp -= 2;

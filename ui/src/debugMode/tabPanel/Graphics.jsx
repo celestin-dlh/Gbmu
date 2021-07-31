@@ -17,12 +17,12 @@ function VideoRegisters({ registers }) {
             <tr>
                 <td>LCDC</td>
                 <td>FF40</td>
-                <td>{formatHexNumber(registers[0], 2)}</td>
+                <td>{registers[0].toString(2).padStart(8, '0')}</td>
             </tr>
             <tr>
                 <td>STAT</td>
                 <td>FF41</td>
-                <td>{formatHexNumber(registers[1], 2)}</td>
+                <td>{registers[1].toString(2).padStart(8, '0')}</td>
             </tr>
             <tr>
                 <td>SCY</td>

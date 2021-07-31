@@ -24,9 +24,9 @@ import {
     ROM_SIZE,
 } from '../constants';
 import { Cpu } from '../cpu';
-import { combineBytes } from '../helpers/bitOperations';
+import { combineBytes, getHighByte } from '../helpers/bitOperations';
 import { syncCycle } from '../syncCycle';
-import { resetDiv } from '../timers';
+import { Timer, DIV_ADDRESS, TIMA_ADDRESS, TAC_ADDRESS, TMA_ADDRESS } from '../timers';
 import { Memory } from './index';
 
 
@@ -68,13 +68,25 @@ export function writeByte(address: u16, byte: u8): void {
         new Error("Nintendo says use of this area is prohibited.");
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
+        // timers
+        if (address == DIV_ADDRESS) {
+            Timer.DIV = 0;
+            return;
+        }
+        if (address == TIMA_ADDRESS) {
+            Timer.TIMA = byte;
+            return;
+        }
+        if (address == TMA_ADDRESS) {
+            Timer.TMA = byte;
+            return;
+        }
+        if (address == TAC_ADDRESS) {
+            Timer.TAC = byte;
+            return;
+        }
         Memory.ioRegisters[address - IO_REGISTERS_START] = byte;
 
-        // DIV Timer
-        if (address === 0xFF04) {
-            resetDiv();
-            return;
-        } 
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {
         Memory.highRam[address - HIGH_RAM_START] = byte;
@@ -167,6 +179,16 @@ export function readByte(address: u16): u8 {
         return Memory.unusedMemory[address - UNUSED_MEMORY_START];
     } 
     else if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_END) {
+        // timers
+        if (address == DIV_ADDRESS) 
+            return getHighByte(Timer.DIV);
+        if (address == TIMA_ADDRESS)
+            return Timer.TIMA;
+        if (address == TMA_ADDRESS)
+            return Timer.TMA;
+        if (address == TAC_ADDRESS)
+            return Timer.TAC;
+
         return Memory.ioRegisters[address - IO_REGISTERS_START];
     } 
     else if (address >= HIGH_RAM_START && address <= HIGH_RAM_END) {

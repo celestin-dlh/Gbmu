@@ -27,7 +27,7 @@ const CYCLE_PER_FRAME = 69905;
 
 export function runFrame(): void {
   let cycle = 0;
-  while (cycle < CYCLE_PER_FRAME) {
+  while (cycle <= CYCLE_PER_FRAME) {
     if (Cpu.isHalted) {
       syncCycle(4);
       cycle += 4;
@@ -39,32 +39,11 @@ export function runFrame(): void {
   }
 }
 
-
-
-
-// dont use this one
-export function runOneSecond(): void {
-  let cycle = 0;
-  while (cycle < CYCLE_PER_FRAME * 60) {
-    const opcode = fetchOpcode();
-    cycle += executeOpcode(opcode);
-    interruptHandling();
-  }
-}
-
-
-
-
-
-
-
-
 function loadDmgBootRom(): void {
   for(let index = 0; index < dmgBootRom.length; index++) {
     unSafeWriteByte(<u16>index, <u8>dmgBootRom[index]);
   }
 }
-
 
 export function reset(): void {
   Cpu.reset();

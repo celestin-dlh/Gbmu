@@ -1,24 +1,28 @@
-import { IO_REGISTERS_START } from "../constants";
-import { getBitValue, getHighByte, getLowByte, setBitValue } from "../helpers/bitOperations";
-import { Interrupt, InterruptType, setInterrupt } from "../interrupts";
-import { Memory, readByte, unSafeWriteByte, writeByte } from "../memory";
+import { getBitValue, getHighByte, getLowByte } from "../helpers/bitOperations";
+import { InterruptType, setInterrupt } from "../interrupts";
 
 export class Timer {
-    static internalDiv: u16 = 0;
+    static DIV: u16 = 0;
+    static TIMA: u8 = 0;
+    static TMA: u8 = 0;
+    static TAC: u8 = 0;
     static lastAnd: bool = false;
-    static timaHasOverflowed: bool = false;
+    static TIMAHasOverflowed: bool = false;
 
     static reset(): void {
-        Timer.internalDiv = 0;
+        Timer.DIV = 0;
+        Timer.TIMA = 0;
+        Timer.TMA = 0;
+        Timer.TAC = 0;
         Timer.lastAnd = false;
-        Timer.timaHasOverflowed = false;
+        Timer.TIMAHasOverflowed = false;
     }
 }
 
-function getDivBit(): bool {
-    const tac = readByte(0xFF07) & 0b11;
-    const lowByte = getLowByte(Timer.internalDiv);
-    const highByte = getHighByte(Timer.internalDiv);
+function getDIVBit(): bool {
+    const tac = Timer.TAC & 0b11;
+    const lowByte = getLowByte(Timer.DIV);
+    const highByte = getHighByte(Timer.DIV);
 
     if (tac == 0b00)
         return getBitValue(highByte, 1);
@@ -30,49 +34,30 @@ function getDivBit(): bool {
 }
 
 function timerCounterEnable(): bool {
-    return getBitValue(readByte(0xFF07), 2);
+    return getBitValue(Timer.TAC, 2);
 }
 
-// TIMA
-function incrementTima(): void {
-    const tima: u8 = readByte(0xFF05) + 1;
-    if (tima == 0)
-        Timer.timaHasOverflowed = true;
-    setTima(tima);
-}
-
-function setTima(value: u8): void {
-    unSafeWriteByte(0xFF05, value);
-}
-
-function setDiv(value: u8): void {
-    unSafeWriteByte(0xFF04, value);
-}
-
-export function resetDiv(): void {
-    Timer.internalDiv = 0;
-    Memory.ioRegisters[0xFF04 - IO_REGISTERS_START] = 0;
+function incrementTIMA(): void {
+    Timer.TIMA += 1;
+    if (Timer.TIMA == 0)
+        Timer.TIMAHasOverflowed = true;
 }
 
 export function tickTimers(): void {
-    // DIV
-    Timer.internalDiv += 1;
-    setDiv(getHighByte(Timer.internalDiv));
+    Timer.DIV += 1;
 
-    // TIMA
-    if (Timer.timaHasOverflowed) {
+    if (Timer.TIMAHasOverflowed) {
         setInterrupt(InterruptType.Timer);
-        const tma = readByte(0xFF06);
-        setTima(tma);
-        Timer.timaHasOverflowed = false;
-        // return;
+        Timer.TIMA = Timer.TMA;
+        Timer.TIMAHasOverflowed = false;
     }
 
-    const currentAnd = <u8>timerCounterEnable() & <u8>getDivBit();
+    const currentAnd = <u8>timerCounterEnable() & <u8>getDIVBit();
     if (Timer.lastAnd && currentAnd == 0) {
-        incrementTima()
+        incrementTIMA();
     }
     Timer.lastAnd = <bool>currentAnd;
 }
 
 export { getTimersRegisters } from './debug';
+export { DIV_ADDRESS, TIMA_ADDRESS, TAC_ADDRESS, TMA_ADDRESS } from './constants'
